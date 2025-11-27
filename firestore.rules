@@ -1,0 +1,42 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // 1. User Data (Logs, Settings, etc.)
+    // Users can only read/write their own data in the 'users' collection
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // 2. Exercises Collection
+    // This contains both system exercises (from ExerciseDB) and custom user exercises
+    match /exercises/{exerciseId} {
+      // Allow READ for all authenticated users
+      allow read: if request.auth != null;
+      
+      // Allow WRITE for system exercises (no userId field) - for syncing
+      // Allow WRITE for user exercises where they are the owner
+      allow write: if request.auth != null && (
+        // System exercise (no userId) - allow authenticated users to sync
+        !('userId' in request.resource.data) ||
+        // User's custom exercise
+        request.resource.data.userId == request.auth.uid
+      );
+    }
+
+    // 3. System Exercises (Legacy - can be removed if not used)
+    match /system_exercises/{exerciseId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null; 
+    }
+
+    // 4. Notes Collection
+    // Users can only read/write their own notes
+    match /notes/{noteId} {
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow write: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
+  }
+}
+

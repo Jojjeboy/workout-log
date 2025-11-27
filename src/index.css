@@ -1,0 +1,54 @@
+/* Global styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+
+:root {
+  font-family: Poppins, Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #f5f7ff 0%, #e8edff 40%, #dce5ff 100%);
+  color: #1a202c;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.glass-card {
+  background: rgba(255,255,255,0.85);
+  border: 1px solid rgba(200,210,240,0.4);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  backdrop-filter: blur(4px);
+  border-radius: 12px;
+}
+
+.glass-card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+  border-color: rgba(200,210,240,0.6);
+  transition: all 0.3s ease;
+}
+
+.app-title-gradient {
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.muted-text {
+  color: #6b7280;
+}
+
+.stat-card-icon {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05));
+}

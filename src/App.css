@@ -1,0 +1,25 @@
+/* App container constraints */
+#root {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.hero-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand-badge {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.06));
+  border: 1px solid rgba(102, 126, 234, 0.1);
+}
+
+.card { padding: 1rem; }
+
+.page-panel { padding: 1.5rem; }
+
+.center-muted { color: rgba(107,114,128,0.6); }
