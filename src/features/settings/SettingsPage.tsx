@@ -1,5 +1,5 @@
 import { Container, Title, Text, Paper, Group, Stack, Button, useMantineTheme, ThemeIcon, Box } from '@mantine/core';
-import { IconLogout, IconChevronRight, IconNote } from '@tabler/icons-react';
+import { IconLogout, IconChevronRight, IconNote, IconRefresh } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
 import { SyncFromJsonButton } from '../../components/SyncButton';
@@ -12,6 +12,45 @@ export function SettingsPage() {
     const handleLogout = async () => {
         await authService.logout();
         navigate('/login');
+    };
+
+    const handleForceUpdate = async () => {
+        if (!('serviceWorker' in navigator)) {
+            window.alert('Service worker not supported in this browser.');
+            return;
+        }
+
+        try {
+            const registration = await navigator.serviceWorker.getRegistration();
+            if (!registration) {
+                window.alert('No service worker registration found.');
+                return;
+            }
+
+            // If there's already a waiting service worker, activate it
+            if (registration.waiting) {
+                (registration.waiting as ServiceWorker).postMessage({ type: 'SKIP_WAITING' });
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    window.location.reload();
+                }, { once: true });
+                return;
+            }
+
+            // Otherwise, check for updates and then activate if found
+            await registration.update();
+
+            if (registration.waiting) {
+                (registration.waiting as ServiceWorker).postMessage({ type: 'SKIP_WAITING' });
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    window.location.reload();
+                }, { once: true });
+            } else {
+                window.alert('No update available right now.');
+            }
+        } catch (err) {
+            console.error('Force update failed', err);
+            window.alert('Failed to check for updates. See console for details.');
+        }
     };
 
     return (
@@ -53,6 +92,19 @@ export function SettingsPage() {
                         <Text size="sm" fw={500} c="dimmed" mb="sm" tt="uppercase">Data Management</Text>
                         <Stack>
                             <SyncFromJsonButton />
+                        </Stack>
+                    </Paper>
+
+                    <Paper p="md" radius="lg">
+                        <Text size="sm" fw={500} c="dimmed" mb="sm" tt="uppercase">Application</Text>
+                        <Stack>
+                            <Button
+                                variant="outline"
+                                leftSection={<IconRefresh size={16} />}
+                                onClick={handleForceUpdate}
+                            >
+                                Force Update
+                            </Button>
                         </Stack>
                     </Paper>
 
