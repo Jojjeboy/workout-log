@@ -11,6 +11,7 @@ import { AnalysisPage } from './features/analysis/AnalysisPage';
 import { ProfilePage } from './features/profile/ProfilePage';
 import { Footer } from './components/Footer';
 import { useAuth } from './hooks/useAuth';
+import { UpdateNotification } from './components/UpdateNotification';
 
 function App() {
   const location = useLocation();
@@ -52,6 +53,7 @@ function App() {
       </AppShell.Main>
 
       {showFooter && <Footer />}
+        <UpdateNotification />
     </AppShell>
   );
 }
