@@ -100,55 +100,10 @@ export function ExerciseDetail() {
                                     ))}
                                 </Group>
                             </Paper>
-
-                            {/* Instructions */}
-                            <Paper p="lg" radius="lg" className="glass-card">
-                                <Title order={3} mb="md" c="#1a202c">Instructions</Title>
-                                <Stack gap="md">
-                                    {exercise.instructions.map((step, index) => (
-                                        <Paper
-                                            key={index}
-                                            p="md"
-                                            radius="md"
-                                            withBorder
-                                            className="glass-card"
-                                            style={{
-                                                transition: 'all 0.2s',
-                                                backgroundColor: checkedSteps[index] ? 'rgba(76, 175, 80, 0.15)' : undefined
-                                            }}
-                                        >
-                                            <Group wrap="nowrap" align="flex-start" gap="sm">
-                                                <Checkbox
-                                                    checked={checkedSteps[index] || false}
-                                                    onChange={(event) => {
-                                                        event.stopPropagation();
-                                                        toggleStep(index);
-                                                    }}
-                                                    size="md"
-                                                    mt={2}
-                                                />
-                                                <Text
-                                                    size="md"
-                                                    c="#1a202c"
-                                                    style={{
-                                                        flex: 1,
-                                                        textDecoration: checkedSteps[index] ? 'line-through' : 'none',
-                                                        opacity: checkedSteps[index] ? 0.6 : 1,
-                                                        cursor: 'pointer'
-                                                    }}
-                                                    onClick={() => toggleStep(index)}
-                                                >
-                                                    {step}
-                                                </Text>
-                                            </Group>
-                                        </Paper>
-                                    ))}
-                                </Stack>
-                            </Paper>
                         </Stack>
                     </Grid.Col>
 
-                    {/* Right Column - Workout Logging */}
+                    {/* Right Column - Workout Logging (Moved up) */}
                     <Grid.Col span={{ base: 12, md: 6 }}>
                         <Paper withBorder p="lg" radius="lg" className="glass-card">
                             <Tabs defaultValue="log">
@@ -173,6 +128,51 @@ export function ExerciseDetail() {
                         </Paper>
                     </Grid.Col>
                 </Grid>
+
+                {/* Instructions - Below the main grid */}
+                <Paper p="lg" radius="lg" className="glass-card" mt="lg">
+                    <Title order={3} mb="md" c="#1a202c">Instructions</Title>
+                    <Stack gap="md">
+                        {exercise.instructions.map((step, index) => (
+                            <Paper
+                                key={index}
+                                p="md"
+                                radius="md"
+                                withBorder
+                                className="glass-card"
+                                style={{
+                                    transition: 'all 0.2s',
+                                    backgroundColor: checkedSteps[index] ? 'rgba(76, 175, 80, 0.15)' : undefined
+                                }}
+                            >
+                                <Group wrap="nowrap" align="flex-start" gap="sm">
+                                    <Checkbox
+                                        checked={checkedSteps[index] || false}
+                                        onChange={(event) => {
+                                            event.stopPropagation();
+                                            toggleStep(index);
+                                        }}
+                                        size="md"
+                                        mt={2}
+                                    />
+                                    <Text
+                                        size="md"
+                                        c="#1a202c"
+                                        style={{
+                                            flex: 1,
+                                            textDecoration: checkedSteps[index] ? 'line-through' : 'none',
+                                            opacity: checkedSteps[index] ? 0.6 : 1,
+                                            cursor: 'pointer'
+                                        }}
+                                        onClick={() => toggleStep(index)}
+                                    >
+                                        {step}
+                                    </Text>
+                                </Group>
+                            </Paper>
+                        ))}
+                    </Stack>
+                </Paper>
             </Container>
         </Box>
     );
