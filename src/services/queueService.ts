@@ -1,7 +1,7 @@
 import { db } from './db';
 import { QueueItem } from '../types';
 import { collection, addDoc } from 'firebase/firestore';
-import { db as firestore } from '../lib/firebase';
+import { db as firestore, auth } from '../lib/firebase';
 
 const MAX_RETRIES = 3;
 
@@ -47,7 +47,17 @@ export const queueService = {
         // This switch handles the actual logic for each queue type
         switch (item.type) {
             case 'LOG_WORKOUT':
-                await addDoc(collection(firestore, 'logs'), item.payload);
+                // Ensure the payload contains the user's uid. If it's missing, try to attach current auth uid.
+                try {
+                    const payload = { ...item.payload } as any;
+                    const currentUser = auth.currentUser;
+                    if (!payload.uid && currentUser?.uid) {
+                        payload.uid = currentUser.uid;
+                    }
+                    await addDoc(collection(firestore, 'logs'), payload);
+                } catch (err) {
+                    throw err;
+                }
                 break;
 
             case 'SYNC_EXERCISES':

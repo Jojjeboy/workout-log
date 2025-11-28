@@ -3,6 +3,7 @@ import { db } from '../services/db';
 import { queueService } from '../services/queueService';
 import { WorkoutLog } from '../types';
 import { v4 as uuidv4 } from 'uuid';
+import { authService } from '../services/authService';
 
 export function useWorkouts() {
     const queryClient = useQueryClient();
@@ -16,10 +17,14 @@ export function useWorkouts() {
 
     const logWorkoutMutation = useMutation({
         mutationFn: async (log: Omit<WorkoutLog, 'id'>) => {
+            const currentUser = authService.getCurrentUser();
+            const uid = currentUser?.uid;
+
             const newLog: WorkoutLog = {
                 ...log,
                 id: uuidv4(),
-            };
+                ...(uid ? { uid } : {} as any),
+            } as any;
 
             // Save to local DB
             await db.logs.add(newLog);

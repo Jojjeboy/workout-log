@@ -22,10 +22,16 @@ export const theme = createTheme({
             "#764ba2",
         ] as any,
     },
+    shadows: {
+        md: '0 4px 20px rgba(0, 0, 0, 0.05)',
+        lg: '0 10px 30px rgba(0, 0, 0, 0.08)',
+    },
     components: {
         Card: {
             defaultProps: {
                 radius: 'lg',
+                shadow: 'md',
+                withBorder: false,
             },
         },
         Button: {
@@ -33,15 +39,10 @@ export const theme = createTheme({
                 radius: 'lg',
             },
         },
-        TextInput: {
+        ThemeIcon: {
             defaultProps: {
                 radius: 'lg',
-            },
-        },
-        Textarea: {
-            defaultProps: {
-                radius: 'lg',
-            },
-        },
+            }
+        }
     },
 });

@@ -1,4 +1,4 @@
-import { Container, Grid, Card, Text, Title, Loader, Center, Stack, Group, ThemeIcon, Badge, Paper, Box } from '@mantine/core';
+import { Container, Grid, Card, Text, Title, Loader, Center, Stack, Group, ThemeIcon, Badge, ActionIcon, Paper, Box } from '@mantine/core';
 import { IconTrendingUp, IconActivity, IconCalendar, IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { useAuth } from '../../hooks/useAuth';
@@ -26,6 +26,7 @@ export function DashboardPage() {
 
     return (
         <Box bg="var(--mantine-color-body)" style={{ minHeight: '100vh', paddingBottom: '100px' }}>
+            {/* Header Section */}
             <div style={{
                 background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
                 padding: '40px 20px 80px',
@@ -45,6 +46,7 @@ export function DashboardPage() {
 
             <Container size="lg" px="md">
                 <Stack gap="xl">
+                    {/* Stats Grid */}
                     <Grid gutter="md">
                         <Grid.Col span={6}>
                             <Card padding="lg" radius="xl">
@@ -104,6 +106,7 @@ export function DashboardPage() {
                         </Grid.Col>
                     </Grid>
 
+                    {/* Weekly Activity */}
                     <Card padding="lg" radius="xl">
                         <Group justify="space-between" mb="lg">
                             <Title order={4}>Weekly Activity</Title>
@@ -119,6 +122,7 @@ export function DashboardPage() {
                         </div>
                     </Card>
 
+                    {/* Recent Activity List */}
                     <div>
                         <Group justify="space-between" mb="md">
                             <Title order={4}>Recent Workouts</Title>
