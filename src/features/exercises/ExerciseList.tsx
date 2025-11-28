@@ -6,68 +6,123 @@ import { useExercises } from '../../hooks/useExercises';
 import { Exercise } from '../../types';
 import { ThemeToggle } from '../../components/ThemeToggle';
 
+// Number of exercises to show per page for better performance
 const ITEMS_PER_PAGE = 24;
 
+/**
+ * Exercise List Page
+ * 
+ * Features:
+ * - Displays all available exercises in a paginated grid
+ * - Search by exercise name
+ * - Filter by target muscles or body parts
+ * - Pagination to improve performance (only 24 exercises rendered at a time)
+ * - Smooth scroll to top when changing pages
+ * - Support for randomized exercise display (useful for workout variety)
+ */
 export function ExerciseList() {
     const { data: exercises, isLoading } = useExercises();
     const location = useLocation();
-    const randomizedOnceRef = useRef(false);
-    const containerRef = useRef<HTMLDivElement>(null);
+    const navigate = useNavigate();
+
+    // Refs for tracking state that shouldn't trigger re-renders
+    const randomizedOnceRef = useRef(false); // Prevent re-randomizing on every render
+    const containerRef = useRef<HTMLDivElement>(null); // Reference to scroll target
+
+    // Component state
     const [initialExercises, setInitialExercises] = useState<Exercise[] | null>(null);
     const [search, setSearch] = useState('');
     const [selectedMuscles, setSelectedMuscles] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const navigate = useNavigate();
 
+    /**
+     * Filter exercises based on search term and selected muscles
+     * 
+     * This is memoized (cached) so it only recalculates when:
+     * - The exercise list changes
+     * - The search term changes
+     * - The selected muscle filters change
+     */
     const filteredExercises = useMemo(() => {
-        const base = initialExercises ?? exercises;
-        if (!base) return [];
-        return base.filter((ex) => {
-            const matchesSearch = ex.name.toLowerCase().includes(search.toLowerCase());
+        const baseExercises = initialExercises ?? exercises;
+        if (!baseExercises) return [];
+
+        return baseExercises.filter((exercise) => {
+            // Check if exercise name contains the search term (case-insensitive)
+            const matchesSearch = exercise.name.toLowerCase().includes(search.toLowerCase());
+
+            // Check if exercise targets any of the selected muscles or body parts
+            // If no muscles are selected, show all exercises
             const matchesMuscle = selectedMuscles.length === 0 ||
-                ex.targetMuscles.some(m => selectedMuscles.includes(m)) ||
-                ex.bodyParts.some(bp => selectedMuscles.includes(bp));
+                exercise.targetMuscles.some(muscle => selectedMuscles.includes(muscle)) ||
+                exercise.bodyParts.some(bodyPart => selectedMuscles.includes(bodyPart));
+
             return matchesSearch && matchesMuscle;
         });
     }, [initialExercises, exercises, search, selectedMuscles]);
 
+    // Calculate total number of pages needed
     const totalPages = Math.ceil(filteredExercises.length / ITEMS_PER_PAGE);
 
+    /**
+     * Get only the exercises for the current page
+     * This improves performance by not rendering all exercises at once
+     */
     const paginatedExercises = useMemo(() => {
-        const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
-        const endIdx = startIdx + ITEMS_PER_PAGE;
-        return filteredExercises.slice(startIdx, endIdx);
+        const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+        const endIndex = startIndex + ITEMS_PER_PAGE;
+        return filteredExercises.slice(startIndex, endIndex);
     }, [filteredExercises, currentPage]);
 
+    /**
+     * Extract all unique muscles and body parts for the filter dropdown
+     * Sorted alphabetically for better UX
+     */
     const allMuscles = useMemo(() => {
-        const base = initialExercises ?? exercises;
-        if (!base) return [];
-        const muscles = new Set<string>();
-        base.forEach(ex => {
-            ex.targetMuscles.forEach(m => muscles.add(m));
-            ex.bodyParts.forEach(bp => muscles.add(bp));
+        const baseExercises = initialExercises ?? exercises;
+        if (!baseExercises) return [];
+
+        const muscleSet = new Set<string>();
+        baseExercises.forEach(exercise => {
+            exercise.targetMuscles.forEach(muscle => muscleSet.add(muscle));
+            exercise.bodyParts.forEach(bodyPart => muscleSet.add(bodyPart));
         });
-        return Array.from(muscles).sort();
+
+        return Array.from(muscleSet).sort();
     }, [initialExercises, exercises]);
 
-    // Reset to page 1 when search or filter changes
+    // ===== EFFECTS (Side effects that run when certain values change) =====
+
+    /**
+     * Reset to page 1 whenever search or filters change
+     * This prevents showing an empty page if the filtered results have fewer pages
+     */
     useEffect(() => {
         setCurrentPage(1);
     }, [search, selectedMuscles]);
 
-    // Scroll to top when page changes
+    /**
+     * Smooth scroll to top when user changes pages
+     * Provides better UX so user doesn't have to manually scroll up
+     */
     useEffect(() => {
         if (containerRef.current) {
             containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, [currentPage]);
 
+    /**
+     * Handle exercise randomization on first load
+     * Randomization can be requested via navigation state for workout variety
+     * Uses a ref to ensure randomization only happens once
+     */
     useEffect(() => {
         if (!exercises) return;
 
         const shouldRandomize = (location.state as any)?.randomizeExercises && !randomizedOnceRef.current;
 
         if (shouldRandomize) {
+            // Fisher-Yates shuffle using Array.sort with random comparator
             const shuffled = [...exercises].sort(() => Math.random() - 0.5);
             setInitialExercises(shuffled);
             randomizedOnceRef.current = true;
@@ -76,6 +131,7 @@ export function ExerciseList() {
         }
     }, [exercises, initialExercises, location.state]);
 
+    // Show loading spinner while exercises are being fetched
     if (isLoading) {
         return <Center h={400}><Loader /></Center>;
     }

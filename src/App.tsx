@@ -1,5 +1,5 @@
 import { AppShell } from '@mantine/core';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { LoginPage } from './features/auth/LoginPage';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { ExerciseList } from './features/exercises/ExerciseList';
@@ -10,16 +10,23 @@ import { SettingsPage } from './features/settings/SettingsPage';
 import { AnalysisPage } from './features/analysis/AnalysisPage';
 import { ProfilePage } from './features/profile/ProfilePage';
 import { Footer } from './components/Footer';
+import { useAuth } from './hooks/useAuth';
 
 function App() {
+  const location = useLocation();
+  const { user } = useAuth();
+
+  // Only show footer when user is authenticated (not on login page)
+  const showFooter = user && location.pathname !== '/login';
+
   return (
     <AppShell
       header={{ height: 0 }} // Hide default header to use custom one
-      footer={{ height: 85 }}
+      footer={{ height: showFooter ? 85 : 0 }}
       padding="0" // Remove default padding
       styles={{
         root: { minHeight: '100vh' },
-        main: { paddingBottom: '85px' }
+        main: { paddingBottom: showFooter ? '85px' : '0' }
       }}
     >
       {/* Removed AppShell.Header since we use custom header in Dashboard */}
@@ -44,7 +51,7 @@ function App() {
         </div>
       </AppShell.Main>
 
-      <Footer />
+      {showFooter && <Footer />}
     </AppShell>
   );
 }
