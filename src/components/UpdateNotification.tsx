@@ -1,82 +1,34 @@
 import { useEffect, useState } from 'react';
 import { Modal, Button, Group, Text, Stack } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
+import { onUpdateAvailable, offUpdateAvailable, checkForUpdates, forceUpdate } from '../lib/sw';
+import { showNotification } from '@mantine/notifications';
 
 export function UpdateNotification() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
-  const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
 
   useEffect(() => {
-    if (!('serviceWorker' in navigator)) {
-      return;
-    }
-
-    // Listen for controller change (indicates update was applied)
-    const handleControllerChange = () => {
-      setUpdateAvailable(false);
-    };
-
-    navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
-
-    // Check for updates periodically
-    const checkForUpdates = async () => {
-      try {
-        const reg = await navigator.serviceWorker.getRegistration();
-        if (reg) {
-          setRegistration(reg);
-          await reg.update();
-        }
-      } catch (error) {
-        console.error('Error checking for updates:', error);
-      }
-    };
-
-    // Check on mount
+    const handle = () => setUpdateAvailable(true);
+    onUpdateAvailable(handle);
+    // Trigger an initial check
     checkForUpdates();
-
-    // Check every 60 seconds
-    const interval = setInterval(checkForUpdates, 60000);
-
-    return () => {
-      clearInterval(interval);
-      navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
-    };
+    return () => offUpdateAvailable(handle);
   }, []);
 
   useEffect(() => {
-    if (!registration) return;
+    const onController = () => setUpdateAvailable(false);
+    navigator.serviceWorker.addEventListener('controllerchange', onController);
+    return () => navigator.serviceWorker.removeEventListener('controllerchange', onController);
+  }, []);
 
-    const handleUpdate = () => {
-      // Check if there's a waiting service worker (new version available)
-      if (registration.waiting) {
-        setUpdateAvailable(true);
-      }
-    };
-
-    // Listen for updates
-    registration.addEventListener('updatefound', handleUpdate);
-
-    // Also check if there's already a waiting service worker
-    if (registration.waiting) {
-      setUpdateAvailable(true);
-    }
-
-    return () => {
-      registration.removeEventListener('updatefound', handleUpdate);
-    };
-  }, [registration]);
-
-  const handleUpdate = () => {
-    if (registration?.waiting) {
-      // Tell the waiting service worker to activate
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
-      
-      // Wait for the controller to change, then reload
-      const reloadPage = () => {
-        window.location.reload();
-      };
-
-      navigator.serviceWorker.addEventListener('controllerchange', reloadPage, { once: true });
+  const handleUpdate = async () => {
+    const applied = await forceUpdate();
+    if (applied) {
+      showNotification({ title: 'Updating', message: 'Applying update and reloading...', color: 'blue' });
+      // reload will happen on controllerchange
+    } else {
+      showNotification({ title: 'No Update', message: 'No update was available.', color: 'gray' });
+      setUpdateAvailable(false);
     }
   };
 

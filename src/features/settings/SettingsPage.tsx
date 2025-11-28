@@ -1,9 +1,12 @@
-import { Container, Title, Text, Paper, Group, Stack, Button, useMantineTheme, ThemeIcon, Box } from '@mantine/core';
+import { Container, Title, Text, Paper, Group, Stack, Button, useMantineTheme, ThemeIcon, Box, Badge } from '@mantine/core';
+import { useEffect } from 'react';
 import { IconLogout, IconChevronRight, IconNote, IconRefresh } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
 import { SyncFromJsonButton } from '../../components/SyncButton';
 import { ThemeToggle } from '../../components/ThemeToggle';
+import { showNotification } from '@mantine/notifications';
+import { onUpdateAvailable, offUpdateAvailable, checkForUpdates, forceUpdate } from '../../lib/sw';
 
 export function SettingsPage() {
     const navigate = useNavigate();
@@ -23,35 +26,33 @@ export function SettingsPage() {
         try {
             const registration = await navigator.serviceWorker.getRegistration();
             if (!registration) {
-                window.alert('No service worker registration found.');
+                showNotification({ title: 'No SW', message: 'No service worker registration found.', color: 'yellow' });
                 return;
             }
 
             // If there's already a waiting service worker, activate it
-            if (registration.waiting) {
-                (registration.waiting as ServiceWorker).postMessage({ type: 'SKIP_WAITING' });
-                navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    window.location.reload();
-                }, { once: true });
-                return;
-            }
-
-            // Otherwise, check for updates and then activate if found
-            await registration.update();
-
-            if (registration.waiting) {
-                (registration.waiting as ServiceWorker).postMessage({ type: 'SKIP_WAITING' });
-                navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    window.location.reload();
-                }, { once: true });
-            } else {
-                window.alert('No update available right now.');
+            // Use the shared helper which will also emit events
+            const applied = await forceUpdate();
+            if (!applied) {
+                showNotification({ title: 'No Update', message: 'No update available right now.', color: 'gray' });
             }
         } catch (err) {
             console.error('Force update failed', err);
-            window.alert('Failed to check for updates. See console for details.');
+                showNotification({ title: 'Update Check Failed', message: 'Failed to check for updates. See console for details.', color: 'red' });
         }
     };
+
+    // Subscribe to update available events to show badge
+    useEffect(() => {
+        const onAvailable = () => {
+            const el = document.getElementById('update-badge');
+            if (el) el.style.display = 'inline-block';
+        };
+        onUpdateAvailable(onAvailable);
+        // initial check
+        checkForUpdates();
+        return () => offUpdateAvailable(onAvailable);
+    }, []);
 
     return (
         <Box bg="var(--mantine-color-body)" style={{ minHeight: '100vh', paddingBottom: '100px' }}>
@@ -94,17 +95,21 @@ export function SettingsPage() {
                             <SyncFromJsonButton />
                         </Stack>
                     </Paper>
-
                     <Paper p="md" radius="lg">
                         <Text size="sm" fw={500} c="dimmed" mb="sm" tt="uppercase">Application</Text>
                         <Stack>
-                            <Button
-                                variant="outline"
-                                leftSection={<IconRefresh size={16} />}
-                                onClick={handleForceUpdate}
-                            >
-                                Force Update
-                            </Button>
+                            <Group style={{ justifyContent: 'space-between', width: '100%' }}>
+                                <Button
+                                    variant="outline"
+                                    leftSection={<IconRefresh size={16} />}
+                                    onClick={handleForceUpdate}
+                                >
+                                    Force Update
+                                </Button>
+                                <Badge color="yellow" variant="light" radius="sm" id="update-badge" style={{ display: 'none' }}>
+                                    Update available
+                                </Badge>
+                            </Group>
                         </Stack>
                     </Paper>
 

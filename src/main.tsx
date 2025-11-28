@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { MantineProvider } from '@mantine/core';
+import { Notifications } from '@mantine/notifications';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
@@ -24,6 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <MantineProvider theme={theme}>
         <BrowserRouter>
           <App />
+          <Notifications />
         </BrowserRouter>
       </MantineProvider>
     </QueryClientProvider>
