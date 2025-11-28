@@ -69,7 +69,7 @@ export function ExerciseDetail() {
                     <Grid.Col span={{ base: 12, md: 6 }}>
                         <Stack gap="lg">
                             {/* Exercise Image */}
-                            <Paper p="md" radius="lg">
+                            <Paper p="md" radius="lg" className="glass-card">
                                 <Image
                                     src={exercise.gifUrl}
                                     radius="md"
@@ -78,7 +78,7 @@ export function ExerciseDetail() {
                                 />
 
                                 {/* Exercise Name */}
-                                <Title order={2} tt="capitalize" mb="md">
+                                <Title order={2} tt="capitalize" mb="md" c="#1a202c">
                                     {exercise.name}
                                 </Title>
 
@@ -93,7 +93,7 @@ export function ExerciseDetail() {
                                 </Group>
 
                                 {/* Target Muscles */}
-                                <Text size="md" fw={500} mb="xs">Target Muscles:</Text>
+                                <Text size="md" fw={500} mb="xs" c="#1a202c">Target Muscles:</Text>
                                 <Group mb="md">
                                     {exercise.targetMuscles.map(m => (
                                         <Badge key={m} variant="outline" color="pink" size="md">{m}</Badge>
@@ -102,8 +102,8 @@ export function ExerciseDetail() {
                             </Paper>
 
                             {/* Instructions */}
-                            <Paper p="lg" radius="lg">
-                                <Title order={3} mb="md">Instructions</Title>
+                            <Paper p="lg" radius="lg" className="glass-card">
+                                <Title order={3} mb="md" c="#1a202c">Instructions</Title>
                                 <Stack gap="md">
                                     {exercise.instructions.map((step, index) => (
                                         <Paper
@@ -111,9 +111,10 @@ export function ExerciseDetail() {
                                             p="md"
                                             radius="md"
                                             withBorder
+                                            className="glass-card"
                                             style={{
                                                 transition: 'all 0.2s',
-                                                backgroundColor: checkedSteps[index] ? 'var(--mantine-color-green-light)' : undefined
+                                                backgroundColor: checkedSteps[index] ? 'rgba(76, 175, 80, 0.15)' : undefined
                                             }}
                                         >
                                             <Group wrap="nowrap" align="flex-start" gap="sm">
@@ -128,6 +129,7 @@ export function ExerciseDetail() {
                                                 />
                                                 <Text
                                                     size="md"
+                                                    c="#1a202c"
                                                     style={{
                                                         flex: 1,
                                                         textDecoration: checkedSteps[index] ? 'line-through' : 'none',
@@ -148,12 +150,12 @@ export function ExerciseDetail() {
 
                     {/* Right Column - Workout Logging */}
                     <Grid.Col span={{ base: 12, md: 6 }}>
-                        <Paper withBorder p="lg" radius="lg">
+                        <Paper withBorder p="lg" radius="lg" className="glass-card">
                             <Tabs defaultValue="log">
                                 <Tabs.List mb="md">
-                                    <Tabs.Tab value="log" leftSection={<IconList size={14} />}>Log Workout</Tabs.Tab>
-                                    <Tabs.Tab value="history" leftSection={<IconHistory size={14} />}>History</Tabs.Tab>
-                                    <Tabs.Tab value="chart" leftSection={<IconChartLine size={14} />}>Progress</Tabs.Tab>
+                                    <Tabs.Tab value="log" leftSection={<IconList size={14} />} c="#1a202c">Log Workout</Tabs.Tab>
+                                    <Tabs.Tab value="history" leftSection={<IconHistory size={14} />} c="#1a202c">History</Tabs.Tab>
+                                    <Tabs.Tab value="chart" leftSection={<IconChartLine size={14} />} c="#1a202c">Progress</Tabs.Tab>
                                 </Tabs.List>
 
                                 <Tabs.Panel value="log">
