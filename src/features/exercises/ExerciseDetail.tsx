@@ -107,7 +107,7 @@ export function ExerciseDetail() {
                     <Grid.Col span={{ base: 12, md: 6 }}>
                         <Paper withBorder p="lg" radius="lg" className="glass-card">
                             <Tabs defaultValue="log">
-                                <Tabs.List mb="md">
+                                <Tabs.List mb="md" grow>
                                     <Tabs.Tab value="log" leftSection={<IconList size={14} />} c="#1a202c">Log Workout</Tabs.Tab>
                                     <Tabs.Tab value="history" leftSection={<IconHistory size={14} />} c="#1a202c">History</Tabs.Tab>
                                     <Tabs.Tab value="chart" leftSection={<IconChartLine size={14} />} c="#1a202c">Progress</Tabs.Tab>
