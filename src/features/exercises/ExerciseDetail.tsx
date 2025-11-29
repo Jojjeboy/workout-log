@@ -124,7 +124,7 @@ export function ExerciseDetail() {
                                 </Tabs.List>
 
                                 <Tabs.Panel value="log">
-                                    <WorkoutLogger onSave={handleSaveWorkout} isSaving={isLogging} />
+                                    <WorkoutLogger onSave={handleSaveWorkout} isSaving={isLogging} onSaveSuccess={() => {}} />
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="history">

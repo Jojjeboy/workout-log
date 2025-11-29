@@ -1,21 +1,24 @@
 import { useState } from 'react';
-import { Button, NumberInput, Stack, ActionIcon, Group, Text, Paper, Table } from '@mantine/core';
+import { Button, NumberInput, Stack, ActionIcon, Group, Text, Paper, Table, Alert } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
 import { IconPlus, IconTrash, IconCheck, IconCalendar } from '@tabler/icons-react';
 import { WorkoutSet } from '../../types';
+import { showNotification } from '@mantine/notifications';
 
 interface WorkoutLoggerProps {
     onSave: (sets: WorkoutSet[], date: Date) => void;
     isSaving: boolean;
     initialSets?: WorkoutSet[];
     initialDate?: Date;
+    onSaveSuccess?: () => void;
 }
 
-export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate }: WorkoutLoggerProps) {
+export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSaveSuccess }: WorkoutLoggerProps) {
     const [sets, setSets] = useState<WorkoutSet[]>(
         initialSets || [{ weight: 0, reps: 0, completed: false }]
     );
     const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate || new Date());
+    const [showSuccess, setShowSuccess] = useState(false);
 
     const addSet = () => {
         const lastSet = sets[sets.length - 1];
@@ -41,10 +44,45 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate }: Wo
     const handleSave = () => {
         if (!selectedDate) return;
         onSave(sets, selectedDate);
+        
+        // Show success notification
+        showNotification({
+            title: 'Workout Logged',
+            message: 'Your workout has been saved successfully!',
+            color: 'green',
+            icon: <IconCheck size={16} />,
+            autoClose: 3000,
+        });
+
+        // Reset form
+        setSets([{ weight: 0, reps: 0, completed: false }]);
+        setSelectedDate(new Date());
+        setShowSuccess(true);
+
+        // Hide success alert after 3 seconds
+        setTimeout(() => setShowSuccess(false), 3000);
+
+        // Call optional callback
+        if (onSaveSuccess) {
+            onSaveSuccess();
+        }
     };
 
     return (
         <Stack gap="md">
+            {showSuccess && (
+                <Alert
+                    icon={<IconCheck size={16} />}
+                    title="Workout Logged!"
+                    color="green"
+                    radius="md"
+                    withCloseButton
+                    onClose={() => setShowSuccess(false)}
+                >
+                    Your workout has been saved successfully and will be synced to the cloud.
+                </Alert>
+            )}
+
             <Paper withBorder radius="sm" p={0} style={{ overflow: 'hidden' }}>
                 <Table verticalSpacing="sm" withRowBorders>
                     <Table.Thead bg="#f8f9fa">
