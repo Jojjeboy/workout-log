@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
-import { Container, Title, Text, Image, Badge, Group, Button, Paper, Grid, Tabs, Stack, Checkbox, Box, Avatar } from '@mantine/core';
+import { Container, Title, Text, Image, Badge, Group, Button, Paper, Grid, Tabs, Stack, Checkbox, Box, Avatar, Table } from '@mantine/core';
 import { IconArrowLeft, IconChartLine, IconList, IconHistory } from '@tabler/icons-react';
 import { useExercise } from '../../hooks/useExercises';
 import { WorkoutLogger } from '../workouts/WorkoutLogger';
@@ -132,7 +132,56 @@ export function ExerciseDetail() {
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="history">
-                                    <Text c="dimmed" ta="center" py="xl">History view coming soon</Text>
+                                    {(() => {
+                                        const exerciseLogs = logs?.filter(log => log.exerciseId === id) || [];
+                                        if (exerciseLogs.length === 0) {
+                                            return <Text c="dimmed" ta="center" py="xl">No workout history for this exercise yet.</Text>;
+                                        }
+                                        return (
+                                            <Stack gap="md">
+                                                {exerciseLogs.map((log, logIndex) => (
+                                                    <Paper key={log.id || logIndex} p="md" radius="sm" withBorder bg="white">
+                                                        <Group justify="space-between" mb="md">
+                                                            <Text fw={600} size="sm">
+                                                                {new Date(log.timestamp).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                                                            </Text>
+                                                            <Badge color="blue" variant="light">{log.sets?.length || 0} Sets</Badge>
+                                                        </Group>
+                                                        <Table striped highlightOnHover>
+                                                            <Table.Thead>
+                                                                <Table.Tr>
+                                                                    <Table.Th>Set</Table.Th>
+                                                                    <Table.Th>Weight (kg)</Table.Th>
+                                                                    <Table.Th>Reps</Table.Th>
+                                                                    <Table.Th>Status</Table.Th>
+                                                                </Table.Tr>
+                                                            </Table.Thead>
+                                                            <Table.Tbody>
+                                                                {log.sets?.map((set, setIdx) => (
+                                                                    <Table.Tr key={setIdx}>
+                                                                        <Table.Td c="#1a202c">{setIdx + 1}</Table.Td>
+                                                                        <Table.Td c="#1a202c">{set.weight}</Table.Td>
+                                                                        <Table.Td c="#1a202c">{set.reps}</Table.Td>
+                                                                        <Table.Td>
+                                                                            <Badge color={set.completed ? 'green' : 'gray'} variant="light">
+                                                                                {set.completed ? 'Done' : 'Pending'}
+                                                                            </Badge>
+                                                                        </Table.Td>
+                                                                    </Table.Tr>
+                                                                ))}
+                                                            </Table.Tbody>
+                                                        </Table>
+                                                        {log.note && (
+                                                            <Stack gap="xs" mt="md">
+                                                                <Text fw={600} size="sm">Notes</Text>
+                                                                <Text size="sm" c="dimmed">{log.note}</Text>
+                                                            </Stack>
+                                                        )}
+                                                    </Paper>
+                                                ))}
+                                            </Stack>
+                                        );
+                                    })()}
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="chart">
