@@ -79,7 +79,7 @@ export function Footer() {
         <AppShell.Footer
             p={0}
             pb="xs"
-            style={{ zIndex: 101, borderTop: 'none', boxShadow: '0 -4px 20px rgba(0,0,0,0.05)' }}
+            style={{ zIndex: 101, borderTop: 'none', boxShadow: '0 -2px 10px rgba(0,0,0,0.08)' }}
         >
             {/* Background color changes based on dark mode */}
             <Group h="100%" gap={0} bg="white" align="center">
