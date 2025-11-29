@@ -36,22 +36,10 @@ export function DashboardPage() {
             }}>
                 {/* Top Bar */}
                 <Group justify="space-between" align="center" mb="xl">
-                    <Group gap="xs">
-                        <Avatar
-                            src={user?.photoURL}
-                            alt={user?.displayName || 'User'}
-                            radius="xl"
-                            size="md"
-                            color="white"
-                            bg="rgba(255,255,255,0.2)"
-                        >
-                            {user?.displayName?.[0] || 'A'}
-                        </Avatar>
-                        <div>
-                            <Text size="xs" style={{ opacity: 0.8 }}>Welcome back,</Text>
-                            <Text size="sm" fw={600}>{user?.displayName || 'Athlete'}</Text>
-                        </div>
-                    </Group>
+                    <div>
+                        <Text size="xs" style={{ opacity: 0.8 }}>Welcome back,</Text>
+                        <Text size="sm" fw={600}>{user?.displayName || 'Athlete'}</Text>
+                    </div>
                     <Group gap="sm">
                         <Avatar
                             src={user?.photoURL}
