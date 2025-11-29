@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Container, Title, Text, Image, Badge, Group, Button, Paper, Grid, Tabs, Stack, Checkbox, Box, Avatar } from '@mantine/core';
 import { IconArrowLeft, IconChartLine, IconList, IconHistory } from '@tabler/icons-react';
 import { useExercise } from '../../hooks/useExercises';
@@ -13,9 +13,13 @@ import { useAuth } from '../../hooks/useAuth';
 export function ExerciseDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const { data: exercise, isLoading: exerciseLoading } = useExercise(id || '');
-    const { logs, logWorkout, isLogging } = useWorkouts();
+    const { logs, logWorkout, isLoading: isLogging } = useWorkouts();
     const { user } = useAuth();
+
+    // Get tab from query parameters, default to 'log'
+    const initialTab = searchParams.get('tab') || 'log';
 
     // Track which instruction steps are checked
     const [checkedSteps, setCheckedSteps] = useState<Record<number, boolean>>({});
@@ -116,7 +120,7 @@ export function ExerciseDetail() {
                     {/* Right Column - Workout Logging */}
                     <Grid.Col span={{ base: 12, md: 6 }}>
                         <Paper withBorder p="lg" radius="sm" shadow="sm" bg="white">
-                            <Tabs defaultValue="log" color="darkBlue" variant="pills" radius="xs">
+                            <Tabs defaultValue={initialTab} color="darkBlue" variant="pills" radius="xs">
                                 <Tabs.List mb="md" grow>
                                     <Tabs.Tab value="log" leftSection={<IconList size={14} />}>Log</Tabs.Tab>
                                     <Tabs.Tab value="history" leftSection={<IconHistory size={14} />}>History</Tabs.Tab>

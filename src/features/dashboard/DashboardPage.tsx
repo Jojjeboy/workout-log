@@ -1,12 +1,22 @@
 import { Container, Grid, Text, Title, Loader, Center, Stack, Group, ThemeIcon, Badge, Paper, Box, Avatar, Accordion, Table } from '@mantine/core';
 import { IconTrendingUp, IconActivity, IconArrowUpRight } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 import { useWorkouts } from '../../hooks/useWorkouts';
+import { useExercises } from '../../hooks/useExercises';
 import { useAuth } from '../../hooks/useAuth';
 import './DashboardPage.css';
 
 export function DashboardPage() {
     const { logs, isLoading, updateWorkout } = useWorkouts();
+    const { data: exercises = [] } = useExercises();
     const { user } = useAuth();
+    const navigate = useNavigate();
+
+    // Create a map of exercise IDs to exercise names
+    const exerciseMap = exercises.reduce((acc, exercise) => {
+        acc[exercise.exerciseId] = exercise.name;
+        return acc;
+    }, {} as Record<string, string>);
 
     const stats = {
         totalWorkouts: logs?.length || 0,
@@ -172,7 +182,19 @@ export function DashboardPage() {
                                             <Accordion.Panel>
                                                 <Stack gap="md">
                                                     <div>
-                                                        <Text fw={600} size="sm" mb="sm">Exercise: {log.exerciseId}</Text>
+                                                        <Text fw={600} size="sm" mb="sm">
+                                                            Exercise: 
+                                                            <Text 
+                                                                component="span"
+                                                                fw={600} 
+                                                                size="sm" 
+                                                                c="blue"
+                                                                style={{ cursor: 'pointer', marginLeft: '8px' }}
+                                                                onClick={() => navigate(`/exercises/${log.exerciseId}?tab=history`)}
+                                                            >
+                                                                {exerciseMap[log.exerciseId] || log.exerciseId}
+                                                            </Text>
+                                                        </Text>
                                                         <Table striped highlightOnHover>
                                                             <Table.Thead>
                                                                 <Table.Tr>
