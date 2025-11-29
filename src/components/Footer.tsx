@@ -126,7 +126,7 @@ export function Footer() {
         >
             {/* Background color changes based on dark mode */}
             <Group h="100%" gap={0} bg={colorScheme === 'dark' ? 'dark.7' : 'white'} align="center">
-                <NavItem path="/" icon={IconHome} label="Home" color="blue" />
+                <NavItem path="/" icon={IconHome} label="Dashboard" color="blue" />
                 <NavItem path="/analysis" icon={IconChartBar} label="Analysis" color="violet" />
                 <NavItem path="/exercises" icon={IconPlus} label="Add" color="cyan" />
                 <NavItem path="/settings" icon={IconSettings} label="Settings" color="orange" />

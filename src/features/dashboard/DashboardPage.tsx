@@ -1,5 +1,5 @@
-import { Container, Grid, Card, Text, Title, Loader, Center, Stack, Group, ThemeIcon, Badge, Paper, Box } from '@mantine/core';
-import { IconTrendingUp, IconActivity, IconCalendar, IconArrowUpRight, IconArrowDownRight } from '@tabler/icons-react';
+import { Container, Grid, Text, Title, Loader, Center, Stack, Group, ThemeIcon, Badge, Paper, Box, Divider, Avatar } from '@mantine/core';
+import { IconTrendingUp, IconActivity, IconArrowUpRight, IconChevronRight } from '@tabler/icons-react';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { useAuth } from '../../hooks/useAuth';
 import { ThemeToggle } from '../../components/ThemeToggle';
@@ -25,126 +25,141 @@ export function DashboardPage() {
     }
 
     return (
-        <Box bg="var(--mantine-color-body)" style={{ minHeight: '100vh', paddingBottom: '100px' }}>
+        <Box bg="#f8f9fa" style={{ minHeight: '100vh', paddingBottom: '100px' }}>
+            {/* Banking App Header */}
             <div style={{
-                background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
-                padding: '40px 20px 80px',
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+                padding: '20px 20px 60px', // Extra padding bottom for the curve/overlap
                 color: 'white',
-                borderBottomLeftRadius: '30px',
-                borderBottomRightRadius: '30px',
-                marginBottom: '-60px'
+                borderBottomLeftRadius: '10px',
+                borderBottomRightRadius: '10px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
             }}>
-                <Group justify="space-between" align="flex-start" mb="xl">
-                    <div>
-                        <Text size="sm" style={{ opacity: 0.8 }}>Welcome back</Text>
-                        <Title order={1} style={{ fontSize: '28px' }}>{user?.displayName || 'Athlete'}</Title>
-                    </div>
-                    <ThemeToggle />
+                {/* Top Bar */}
+                <Group justify="space-between" align="center" mb="xl">
+                    <Group gap="xs">
+                        <Avatar
+                            src={user?.photoURL}
+                            alt={user?.displayName || 'User'}
+                            radius="xl"
+                            size="md"
+                            color="white"
+                            bg="rgba(255,255,255,0.2)"
+                        >
+                            {user?.displayName?.[0] || 'A'}
+                        </Avatar>
+                        <div>
+                            <Text size="xs" style={{ opacity: 0.8 }}>Welcome back,</Text>
+                            <Text size="sm" fw={600}>{user?.displayName || 'Athlete'}</Text>
+                        </div>
+                    </Group>
+                    <Group gap="sm">
+                        <ThemeToggle />
+                    </Group>
                 </Group>
+
+                {/* "Balance" / Key Stat */}
+                <Stack gap={0} align="center" mt="md" mb="sm">
+                    <Text size="sm" style={{ opacity: 0.9 }}>Total Workouts</Text>
+                    <Title order={1} style={{ fontSize: '42px', fontWeight: 700, letterSpacing: '-1px' }}>
+                        {stats.totalWorkouts}
+                    </Title>
+                    <Badge
+                        variant="light"
+                        color="green"
+                        size="lg"
+                        radius="sm"
+                        mt="xs"
+                        leftSection={<IconArrowUpRight size={14} />}
+                        style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: '#4ade80' }}
+                    >
+                        +3 this week
+                    </Badge>
+                </Stack>
             </div>
 
-            <Container size="lg" px="md">
+            <Container size="lg" px="md" style={{ marginTop: '-40px' }}>
                 <Stack gap="xl">
+                    {/* Stats Grid - Overlapping Header */}
                     <Grid gutter="md">
                         <Grid.Col span={6}>
-                            <Card padding="lg" radius="xl">
-                                <Group justify="space-between" align="flex-start" mb="sm">
-                                    <ThemeIcon size={40} radius="xl" color="green" variant="light">
+                            <Paper p="md" radius="lg" shadow="md" style={{ background: 'white' }}>
+                                <Group justify="space-between" align="flex-start" mb="xs">
+                                    <ThemeIcon size="lg" radius="md" color="blue" variant="light">
                                         <IconActivity size={20} />
                                     </ThemeIcon>
-                                    <Badge color="green" variant="light" size="sm" leftSection={<IconArrowUpRight size={12} />}>
-                                        +12%
-                                    </Badge>
+                                    <Text size="xs" fw={700} c="green">+12%</Text>
                                 </Group>
-                                <Text size="xs" c="dimmed" fw={500}>Total Volume</Text>
+                                <Text size="xs" c="dimmed" fw={600} tt="uppercase">Volume</Text>
                                 <Text size="xl" fw={700}>{stats.totalSets}</Text>
-                            </Card>
+                            </Paper>
                         </Grid.Col>
                         <Grid.Col span={6}>
-                            <Card padding="lg" radius="xl">
-                                <Group justify="space-between" align="flex-start" mb="sm">
-                                    <ThemeIcon size={40} radius="xl" color="red" variant="light">
+                            <Paper p="md" radius="lg" shadow="md" style={{ background: 'white' }}>
+                                <Group justify="space-between" align="flex-start" mb="xs">
+                                    <ThemeIcon size="lg" radius="md" color="orange" variant="light">
                                         <IconTrendingUp size={20} />
                                     </ThemeIcon>
-                                    <Badge color="red" variant="light" size="sm" leftSection={<IconArrowDownRight size={12} />}>
-                                        -2%
-                                    </Badge>
+                                    <Text size="xs" fw={700} c="red">-2%</Text>
                                 </Group>
-                                <Text size="xs" c="dimmed" fw={500}>Workouts</Text>
-                                <Text size="xl" fw={700}>{stats.totalWorkouts}</Text>
-                            </Card>
-                        </Grid.Col>
-                        <Grid.Col span={6}>
-                            <Card padding="lg" radius="xl">
-                                <Group justify="space-between" align="flex-start" mb="sm">
-                                    <ThemeIcon size={40} radius="xl" color="blue" variant="light">
-                                        <IconCalendar size={20} />
-                                    </ThemeIcon>
-                                    <Badge color="blue" variant="light" size="sm" leftSection={<IconArrowUpRight size={12} />}>
-                                        +5%
-                                    </Badge>
-                                </Group>
-                                <Text size="xs" c="dimmed" fw={500}>Active Days</Text>
-                                <Text size="xl" fw={700}>{stats.thisWeek}</Text>
-                            </Card>
-                        </Grid.Col>
-                        <Grid.Col span={6}>
-                            <Card padding="lg" radius="xl">
-                                <Group justify="space-between" align="flex-start" mb="sm">
-                                    <ThemeIcon size={40} radius="xl" color="orange" variant="light">
-                                        <IconActivity size={20} />
-                                    </ThemeIcon>
-                                    <Badge color="green" variant="light" size="sm" leftSection={<IconArrowUpRight size={12} />}>
-                                        +8%
-                                    </Badge>
-                                </Group>
-                                <Text size="xs" c="dimmed" fw={500}>Exercises</Text>
-                                <Text size="xl" fw={700}>{stats.totalExercises}</Text>
-                            </Card>
+                                <Text size="xs" c="dimmed" fw={600} tt="uppercase">Streak</Text>
+                                <Text size="xl" fw={700}>{stats.thisWeek} <span style={{ fontSize: '12px', fontWeight: 400 }}>days</span></Text>
+                            </Paper>
                         </Grid.Col>
                     </Grid>
 
-                    <Card padding="lg" radius="xl">
+                    {/* Weekly Activity */}
+                    <Paper p="lg" radius="lg" withBorder shadow="sm" bg="white">
                         <Group justify="space-between" mb="lg">
-                            <Title order={4}>Weekly Activity</Title>
-                            <Badge variant="light" color="gray">This Week</Badge>
+                            <Title order={4}>Activity</Title>
+                            <Badge variant="dot" color="blue">This Week</Badge>
                         </Group>
-                        <div style={{ height: '150px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', paddingBottom: '10px' }}>
+                        <div style={{ height: '120px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', paddingBottom: '10px' }}>
                             {[40, 70, 30, 85, 50, 65, 90].map((h, i) => (
                                 <div key={i} style={{ width: '10%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', alignItems: 'center', gap: '8px' }}>
-                                    <div style={{ width: '100%', height: `${h}%`, background: i === 6 ? '#2575fc' : '#e9ecef', borderRadius: '8px' }} />
+                                    <div style={{ width: '100%', height: `${h}%`, background: i === 6 ? '#1e3c72' : '#f1f3f5', borderRadius: '6px' }} />
                                     <Text size="xs" c="dimmed">{['S', 'M', 'T', 'W', 'T', 'F', 'S'][i]}</Text>
                                 </div>
                             ))}
                         </div>
-                    </Card>
+                    </Paper>
 
+                    {/* Recent Workouts List */}
                     <div>
-                        <Group justify="space-between" mb="md">
-                            <Title order={4}>Recent Workouts</Title>
-                            <Text size="sm" c="blue" style={{ cursor: 'pointer' }}>View All</Text>
+                        <Group justify="space-between" mb="md" px="xs">
+                            <Title order={4}>Recent Transactions</Title>
+                            <Text size="sm" c="blue" fw={500} style={{ cursor: 'pointer' }}>See All</Text>
                         </Group>
-                        <Stack gap="md">
-                            {logs?.slice(0, 3).map((log, index) => (
-                                <Paper key={index} p="md" radius="xl" withBorder={false} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                                    <Group>
-                                        <ThemeIcon size={40} radius="xl" color={index % 2 === 0 ? 'green' : 'red'} variant="light">
-                                            {index % 2 === 0 ? <IconArrowDownRight size={20} /> : <IconArrowUpRight size={20} />}
+
+                        <Paper radius="lg" withBorder shadow="sm" style={{ overflow: 'hidden', background: 'white' }}>
+                            {logs?.slice(0, 5).map((log, index) => (
+                                <div key={index}>
+                                    <div style={{ padding: '16px', display: 'flex', alignItems: 'center', cursor: 'pointer' }} className="hover-bg-gray">
+                                        <ThemeIcon size={40} radius="xl" color="blue" variant="light" style={{ flexShrink: 0 }}>
+                                            <IconActivity size={20} />
                                         </ThemeIcon>
-                                        <div>
+
+                                        <div style={{ marginLeft: '16px', flex: 1 }}>
                                             <Text fw={600} size="sm">Workout Session</Text>
-                                            <Text size="xs" c="dimmed">{new Date(log.timestamp).toLocaleDateString()}</Text>
+                                            <Text size="xs" c="dimmed">{new Date(log.timestamp).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</Text>
                                         </div>
-                                    </Group>
-                                    <div style={{ textAlign: 'right' }}>
-                                        <Text fw={600} size="sm" c={index % 2 === 0 ? 'green' : 'red'}>
-                                            {log.sets?.length || 0} Sets
-                                        </Text>
-                                        <Text size="xs" c="dimmed">Completed</Text>
+
+                                        <div style={{ textAlign: 'right', marginRight: '16px' }}>
+                                            <Text fw={600} size="sm">{log.sets?.length || 0} Sets</Text>
+                                            <Text size="xs" c="green" fw={500}>Completed</Text>
+                                        </div>
+
+                                        <IconChevronRight size={18} color="#adb5bd" />
                                     </div>
-                                </Paper>
+                                    {index < (logs?.slice(0, 5).length || 0) - 1 && (
+                                        <Divider color="gray.2" style={{ marginLeft: '72px' }} />
+                                    )}
+                                </div>
                             ))}
-                        </Stack>
+                            {(!logs || logs.length === 0) && (
+                                <Text p="xl" ta="center" c="dimmed">No workouts logged yet.</Text>
+                            )}
+                        </Paper>
                     </div>
                 </Stack>
             </Container>

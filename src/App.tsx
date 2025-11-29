@@ -53,7 +53,7 @@ function App() {
       </AppShell.Main>
 
       {showFooter && <Footer />}
-        <UpdateNotification />
+      <UpdateNotification />
     </AppShell>
   );
 }

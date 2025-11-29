@@ -8,7 +8,7 @@ export function LoginPage() {
     const handleLogin = async () => {
         try {
             await authService.login();
-            navigate('/', { state: { randomizeExercises: true } });
+            navigate('/exercises', { state: { randomizeExercises: true } });
         } catch (error) {
             console.error('Login failed', error);
         }

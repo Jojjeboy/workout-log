@@ -11,8 +11,8 @@ export function SyncButton() {
                 onClick={() => syncExercises()}
                 loading={isSyncing}
                 leftSection={<IconRefresh size={16} />}
-                variant="gradient"
-                gradient={{ from: 'violet.6', to: 'violet.3', deg: 45 }}
+                color="darkBlue"
+                radius="xs"
             >
                 Sync Exercises
             </Button>
@@ -29,9 +29,12 @@ export function SyncFromJsonButton() {
                 onClick={() => syncFromJson()}
                 loading={isSyncingFromJson}
                 leftSection={<IconFileImport size={16} />}
-                variant="gradient"
-                gradient={{ from: 'violet.6', to: 'violet.3', deg: 45 }}
+                color="darkBlue"
+                radius="xs"
                 fullWidth
+                variant="light"
+                justify="space-between"
+                rightSection={<span />} // Spacer to keep text centered or left aligned if needed, but justify space-between works well with leftSection
             >
                 Sync Exercises
             </Button>
@@ -50,6 +53,7 @@ export function UploadButton({ exercises }: { exercises: any[] }) {
                 leftSection={<IconCloudUpload size={16} />}
                 color="red"
                 variant="outline"
+                radius="xs"
             >
                 Upload to Cloud
             </Button>

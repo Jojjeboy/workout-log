@@ -38,79 +38,78 @@ export function ExerciseDetail() {
     };
 
     return (
-        <Box bg="var(--mantine-color-body)" style={{ minHeight: '100vh', paddingBottom: '100px' }}>
-            {/* Compact Header */}
+        <Box bg="#f8f9fa" style={{ minHeight: '100vh', paddingBottom: '100px' }}>
+            {/* Banking App Header */}
             <div style={{
-                background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
-                padding: '20px',
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+                padding: '20px 20px 80px', // Extra padding for overlap
                 color: 'white',
-                borderBottomLeftRadius: '20px',
-                borderBottomRightRadius: '20px',
-                marginBottom: '20px'
+                borderBottomLeftRadius: '10px',
+                borderBottomRightRadius: '10px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
             }}>
-                <Container size="lg">
-                    <Group justify="space-between" align="center">
-                        <Button
-                            variant="white"
-                            leftSection={<IconArrowLeft size={16} />}
-                            onClick={() => navigate(-1)}
-                            size="sm"
-                        >
-                            Back
-                        </Button>
+                <Group justify="space-between" align="center" mb="lg">
+                    <Button
+                        variant="white"
+                        color="dark"
+                        leftSection={<IconArrowLeft size={16} />}
+                        onClick={() => navigate(-1)}
+                        size="sm"
+                        radius="xs"
+                        style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', border: 'none' }}
+                    >
+                        Back
+                    </Button>
+                    <Group gap="sm">
                         <ThemeToggle />
                     </Group>
+                </Group>
+
+                <Container size="lg" px={0}>
+                    <Title order={2} style={{ color: 'white', fontSize: '28px' }} tt="capitalize">
+                        {exercise.name}
+                    </Title>
+                    <Text c="white" style={{ opacity: 0.8 }} size="sm" mt={4}>
+                        {exercise.targetMuscles.join(', ')}
+                    </Text>
                 </Container>
             </div>
 
-            <Container size="lg">
+            <Container size="lg" px="md" style={{ marginTop: '-60px' }}>
                 <Grid gutter="lg">
                     {/* Left Column - Exercise Info */}
                     <Grid.Col span={{ base: 12, md: 6 }}>
                         <Stack gap="lg">
                             {/* Exercise Image */}
-                            <Paper p="md" radius="lg" className="glass-card">
+                            <Paper p="md" radius="sm" shadow="md" bg="white">
                                 <Image
                                     src={exercise.gifUrl}
-                                    radius="md"
+                                    radius="sm"
                                     alt={exercise.name}
                                     mb="md"
                                 />
 
-                                {/* Exercise Name */}
-                                <Title order={2} tt="capitalize" mb="md" c="#1a202c">
-                                    {exercise.name}
-                                </Title>
-
                                 {/* Body Parts & Equipment */}
                                 <Group mb="md">
                                     {exercise.bodyParts.map(bp => (
-                                        <Badge key={bp} color="blue" size="lg">{bp}</Badge>
+                                        <Badge key={bp} color="darkBlue" size="lg" radius="xs" variant="light">{bp}</Badge>
                                     ))}
                                     {exercise.equipments.map(eq => (
-                                        <Badge key={eq} color="gray" size="lg">{eq}</Badge>
-                                    ))}
-                                </Group>
-
-                                {/* Target Muscles */}
-                                <Text size="md" fw={500} mb="xs" c="#1a202c">Target Muscles:</Text>
-                                <Group mb="md">
-                                    {exercise.targetMuscles.map(m => (
-                                        <Badge key={m} variant="outline" color="pink" size="md">{m}</Badge>
+                                        <Badge key={eq} color="gray" size="lg" radius="xs" variant="light">{eq}</Badge>
                                     ))}
                                 </Group>
                             </Paper>
                         </Stack>
                     </Grid.Col>
 
-                    {/* Right Column - Workout Logging (Moved up) */}
+                    {/* Right Column - Workout Logging */}
                     <Grid.Col span={{ base: 12, md: 6 }}>
-                        <Paper withBorder p="lg" radius="lg" className="glass-card">
-                            <Tabs defaultValue="log">
-                                <Tabs.List mb="md" grow style={{ overflow: 'visible' }}>
-                                    <Tabs.Tab value="log" leftSection={<IconList size={14} />} c="#1a202c" style={{ flex: 1, fontSize: '12px', padding: '8px 4px' }}>Log</Tabs.Tab>
-                                    <Tabs.Tab value="history" leftSection={<IconHistory size={14} />} c="#1a202c" style={{ flex: 1, fontSize: '12px', padding: '8px 4px' }}>History</Tabs.Tab>
-                                    <Tabs.Tab value="chart" leftSection={<IconChartLine size={14} />} c="#1a202c" style={{ flex: 1, fontSize: '12px', padding: '8px 4px' }}>Progress</Tabs.Tab>
+                        <Paper withBorder p="lg" radius="sm" shadow="sm" bg="white">
+                            <Tabs defaultValue="log" color="darkBlue" variant="pills" radius="xs">
+                                <Tabs.List mb="md" grow>
+                                    <Tabs.Tab value="log" leftSection={<IconList size={14} />}>Log</Tabs.Tab>
+                                    <Tabs.Tab value="history" leftSection={<IconHistory size={14} />}>History</Tabs.Tab>
+                                    <Tabs.Tab value="chart" leftSection={<IconChartLine size={14} />}>Progress</Tabs.Tab>
                                 </Tabs.List>
 
                                 <Tabs.Panel value="log">
@@ -118,7 +117,7 @@ export function ExerciseDetail() {
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="history">
-                                    <Text c="dimmed" ta="center">History view coming soon</Text>
+                                    <Text c="dimmed" ta="center" py="xl">History view coming soon</Text>
                                 </Tabs.Panel>
 
                                 <Tabs.Panel value="chart">
@@ -130,19 +129,18 @@ export function ExerciseDetail() {
                 </Grid>
 
                 {/* Instructions - Below the main grid */}
-                <Paper p="lg" radius="lg" className="glass-card" mt="lg">
-                    <Title order={3} mb="md" c="#1a202c">Instructions</Title>
-                    <Stack gap="md">
+                <Paper p="lg" radius="sm" shadow="sm" bg="white" mt="lg">
+                    <Title order={4} mb="md">Instructions</Title>
+                    <Stack gap="sm">
                         {exercise.instructions.map((step, index) => (
-                            <Paper
+                            <div
                                 key={index}
-                                p="md"
-                                radius="md"
-                                withBorder
-                                className="glass-card"
                                 style={{
-                                    transition: 'all 0.2s',
-                                    backgroundColor: checkedSteps[index] ? 'rgba(76, 175, 80, 0.15)' : undefined
+                                    padding: '12px',
+                                    borderRadius: '4px', // Very slight radius
+                                    border: '1px solid #eee',
+                                    backgroundColor: checkedSteps[index] ? '#f0fff4' : 'white',
+                                    transition: 'all 0.2s'
                                 }}
                             >
                                 <Group wrap="nowrap" align="flex-start" gap="sm">
@@ -154,22 +152,24 @@ export function ExerciseDetail() {
                                         }}
                                         size="md"
                                         mt={2}
+                                        color="darkBlue"
+                                        radius="xs"
                                     />
                                     <Text
-                                        size="md"
-                                        c="#1a202c"
+                                        size="sm"
                                         style={{
                                             flex: 1,
                                             textDecoration: checkedSteps[index] ? 'line-through' : 'none',
                                             opacity: checkedSteps[index] ? 0.6 : 1,
-                                            cursor: 'pointer'
+                                            cursor: 'pointer',
+                                            color: '#495057'
                                         }}
                                         onClick={() => toggleStep(index)}
                                     >
                                         {step}
                                     </Text>
                                 </Group>
-                            </Paper>
+                            </div>
                         ))}
                     </Stack>
                 </Paper>

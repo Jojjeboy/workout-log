@@ -1,58 +1,34 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { TextInput, SimpleGrid, Card, Image, Text, Badge, Group, Container, MultiSelect, Loader, Center, Stack, Title, ThemeIcon, Box, Pagination } from '@mantine/core';
-import { IconSearch, IconArrowRight } from '@tabler/icons-react';
+import { TextInput, Text, Badge, Group, Container, MultiSelect, Loader, Center, Stack, Title, Box, Pagination, Paper, Avatar, Divider, ActionIcon, Collapse } from '@mantine/core';
+import { IconSearch, IconChevronRight, IconFilter } from '@tabler/icons-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useExercises } from '../../hooks/useExercises';
 import { Exercise } from '../../types';
 import { ThemeToggle } from '../../components/ThemeToggle';
 
-// Number of exercises to show per page for better performance
-const ITEMS_PER_PAGE = 24;
+// Number of exercises to show per page
+const ITEMS_PER_PAGE = 20;
 
-/**
- * Exercise List Page
- * 
- * Features:
- * - Displays all available exercises in a paginated grid
- * - Search by exercise name
- * - Filter by target muscles or body parts
- * - Pagination to improve performance (only 24 exercises rendered at a time)
- * - Smooth scroll to top when changing pages
- * - Support for randomized exercise display (useful for workout variety)
- */
 export function ExerciseList() {
     const { data: exercises, isLoading } = useExercises();
     const location = useLocation();
     const navigate = useNavigate();
 
-    // Refs for tracking state that shouldn't trigger re-renders
-    const randomizedOnceRef = useRef(false); // Prevent re-randomizing on every render
-    const containerRef = useRef<HTMLDivElement>(null); // Reference to scroll target
+    const randomizedOnceRef = useRef(false);
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    // Component state
     const [initialExercises, setInitialExercises] = useState<Exercise[] | null>(null);
     const [search, setSearch] = useState('');
     const [selectedMuscles, setSelectedMuscles] = useState<string[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showFilters, setShowFilters] = useState(false);
 
-    /**
-     * Filter exercises based on search term and selected muscles
-     * 
-     * This is memoized (cached) so it only recalculates when:
-     * - The exercise list changes
-     * - The search term changes
-     * - The selected muscle filters change
-     */
     const filteredExercises = useMemo(() => {
         const baseExercises = initialExercises ?? exercises;
         if (!baseExercises) return [];
 
         return baseExercises.filter((exercise) => {
-            // Check if exercise name contains the search term (case-insensitive)
             const matchesSearch = exercise.name.toLowerCase().includes(search.toLowerCase());
-
-            // Check if exercise targets any of the selected muscles or body parts
-            // If no muscles are selected, show all exercises
             const matchesMuscle = selectedMuscles.length === 0 ||
                 exercise.targetMuscles.some(muscle => selectedMuscles.includes(muscle)) ||
                 exercise.bodyParts.some(bodyPart => selectedMuscles.includes(bodyPart));
@@ -61,23 +37,14 @@ export function ExerciseList() {
         });
     }, [initialExercises, exercises, search, selectedMuscles]);
 
-    // Calculate total number of pages needed
     const totalPages = Math.ceil(filteredExercises.length / ITEMS_PER_PAGE);
 
-    /**
-     * Get only the exercises for the current page
-     * This improves performance by not rendering all exercises at once
-     */
     const paginatedExercises = useMemo(() => {
         const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
         const endIndex = startIndex + ITEMS_PER_PAGE;
         return filteredExercises.slice(startIndex, endIndex);
     }, [filteredExercises, currentPage]);
 
-    /**
-     * Extract all unique muscles and body parts for the filter dropdown
-     * Sorted alphabetically for better UX
-     */
     const allMuscles = useMemo(() => {
         const baseExercises = initialExercises ?? exercises;
         if (!baseExercises) return [];
@@ -91,38 +58,21 @@ export function ExerciseList() {
         return Array.from(muscleSet).sort();
     }, [initialExercises, exercises]);
 
-    // ===== EFFECTS (Side effects that run when certain values change) =====
-
-    /**
-     * Reset to page 1 whenever search or filters change
-     * This prevents showing an empty page if the filtered results have fewer pages
-     */
     useEffect(() => {
         setCurrentPage(1);
     }, [search, selectedMuscles]);
 
-    /**
-     * Smooth scroll to top when user changes pages
-     * Provides better UX so user doesn't have to manually scroll up
-     */
     useEffect(() => {
         if (containerRef.current) {
             containerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     }, [currentPage]);
 
-    /**
-     * Handle exercise randomization on first load
-     * Randomization can be requested via navigation state for workout variety
-     * Uses a ref to ensure randomization only happens once
-     */
     useEffect(() => {
         if (!exercises) return;
-
         const shouldRandomize = (location.state as any)?.randomizeExercises && !randomizedOnceRef.current;
 
         if (shouldRandomize) {
-            // Fisher-Yates shuffle using Array.sort with random comparator
             const shuffled = [...exercises].sort(() => Math.random() - 0.5);
             setInitialExercises(shuffled);
             randomizedOnceRef.current = true;
@@ -131,131 +81,149 @@ export function ExerciseList() {
         }
     }, [exercises, initialExercises, location.state]);
 
-    // Show loading spinner while exercises are being fetched
+    const handleToggleFilters = () => {
+        if (showFilters) {
+            // Reset filters when hiding
+            setSelectedMuscles([]);
+        }
+        setShowFilters(!showFilters);
+    };
+
     if (isLoading) {
         return <Center h={400}><Loader /></Center>;
     }
 
-    const startIdx = (currentPage - 1) * ITEMS_PER_PAGE + 1;
-    const endIdx = Math.min(currentPage * ITEMS_PER_PAGE, filteredExercises.length);
-
     return (
-        <Box bg="var(--mantine-color-body)" style={{ minHeight: '100vh', paddingBottom: '100px' }}>
+        <Box bg="#f8f9fa" style={{ minHeight: '100vh', paddingBottom: '100px' }}>
             <div ref={containerRef} />
-            {/* Header Section */}
+
+            {/* Banking App Header */}
             <div style={{
-                background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
-                padding: '40px 20px 80px',
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+                padding: '20px 20px 60px',
                 color: 'white',
-                borderBottomLeftRadius: '30px',
-                borderBottomRightRadius: '30px',
-                marginBottom: '-60px'
+                borderBottomLeftRadius: '10px',
+                borderBottomRightRadius: '10px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
             }}>
-                <Group justify="space-between" align="flex-start" mb="xl">
+                <Group justify="space-between" align="center" mb="lg">
                     <div>
-                        <Text size="sm" style={{ opacity: 0.8 }}>Library</Text>
-                        <Title order={1} style={{ fontSize: '28px' }}>Exercises</Title>
+                        <Text size="xs" style={{ opacity: 0.8 }}>Library</Text>
+                        <Title order={2} style={{ color: 'white' }}>Exercises</Title>
                     </div>
-                    <ThemeToggle />
+                    <Group gap="sm">
+                        <ThemeToggle />
+                    </Group>
                 </Group>
+
+                {/* Search Bar in Header */}
+                <TextInput
+                    placeholder="Search exercises..."
+                    leftSection={<IconSearch size={16} />}
+                    rightSection={
+                        <ActionIcon
+                            variant="transparent"
+                            onClick={handleToggleFilters}
+                            style={{ color: showFilters ? '#4dabf7' : 'rgba(255,255,255,0.6)' }}
+                        >
+                            <IconFilter size={18} />
+                        </ActionIcon>
+                    }
+                    value={search}
+                    onChange={(event) => setSearch(event.currentTarget.value)}
+                    radius="xl"
+                    size="md"
+                    styles={{
+                        input: {
+                            backgroundColor: 'rgba(255,255,255,0.15)',
+                            color: 'white',
+                            border: 'none',
+                            '::placeholder': { color: 'rgba(255,255,255,0.6)' }
+                        }
+                    }}
+                />
             </div>
 
-            <Container size="lg" px="md">
-                <Stack gap="lg">
-                    {/* Search & Filter */}
-                    <Card radius="lg" p="md">
-                        <Stack gap="sm">
-                            <TextInput
-                                placeholder="Search exercises..."
-                                leftSection={<IconSearch size={16} />}
-                                value={search}
-                                onChange={(event) => setSearch(event.currentTarget.value)}
-                                radius="md"
-                            />
+            <Container size="lg" px="md" style={{ marginTop: '-40px' }}>
+                <Stack gap="md">
+                    {/* Filters */}
+                    <Collapse in={showFilters}>
+                        <Paper p="xs" radius="lg" shadow="sm" bg="white">
                             <MultiSelect
                                 placeholder="Filter by muscle"
                                 data={allMuscles}
                                 value={selectedMuscles}
                                 onChange={setSelectedMuscles}
                                 searchable
-                                radius="md"
+                                variant="unstyled"
+                                styles={{ input: { paddingLeft: '10px' } }}
                             />
-                        </Stack>
-                    </Card>
+                        </Paper>
+                    </Collapse>
 
-                    {filteredExercises.length > 0 && (
-                        <>
-                            <Group justify="space-between">
-                                <Text size="sm" c="dimmed">
-                                    Showing {startIdx}-{endIdx} of {filteredExercises.length} exercises
-                                </Text>
-                                {totalPages > 1 && (
-                                    <Pagination
-                                        total={totalPages}
-                                        value={currentPage}
-                                        onChange={setCurrentPage}
-                                        size="sm"
-                                    />
-                                )}
-                            </Group>
-
-                            <SimpleGrid cols={{ base: 1, sm: 2, md: 3 }} spacing="lg">
-                                {paginatedExercises.map((exercise) => (
-                                    <Card
-                                        key={exercise.exerciseId}
-                                        padding="lg"
-                                        radius="lg"
-                                        style={{ cursor: 'pointer' }}
+                    {filteredExercises.length > 0 ? (
+                        <Paper radius="lg" withBorder shadow="sm" style={{ overflow: 'hidden', background: 'white' }}>
+                            {paginatedExercises.map((exercise, index) => (
+                                <div key={exercise.exerciseId}>
+                                    <div
+                                        style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
                                         onClick={() => navigate(`/exercises/${exercise.exerciseId}`)}
+                                        className="hover-bg-gray"
                                     >
-                                        <Card.Section>
-                                            <Image
-                                                src={exercise.gifUrl}
-                                                height={160}
-                                                alt={exercise.name}
-                                                fallbackSrc="https://placehold.co/600x400?text=No+Image"
-                                                loading="lazy"
-                                            />
-                                        </Card.Section>
+                                        {/* Thumbnail */}
+                                        <Avatar
+                                            src={exercise.gifUrl}
+                                            size="lg"
+                                            radius="md"
+                                            color="blue"
+                                            style={{ flexShrink: 0 }}
+                                        >
+                                            {exercise.name[0]}
+                                        </Avatar>
 
-                                        <Group justify="space-between" mt="md" mb="xs">
-                                            <Text fw={600} tt="capitalize" size="lg">{exercise.name}</Text>
-                                            <Badge color="blue" variant="light">
+                                        {/* Content */}
+                                        <div style={{ marginLeft: '16px', flex: 1 }}>
+                                            <Text fw={600} tt="capitalize" size="sm" lineClamp={1}>
+                                                {exercise.name}
+                                            </Text>
+                                            <Text size="xs" c="dimmed" lineClamp={1}>
+                                                {exercise.targetMuscles.join(', ')}
+                                            </Text>
+                                        </div>
+
+                                        {/* Meta & Action */}
+                                        <Group gap="xs" style={{ flexShrink: 0 }}>
+                                            <Badge color="gray" variant="light" size="sm" visibleFrom="xs">
                                                 {exercise.bodyParts[0]}
                                             </Badge>
+                                            <IconChevronRight size={18} color="#adb5bd" />
                                         </Group>
+                                    </div>
 
-                                        <Text size="sm" c="dimmed" lineClamp={2} mb="md">
-                                            Target: {exercise.targetMuscles.join(', ')}
-                                        </Text>
-
-                                        <Group justify="flex-end">
-                                            <ThemeIcon variant="light" color="blue" radius="xl">
-                                                <IconArrowRight size={16} />
-                                            </ThemeIcon>
-                                        </Group>
-                                    </Card>
-                                ))}
-                            </SimpleGrid>
-
-                            {totalPages > 1 && (
-                                <Group justify="center" mt="md">
-                                    <Pagination
-                                        total={totalPages}
-                                        value={currentPage}
-                                        onChange={setCurrentPage}
-                                    />
-                                </Group>
-                            )}
-                        </>
+                                    {/* Indented Divider */}
+                                    {index < paginatedExercises.length - 1 && (
+                                        <Divider color="gray.2" style={{ marginLeft: '72px' }} />
+                                    )}
+                                </div>
+                            ))}
+                        </Paper>
+                    ) : (
+                        <Text ta="center" c="dimmed" mt="xl">No exercises found.</Text>
                     )}
 
-                    {filteredExercises.length === 0 && (
-                        <Text ta="center" c="dimmed" mt="xl">No exercises found. Try syncing?</Text>
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                        <Group justify="center" mt="md">
+                            <Pagination
+                                total={totalPages}
+                                value={currentPage}
+                                onChange={setCurrentPage}
+                                size="sm"
+                            />
+                        </Group>
                     )}
                 </Stack>
             </Container>
         </Box>
     );
 }
-

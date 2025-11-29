@@ -1,9 +1,9 @@
-import { Container, Title, Text, Paper, Group, Stack, Button, useMantineTheme, ThemeIcon, Box, Badge } from '@mantine/core';
+import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider } from '@mantine/core';
 import { useEffect } from 'react';
-import { IconLogout, IconChevronRight, IconNote, IconRefresh } from '@tabler/icons-react';
+import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
-import { SyncFromJsonButton } from '../../components/SyncButton';
+import { useExerciseSync } from '../../hooks/useExerciseSync'; // Import hook directly to use in custom row
 import { ThemeToggle } from '../../components/ThemeToggle';
 import { showNotification } from '@mantine/notifications';
 import { onUpdateAvailable, offUpdateAvailable, checkForUpdates, forceUpdate } from '../../lib/sw';
@@ -11,6 +11,7 @@ import { onUpdateAvailable, offUpdateAvailable, checkForUpdates, forceUpdate } f
 export function SettingsPage() {
     const navigate = useNavigate();
     const theme = useMantineTheme();
+    const { syncFromJson, isSyncingFromJson } = useExerciseSync(); // Use hook here
 
     const handleLogout = async () => {
         await authService.logout();
@@ -29,101 +30,126 @@ export function SettingsPage() {
                 showNotification({ title: 'No SW', message: 'No service worker registration found.', color: 'yellow' });
                 return;
             }
-
-            // If there's already a waiting service worker, activate it
-            // Use the shared helper which will also emit events
             const applied = await forceUpdate();
             if (!applied) {
                 showNotification({ title: 'No Update', message: 'No update available right now.', color: 'gray' });
             }
         } catch (err) {
             console.error('Force update failed', err);
-                showNotification({ title: 'Update Check Failed', message: 'Failed to check for updates. See console for details.', color: 'red' });
+            showNotification({ title: 'Update Check Failed', message: 'Failed to check for updates. See console for details.', color: 'red' });
         }
     };
 
-    // Subscribe to update available events to show badge
     useEffect(() => {
         const onAvailable = () => {
             const el = document.getElementById('update-badge');
             if (el) el.style.display = 'inline-block';
         };
         onUpdateAvailable(onAvailable);
-        // initial check
         checkForUpdates();
         return () => offUpdateAvailable(onAvailable);
     }, []);
 
+    // Reusable Settings Row Component
+    const SettingsRow = ({
+        icon,
+        color,
+        label,
+        onClick,
+        rightSection,
+        loading = false
+    }: {
+        icon: React.ReactNode,
+        color: string,
+        label: string,
+        onClick: () => void,
+        rightSection?: React.ReactNode,
+        loading?: boolean
+    }) => (
+        <div
+            onClick={onClick}
+            className="hover-bg-gray"
+            style={{
+                padding: '16px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+            }}
+        >
+            <Group>
+                <ThemeIcon variant="light" color={color} size="lg" radius="sm">
+                    {loading ? <IconRefresh size={20} className="mantine-rotate" /> : icon}
+                </ThemeIcon>
+                <Text fw={500} size="sm">{label}</Text>
+            </Group>
+            {rightSection || <IconChevronRight size={18} color={theme.colors.gray[4]} />}
+        </div>
+    );
+
     return (
-        <Box bg="var(--mantine-color-body)" style={{ minHeight: '100vh', paddingBottom: '100px' }}>
-            {/* Header Section */}
+        <Box bg="#f8f9fa" style={{ minHeight: '100vh', paddingBottom: '100px' }}>
+            {/* Banking App Header */}
             <div style={{
-                background: 'linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)',
-                padding: '40px 20px 80px',
+                background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+                padding: '20px 20px 60px',
                 color: 'white',
-                borderBottomLeftRadius: '30px',
-                borderBottomRightRadius: '30px',
-                marginBottom: '-60px'
+                borderBottomLeftRadius: '10px',
+                borderBottomRightRadius: '10px',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
             }}>
-                <Group justify="space-between" align="flex-start" mb="xl">
+                <Group justify="space-between" align="center" mb="lg">
                     <div>
-                        <Text size="sm" style={{ opacity: 0.8 }}>Preferences</Text>
-                        <Title order={1} style={{ fontSize: '28px' }}>Settings</Title>
+                        <Text size="xs" style={{ opacity: 0.8 }}>Preferences</Text>
+                        <Title order={2} style={{ color: 'white' }}>Settings</Title>
                     </div>
                     <ThemeToggle />
                 </Group>
             </div>
 
-            <Container size="md" px="md">
+            <Container size="md" px="md" style={{ marginTop: '-40px' }}>
                 <Stack gap="md">
-                    <Paper p="md" radius="lg">
-                        <Text size="sm" fw={500} c="dimmed" mb="sm" tt="uppercase">Personal</Text>
-                        <Group justify="space-between" onClick={() => navigate('/notes')} style={{ cursor: 'pointer' }}>
-                            <Group>
-                                <ThemeIcon variant="light" color="violet" size="lg" radius="md">
-                                    <IconNote size={20} />
-                                </ThemeIcon>
-                                <Text fw={500}>My Notes</Text>
-                            </Group>
-                            <IconChevronRight size={18} color={theme.colors.gray[5]} />
-                        </Group>
+                    {/* Main Settings Group */}
+                    <Paper radius="sm" shadow="sm" bg="white" style={{ overflow: 'hidden' }}>
+                        <SettingsRow
+                            icon={<IconNote size={20} />}
+                            color="darkBlue"
+                            label="My Notes"
+                            onClick={() => navigate('/notes')}
+                        />
+                        <Divider color="gray.1" />
+                        <SettingsRow
+                            icon={<IconDatabase size={20} />}
+                            color="violet"
+                            label="Sync Exercises"
+                            onClick={syncFromJson}
+                            loading={isSyncingFromJson}
+                        />
+                        <Divider color="gray.1" />
+                        <SettingsRow
+                            icon={<IconDeviceFloppy size={20} />}
+                            color="teal"
+                            label="Force Update"
+                            onClick={handleForceUpdate}
+                            rightSection={
+                                <Group gap="xs">
+                                    <Badge color="yellow" variant="light" radius="xs" id="update-badge" style={{ display: 'none' }}>
+                                        Update
+                                    </Badge>
+                                    <IconChevronRight size={18} color={theme.colors.gray[4]} />
+                                </Group>
+                            }
+                        />
                     </Paper>
 
-                    <Paper p="md" radius="lg">
-                        <Text size="sm" fw={500} c="dimmed" mb="sm" tt="uppercase">Data Management</Text>
-                        <Stack>
-                            <SyncFromJsonButton />
-                        </Stack>
-                    </Paper>
-                    <Paper p="md" radius="lg">
-                        <Text size="sm" fw={500} c="dimmed" mb="sm" tt="uppercase">Application</Text>
-                        <Stack>
-                            <Group style={{ justifyContent: 'space-between', width: '100%' }}>
-                                <Button
-                                    variant="outline"
-                                    leftSection={<IconRefresh size={16} />}
-                                    onClick={handleForceUpdate}
-                                >
-                                    Force Update
-                                </Button>
-                                <Badge color="yellow" variant="light" radius="sm" id="update-badge" style={{ display: 'none' }}>
-                                    Update available
-                                </Badge>
-                            </Group>
-                        </Stack>
-                    </Paper>
-
-                    <Paper p="md" radius="lg">
-                        <Text size="sm" fw={500} c="dimmed" mb="sm" tt="uppercase">Account</Text>
-                        <Button
-                            variant="light"
+                    {/* Account Group */}
+                    <Paper radius="sm" shadow="sm" bg="white" style={{ overflow: 'hidden' }}>
+                        <SettingsRow
+                            icon={<IconLogout size={20} />}
                             color="red"
-                            fullWidth
+                            label="Logout"
                             onClick={handleLogout}
-                            leftSection={<IconLogout size={18} />}
-                        >
-                            Logout
-                        </Button>
+                        />
                     </Paper>
                 </Stack>
             </Container>

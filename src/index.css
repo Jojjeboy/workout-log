@@ -54,3 +54,11 @@ body {
 .stat-card-icon {
   background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05));
 }
+
+.hover-bg-gray {
+  transition: background-color 0.2s ease;
+}
+
+.hover-bg-gray:hover {
+  background-color: #f8f9fa;
+}
