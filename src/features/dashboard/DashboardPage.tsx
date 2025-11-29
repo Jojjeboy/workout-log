@@ -1,11 +1,11 @@
-import { Container, Grid, Text, Title, Loader, Center, Stack, Group, ThemeIcon, Badge, Paper, Box, Divider, Avatar } from '@mantine/core';
-import { IconTrendingUp, IconActivity, IconArrowUpRight, IconChevronRight } from '@tabler/icons-react';
+import { Container, Grid, Text, Title, Loader, Center, Stack, Group, ThemeIcon, Badge, Paper, Box, Avatar, Accordion, Table } from '@mantine/core';
+import { IconTrendingUp, IconActivity, IconArrowUpRight } from '@tabler/icons-react';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { useAuth } from '../../hooks/useAuth';
 import './DashboardPage.css';
 
 export function DashboardPage() {
-    const { logs, isLoading } = useWorkouts();
+    const { logs, isLoading, updateWorkout } = useWorkouts();
     const { user } = useAuth();
 
     const stats = {
@@ -17,6 +17,24 @@ export function DashboardPage() {
             const week = 7 * 24 * 60 * 60 * 1000;
             return log.timestamp > now - week;
         }).length || 0,
+    };
+
+    const handleToggleSetCompletion = (logId: string | undefined, setIdx: number) => {
+        if (!logId) return;
+        
+        const log = logs?.find(l => l.id === logId);
+        if (!log || !log.sets || !log.sets[setIdx]) return;
+
+        // Toggle the completion status
+        const updatedSets = log.sets.map((set, idx) =>
+            idx === setIdx ? { ...set, completed: !set.completed } : set
+        );
+
+        // Update the workout log
+        updateWorkout({
+            ...log,
+            sets: updatedSets,
+        });
     };
 
     if (isLoading) {
@@ -128,32 +146,75 @@ export function DashboardPage() {
                         </Group>
 
                         <Paper radius="lg" withBorder shadow="sm" style={{ overflow: 'hidden', background: 'white' }}>
-                            {logs?.slice(0, 5).map((log, index) => (
-                                <div key={index}>
-                                    <div style={{ padding: '16px', display: 'flex', alignItems: 'center', cursor: 'pointer' }} className="hover-bg-gray">
-                                        <ThemeIcon size={40} radius="xl" color="blue" variant="light" style={{ flexShrink: 0 }}>
-                                            <IconActivity size={20} />
-                                        </ThemeIcon>
-
-                                        <div style={{ marginLeft: '16px', flex: 1 }}>
-                                            <Text fw={600} size="sm">Workout Session</Text>
-                                            <Text size="xs" c="dimmed">{new Date(log.timestamp).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</Text>
-                                        </div>
-
-                                        <div style={{ textAlign: 'right', marginRight: '16px' }}>
-                                            <Text fw={600} size="sm">{log.sets?.length || 0} Sets</Text>
-                                            <Text size="xs" c="green" fw={500}>Completed</Text>
-                                        </div>
-
-                                        <IconChevronRight size={18} color="#adb5bd" />
-                                    </div>
-                                    {index < (logs?.slice(0, 5).length || 0) - 1 && (
-                                        <Divider color="gray.2" style={{ marginLeft: '72px' }} />
-                                    )}
-                                </div>
-                            ))}
-                            {(!logs || logs.length === 0) && (
+                            {(!logs || logs.length === 0) ? (
                                 <Text p="xl" ta="center" c="dimmed">No workouts logged yet.</Text>
+                            ) : (
+                                <Accordion chevronPosition="right" defaultValue="" variant="separated">
+                                    {logs.slice(0, 5).map((log, index) => (
+                                        <Accordion.Item key={log.id || index} value={log.id || index.toString()}>
+                                            <Accordion.Control>
+                                                <Group justify="space-between" style={{ width: '100%' }}>
+                                                    <Group style={{ flex: 1 }}>
+                                                        <ThemeIcon size={40} radius="xl" color="blue" variant="light">
+                                                            <IconActivity size={20} />
+                                                        </ThemeIcon>
+                                                        <div>
+                                                            <Text fw={600} size="sm">Workout Session</Text>
+                                                            <Text size="xs" c="dimmed">{new Date(log.timestamp).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</Text>
+                                                        </div>
+                                                    </Group>
+                                                    <div style={{ textAlign: 'right' }}>
+                                                        <Text fw={600} size="sm">{log.sets?.length || 0} Sets</Text>
+                                                        <Text size="xs" c="green" fw={500}>Completed</Text>
+                                                    </div>
+                                                </Group>
+                                            </Accordion.Control>
+                                            <Accordion.Panel>
+                                                <Stack gap="md">
+                                                    <div>
+                                                        <Text fw={600} size="sm" mb="sm">Exercise: {log.exerciseId}</Text>
+                                                        <Table striped highlightOnHover>
+                                                            <Table.Thead>
+                                                                <Table.Tr>
+                                                                    <Table.Th>Set</Table.Th>
+                                                                    <Table.Th>Weight (kg)</Table.Th>
+                                                                    <Table.Th>Reps</Table.Th>
+                                                                    <Table.Th>Status</Table.Th>
+                                                                </Table.Tr>
+                                                            </Table.Thead>
+                                                            <Table.Tbody>
+                                                                {log.sets?.map((set, setIdx) => (
+                                                                    <Table.Tr key={setIdx}>
+                                                                        <Table.Td c="#1a202c">{setIdx + 1}</Table.Td>
+                                                                        <Table.Td c="#1a202c">{set.weight}</Table.Td>
+                                                                        <Table.Td c="#1a202c">{set.reps}</Table.Td>
+                                                                        <Table.Td>
+                                                                            <Badge 
+                                                                                color={set.completed ? 'green' : 'gray'} 
+                                                                                size="sm" 
+                                                                                variant="light"
+                                                                                style={{ cursor: 'pointer' }}
+                                                                                onClick={() => handleToggleSetCompletion(log.id, setIdx)}
+                                                                            >
+                                                                                {set.completed ? 'Done' : 'Pending'}
+                                                                            </Badge>
+                                                                        </Table.Td>
+                                                                    </Table.Tr>
+                                                                ))}
+                                                            </Table.Tbody>
+                                                        </Table>
+                                                    </div>
+                                                    {log.note && (
+                                                        <div>
+                                                            <Text fw={600} size="sm" mb="xs">Notes</Text>
+                                                            <Text size="sm" c="dimmed">{log.note}</Text>
+                                                        </div>
+                                                    )}
+                                                </Stack>
+                                            </Accordion.Panel>
+                                        </Accordion.Item>
+                                    ))}
+                                </Accordion>
                             )}
                         </Paper>
                     </div>
