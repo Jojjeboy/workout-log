@@ -7,7 +7,7 @@ import { WorkoutLogger } from '../workouts/WorkoutLogger';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { ProgressChart } from '../charts/ProgressChart';
 import { WorkoutSet } from '../../types';
-import { ThemeToggle } from '../../components/ThemeToggle';
+
 
 export function ExerciseDetail() {
     const { id } = useParams<{ id: string }>();
@@ -61,7 +61,7 @@ export function ExerciseDetail() {
                         Back
                     </Button>
                     <Group gap="sm">
-                        <ThemeToggle />
+
                     </Group>
                 </Group>
 

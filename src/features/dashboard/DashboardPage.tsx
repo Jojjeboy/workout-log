@@ -2,7 +2,6 @@ import { Container, Grid, Text, Title, Loader, Center, Stack, Group, ThemeIcon, 
 import { IconTrendingUp, IconActivity, IconArrowUpRight, IconChevronRight } from '@tabler/icons-react';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { useAuth } from '../../hooks/useAuth';
-import { ThemeToggle } from '../../components/ThemeToggle';
 import './DashboardPage.css';
 
 export function DashboardPage() {
@@ -54,7 +53,7 @@ export function DashboardPage() {
                         </div>
                     </Group>
                     <Group gap="sm">
-                        <ThemeToggle />
+
                     </Group>
                 </Group>
 

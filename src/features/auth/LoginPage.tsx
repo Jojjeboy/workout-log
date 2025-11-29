@@ -1,4 +1,4 @@
-import { Button, Container, Paper, Title, Text, Center, Box, Stack } from '@mantine/core';
+import { Button, Container, Paper, Title, Text, Box, Stack } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 import { IconBrandGoogle } from '@tabler/icons-react';
 import { authService } from '../../services/authService';

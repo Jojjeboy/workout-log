@@ -4,7 +4,7 @@ import { IconSearch, IconChevronRight, IconFilter } from '@tabler/icons-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useExercises } from '../../hooks/useExercises';
 import { Exercise } from '../../types';
-import { ThemeToggle } from '../../components/ThemeToggle';
+
 
 // Number of exercises to show per page
 const ITEMS_PER_PAGE = 20;
@@ -112,7 +112,6 @@ export function ExerciseList() {
                         <Title order={2} style={{ color: 'white' }}>Exercises</Title>
                     </div>
                     <Group gap="sm">
-                        <ThemeToggle />
                     </Group>
                 </Group>
 

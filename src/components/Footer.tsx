@@ -1,4 +1,4 @@
-import { AppShell, Group, Text, UnstyledButton, useMantineTheme, ThemeIcon, Stack, useComputedColorScheme, Avatar } from '@mantine/core';
+import { AppShell, Group, Text, UnstyledButton, useMantineTheme, ThemeIcon, Stack, Avatar } from '@mantine/core';
 import { IconHome, IconChartBar, IconPlus, IconSettings, IconUser } from '@tabler/icons-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
@@ -15,7 +15,6 @@ export function Footer() {
     const navigate = useNavigate();
     const location = useLocation();
     const theme = useMantineTheme();
-    const colorScheme = useComputedColorScheme('light');
     const { user } = useAuth();
 
     // Check if the current route matches the given path
@@ -34,23 +33,33 @@ export function Footer() {
      * Standard navigation item with icon and label
      * Used for Home, Analysis, Exercises, and Settings
      */
-    const NavItem = ({ path, icon: Icon, label, color }: { path: string; icon: any; label: string, color: string }) => {
+    const NavItem = ({ path, icon: Icon, label, color, large }: { path: string; icon: any; label: string, color: string, large?: boolean }) => {
         const active = isActive(path);
-        const isDark = colorScheme === 'dark';
+
+
+        // Base sizes
+        const baseIconSize = 26;
+        const baseThemeIconSize = 48;
+
+        // Scale factor for large icons (approx 25% bigger)
+        const scale = large ? 1.25 : 1;
+
+        const iconSize = baseIconSize * scale;
+        const themeIconSize = baseThemeIconSize * scale;
 
         return (
             <UnstyledButton onClick={() => navigate(path)} style={buttonContainerStyle}>
                 <Stack gap={2} align="center">
                     {/* Icon container with highlight when active */}
                     <ThemeIcon
-                        size={48}
+                        size={themeIconSize}
                         radius="xl"
                         variant={active ? 'light' : 'transparent'}
                         color={color}
                         style={!active ? { backgroundColor: 'transparent' } : {}}
                     >
                         <Icon
-                            size={26}
+                            size={iconSize}
                             stroke={1.5}
                             color={!active ? theme.colors.gray[5] : undefined}
                         />
@@ -60,7 +69,7 @@ export function Footer() {
                     <Text
                         size="xs"
                         fw={500}
-                        c={active ? color : (isDark ? 'gray.4' : 'dimmed')}
+                        c={active ? color : 'dimmed'}
                         style={{ fontSize: '11px' }}
                     >
                         {label}
@@ -77,7 +86,7 @@ export function Footer() {
      */
     const ProfileNavItem = ({ path, label, color }: { path: string; label: string, color: string }) => {
         const active = isActive(path);
-        const isDark = colorScheme === 'dark';
+
 
         return (
             <UnstyledButton onClick={() => navigate(path)} style={buttonContainerStyle}>
@@ -108,7 +117,7 @@ export function Footer() {
                     <Text
                         size="xs"
                         fw={500}
-                        c={active ? color : (isDark ? 'gray.4' : 'dimmed')}
+                        c={active ? color : 'dimmed'}
                         style={{ fontSize: '11px' }}
                     >
                         {label}
@@ -125,10 +134,10 @@ export function Footer() {
             style={{ zIndex: 101, borderTop: 'none', boxShadow: '0 -4px 20px rgba(0,0,0,0.05)' }}
         >
             {/* Background color changes based on dark mode */}
-            <Group h="100%" gap={0} bg={colorScheme === 'dark' ? 'dark.7' : 'white'} align="center">
+            <Group h="100%" gap={0} bg="white" align="center">
                 <NavItem path="/" icon={IconHome} label="Dashboard" color="blue" />
                 <NavItem path="/analysis" icon={IconChartBar} label="Analysis" color="violet" />
-                <NavItem path="/exercises" icon={IconPlus} label="Add" color="cyan" />
+                <NavItem path="/exercises" icon={IconPlus} label="Add" color="cyan" large />
                 <NavItem path="/settings" icon={IconSettings} label="Settings" color="orange" />
                 <ProfileNavItem path="/profile" label="Profile" color="pink" />
             </Group>

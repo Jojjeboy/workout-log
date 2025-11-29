@@ -4,7 +4,6 @@ import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, Icon
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
 import { useExerciseSync } from '../../hooks/useExerciseSync'; // Import hook directly to use in custom row
-import { ThemeToggle } from '../../components/ThemeToggle';
 import { showNotification } from '@mantine/notifications';
 import { onUpdateAvailable, offUpdateAvailable, checkForUpdates, forceUpdate } from '../../lib/sw';
 
@@ -103,7 +102,6 @@ export function SettingsPage() {
                         <Text size="xs" style={{ opacity: 0.8 }}>Preferences</Text>
                         <Title order={2} style={{ color: 'white' }}>Settings</Title>
                     </div>
-                    <ThemeToggle />
                 </Group>
             </div>
 

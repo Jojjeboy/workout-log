@@ -1,5 +1,5 @@
 import { Container, Title, Text, Group, Box } from '@mantine/core';
-import { ThemeToggle } from '../../components/ThemeToggle';
+
 
 export function AnalysisPage() {
     return (
@@ -18,7 +18,6 @@ export function AnalysisPage() {
                         <Text size="xs" style={{ opacity: 0.8 }}>Insights</Text>
                         <Title order={2} style={{ color: 'white' }}>Analysis</Title>
                     </div>
-                    <ThemeToggle />
                 </Group>
             </div>
 

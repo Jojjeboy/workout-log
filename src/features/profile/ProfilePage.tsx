@@ -3,7 +3,7 @@ import { IconLogout } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { authService } from '../../services/authService';
-import { ThemeToggle } from '../../components/ThemeToggle';
+
 
 export function ProfilePage() {
     const { user } = useAuth();
@@ -30,7 +30,6 @@ export function ProfilePage() {
                         <Text size="xs" style={{ opacity: 0.8 }}>Account</Text>
                         <Title order={2} style={{ color: 'white' }}>Profile</Title>
                     </div>
-                    <ThemeToggle />
                 </Group>
             </div>
 
