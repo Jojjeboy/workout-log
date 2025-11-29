@@ -7,7 +7,6 @@ import { ExerciseDetail } from './features/exercises/ExerciseDetail';
 import { NotesPage } from './features/notes/NotesPage';
 import { DashboardPage } from './features/dashboard/DashboardPage';
 import { SettingsPage } from './features/settings/SettingsPage';
-import { AnalysisPage } from './features/analysis/AnalysisPage';
 import { ProfilePage } from './features/profile/ProfilePage';
 import { Footer } from './components/Footer';
 import { useAuth } from './hooks/useAuth';
@@ -43,7 +42,6 @@ function App() {
               <Route path="/exercises/:id" element={<ExerciseDetail />} />
               <Route path="/notes" element={<NotesPage />} />
               <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/analysis" element={<AnalysisPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
 

@@ -4,6 +4,7 @@ import { IconSearch, IconChevronRight, IconFilter } from '@tabler/icons-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useExercises } from '../../hooks/useExercises';
 import { Exercise } from '../../types';
+import { useAuth } from '../../hooks/useAuth';
 
 
 // Number of exercises to show per page
@@ -13,6 +14,7 @@ export function ExerciseList() {
     const { data: exercises, isLoading } = useExercises();
     const location = useLocation();
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const randomizedOnceRef = useRef(false);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -112,6 +114,16 @@ export function ExerciseList() {
                         <Title order={2} style={{ color: 'white' }}>Exercises</Title>
                     </div>
                     <Group gap="sm">
+                        <Avatar
+                            src={user?.photoURL}
+                            alt={user?.displayName || 'User'}
+                            size="md"
+                            radius="xl"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => navigate('/profile')}
+                        >
+                            {user?.displayName?.[0] || 'A'}
+                        </Avatar>
                     </Group>
                 </Group>
 

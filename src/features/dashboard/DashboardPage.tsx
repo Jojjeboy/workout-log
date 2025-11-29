@@ -53,7 +53,16 @@ export function DashboardPage() {
                         </div>
                     </Group>
                     <Group gap="sm">
-
+                        <Avatar
+                            src={user?.photoURL}
+                            alt={user?.displayName || 'User'}
+                            size="md"
+                            radius="xl"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => window.location.href = '/profile'}
+                        >
+                            {user?.displayName?.[0] || 'A'}
+                        </Avatar>
                     </Group>
                 </Group>
 

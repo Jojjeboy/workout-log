@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Container, Title, Text, Image, Badge, Group, Button, Paper, Grid, Tabs, Stack, Checkbox, Box } from '@mantine/core';
+import { Container, Title, Text, Image, Badge, Group, Button, Paper, Grid, Tabs, Stack, Checkbox, Box, Avatar } from '@mantine/core';
 import { IconArrowLeft, IconChartLine, IconList, IconHistory } from '@tabler/icons-react';
 import { useExercise } from '../../hooks/useExercises';
 import { WorkoutLogger } from '../workouts/WorkoutLogger';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { ProgressChart } from '../charts/ProgressChart';
 import { WorkoutSet } from '../../types';
+import { useAuth } from '../../hooks/useAuth';
 
 
 export function ExerciseDetail() {
@@ -14,6 +15,7 @@ export function ExerciseDetail() {
     const navigate = useNavigate();
     const { data: exercise, isLoading: exerciseLoading } = useExercise(id || '');
     const { logs, logWorkout, isLogging } = useWorkouts();
+    const { user } = useAuth();
 
     // Track which instruction steps are checked
     const [checkedSteps, setCheckedSteps] = useState<Record<number, boolean>>({});
@@ -61,7 +63,16 @@ export function ExerciseDetail() {
                         Back
                     </Button>
                     <Group gap="sm">
-
+                        <Avatar
+                            src={user?.photoURL}
+                            alt={user?.displayName || 'User'}
+                            size="md"
+                            radius="xl"
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => navigate('/profile')}
+                        >
+                            {user?.displayName?.[0] || 'A'}
+                        </Avatar>
                     </Group>
                 </Group>
 

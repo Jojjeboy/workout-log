@@ -1,4 +1,4 @@
-import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider } from '@mantine/core';
+import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider, Avatar } from '@mantine/core';
 import { useEffect } from 'react';
 import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
@@ -6,11 +6,13 @@ import { authService } from '../../services/authService';
 import { useExerciseSync } from '../../hooks/useExerciseSync'; // Import hook directly to use in custom row
 import { showNotification } from '@mantine/notifications';
 import { onUpdateAvailable, offUpdateAvailable, checkForUpdates, forceUpdate } from '../../lib/sw';
+import { useAuth } from '../../hooks/useAuth';
 
 export function SettingsPage() {
     const navigate = useNavigate();
     const theme = useMantineTheme();
-    const { syncFromJson, isSyncingFromJson } = useExerciseSync(); // Use hook here
+    const { syncFromJson, isSyncingFromJson } = useExerciseSync();
+    const { user } = useAuth();
 
     const handleLogout = async () => {
         await authService.logout();
@@ -102,6 +104,16 @@ export function SettingsPage() {
                         <Text size="xs" style={{ opacity: 0.8 }}>Preferences</Text>
                         <Title order={2} style={{ color: 'white' }}>Settings</Title>
                     </div>
+                    <Avatar
+                        src={user?.photoURL}
+                        alt={user?.displayName || 'User'}
+                        size="md"
+                        radius="xl"
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => navigate('/profile')}
+                    >
+                        {user?.displayName?.[0] || 'A'}
+                    </Avatar>
                 </Group>
             </div>
 

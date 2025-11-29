@@ -30,6 +30,14 @@ export function ProfilePage() {
                         <Text size="xs" style={{ opacity: 0.8 }}>Account</Text>
                         <Title order={2} style={{ color: 'white' }}>Profile</Title>
                     </div>
+                    <Avatar
+                        src={user?.photoURL}
+                        alt={user?.displayName || 'User'}
+                        size="md"
+                        radius="xl"
+                    >
+                        {user?.displayName?.[0] || 'A'}
+                    </Avatar>
                 </Group>
             </div>
 
