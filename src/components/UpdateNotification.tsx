@@ -55,10 +55,10 @@ export function UpdateNotification() {
           A new version of the application is available. Would you like to update now?
         </Text>
         <Group justify="flex-end" gap="sm">
-          <Button variant="outline" onClick={handleCancel}>
+          <Button variant="outline" color="gray" onClick={handleCancel} radius="xs">
             Cancel
           </Button>
-          <Button onClick={handleUpdate}>
+          <Button onClick={handleUpdate} color="darkBlue" radius="xs">
             Update
           </Button>
         </Group>
