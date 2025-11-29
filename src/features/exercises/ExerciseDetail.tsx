@@ -23,11 +23,11 @@ export function ExerciseDetail() {
     if (exerciseLoading) return <Text>Loading...</Text>;
     if (!exercise) return <Text>Exercise not found</Text>;
 
-    const handleSaveWorkout = (sets: WorkoutSet[]) => {
+    const handleSaveWorkout = (sets: WorkoutSet[], date: Date) => {
         if (!id) return;
         logWorkout({
             exerciseId: id,
-            timestamp: Date.now(),
+            timestamp: date.getTime(),
             sets,
         });
     };

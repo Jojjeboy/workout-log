@@ -39,10 +39,42 @@ export function useWorkouts() {
         },
     });
 
+    const updateWorkoutMutation = useMutation({
+        mutationFn: async (log: WorkoutLog) => {
+            // Update in local DB
+            await db.logs.put(log);
+
+            // Queue for sync
+            await queueService.enqueue('LOG_WORKOUT', log);
+
+            return log;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['logs'] });
+        },
+    });
+
+    const deleteWorkoutMutation = useMutation({
+        mutationFn: async (logId: string) => {
+            // Delete from local DB
+            await db.logs.delete(logId);
+
+            // TODO: Queue delete for sync
+            return logId;
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['logs'] });
+        },
+    });
+
     return {
         logs: logsQuery.data,
         isLoading: logsQuery.isLoading,
         logWorkout: logWorkoutMutation.mutate,
         isLogging: logWorkoutMutation.isPending,
+        updateWorkout: updateWorkoutMutation.mutate,
+        isUpdating: updateWorkoutMutation.isPending,
+        deleteWorkout: deleteWorkoutMutation.mutate,
+        isDeleting: deleteWorkoutMutation.isPending,
     };
 }

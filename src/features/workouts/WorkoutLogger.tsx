@@ -1,17 +1,21 @@
 import { useState } from 'react';
 import { Button, NumberInput, Stack, ActionIcon, Group, Text, Paper, Table } from '@mantine/core';
-import { IconPlus, IconTrash, IconCheck } from '@tabler/icons-react';
+import { DatePickerInput } from '@mantine/dates';
+import { IconPlus, IconTrash, IconCheck, IconCalendar } from '@tabler/icons-react';
 import { WorkoutSet } from '../../types';
 
 interface WorkoutLoggerProps {
-    onSave: (sets: WorkoutSet[]) => void;
+    onSave: (sets: WorkoutSet[], date: Date) => void;
     isSaving: boolean;
+    initialSets?: WorkoutSet[];
+    initialDate?: Date;
 }
 
-export function WorkoutLogger({ onSave, isSaving }: WorkoutLoggerProps) {
-    const [sets, setSets] = useState<WorkoutSet[]>([
-        { weight: 0, reps: 0, completed: false }
-    ]);
+export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate }: WorkoutLoggerProps) {
+    const [sets, setSets] = useState<WorkoutSet[]>(
+        initialSets || [{ weight: 0, reps: 0, completed: false }]
+    );
+    const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate || new Date());
 
     const addSet = () => {
         const lastSet = sets[sets.length - 1];
@@ -35,7 +39,8 @@ export function WorkoutLogger({ onSave, isSaving }: WorkoutLoggerProps) {
     };
 
     const handleSave = () => {
-        onSave(sets);
+        if (!selectedDate) return;
+        onSave(sets, selectedDate);
     };
 
     return (
@@ -107,6 +112,23 @@ export function WorkoutLogger({ onSave, isSaving }: WorkoutLoggerProps) {
                     </Table.Tbody>
                 </Table>
             </Paper>
+
+            <DatePickerInput
+                value={selectedDate}
+                onChange={(value) => {
+                    if (typeof value === 'string') {
+                        setSelectedDate(new Date(value));
+                    } else {
+                        setSelectedDate(value);
+                    }
+                }}
+                label="Workout Date"
+                placeholder="Pick date"
+                leftSection={<IconCalendar size={16} />}
+                clearable={false}
+                valueFormat="DD MMM YYYY"
+                radius="xs"
+            />
 
             <Group grow>
                 <Button
