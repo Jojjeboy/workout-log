@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Modal, Button, Group, Text, Stack } from '@mantine/core';
 import { IconAlertCircle } from '@tabler/icons-react';
 import { onUpdateAvailable, offUpdateAvailable, checkForUpdates, forceUpdate } from '../lib/sw';
@@ -6,6 +6,8 @@ import { showNotification } from '@mantine/notifications';
 
 export function UpdateNotification() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
+  // prevent re-showing the modal while an update is being applied
+  const applyingRef = useRef(false);
 
   useEffect(() => {
     const handle = () => setUpdateAvailable(true);
@@ -22,12 +24,33 @@ export function UpdateNotification() {
   }, []);
 
   const handleUpdate = async () => {
+    if (applyingRef.current) return; // guard
+    applyingRef.current = true;
     const applied = await forceUpdate();
     if (applied) {
+      // hide modal immediately to avoid re-show
+      setUpdateAvailable(false);
       showNotification({ title: 'Updating', message: 'Applying update and reloading...', color: 'blue' });
-      // reload will happen on controllerchange
+
+      // If controllerchange doesn't fire (browser quirk), fallback to reload after short delay
+      const reloadTimeout = setTimeout(() => {
+        try {
+          window.location.reload();
+        } catch (err) {
+          // ignore
+        }
+      }, 2000);
+
+      // clear timeout if controllerchange happens first
+      const onControllerOnce = () => {
+        clearTimeout(reloadTimeout);
+        // reload to ensure new content is shown
+        try { window.location.reload(); } catch (e) {}
+      };
+      navigator.serviceWorker.addEventListener('controllerchange', onControllerOnce, { once: true });
     } else {
       showNotification({ title: 'No Update', message: 'No update was available.', color: 'gray' });
+      applyingRef.current = false;
       setUpdateAvailable(false);
     }
   };
