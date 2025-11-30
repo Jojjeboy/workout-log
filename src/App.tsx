@@ -8,6 +8,7 @@ import { NotesPage } from './features/notes/NotesPage';
 import { DashboardPage } from './features/dashboard/DashboardPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { ProfilePage } from './features/profile/ProfilePage';
+import { ChangelogPage } from './features/changelog/ChangelogPage';
 import { Footer } from './components/Footer';
 import { useAuth } from './hooks/useAuth';
 import { UpdateNotification } from './components/UpdateNotification';
@@ -42,6 +43,7 @@ function App() {
               <Route path="/exercises/:id" element={<ExerciseDetail />} />
               <Route path="/notes" element={<NotesPage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/changelog" element={<ChangelogPage />} />
               <Route path="/profile" element={<ProfilePage />} />
             </Route>
 

@@ -1,6 +1,6 @@
 import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider, Avatar } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy } from '@tabler/icons-react';
+import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy, IconHistory } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
 import { useExerciseSync } from '../../hooks/useExerciseSync'; // Import hook directly to use in custom row
@@ -169,6 +169,13 @@ export function SettingsPage() {
                             label="Sync Exercises"
                             onClick={syncFromJson}
                             loading={isSyncingFromJson}
+                        />
+                        <Divider color="gray.1" />
+                        <SettingsRow
+                            icon={<IconHistory size={20} />}
+                            color="grape"
+                            label="Changelog"
+                            onClick={() => navigate('/changelog')}
                         />
                         <Divider color="gray.1" />
                         <SettingsRow
