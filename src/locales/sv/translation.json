@@ -76,6 +76,13 @@
     "file": "fil",
     "files": "filer"
   },
+  "common": {
+    "deleteWorkout": "Ta bort pass",
+    "deleteWorkoutConfirmTitle": "Ta bort pass?",
+    "deleteWorkoutConfirmMessage": "Är du säker på att du vill ta bort detta pass? Detta går inte att ångra.",
+    "delete": "Ta bort",
+    "cancel": "Avbryt"
+  },
   "exerciseDetail": {
     "back": "Tillbaka",
     "loading": "Laddar...",

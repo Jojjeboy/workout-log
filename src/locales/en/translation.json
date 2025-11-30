@@ -76,6 +76,13 @@
     "file": "file",
     "files": "files"
   },
+  "common": {
+    "deleteWorkout": "Delete Workout",
+    "deleteWorkoutConfirmTitle": "Delete Workout?",
+    "deleteWorkoutConfirmMessage": "Are you sure you want to delete this workout? This action cannot be undone.",
+    "delete": "Delete",
+    "cancel": "Cancel"
+  },
   "exerciseDetail": {
     "back": "Back",
     "loading": "Loading...",

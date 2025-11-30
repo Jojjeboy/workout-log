@@ -1,18 +1,36 @@
 import { Container, Grid, Text, Title, Loader, Center, Stack, Group, ThemeIcon, Badge, Paper, Box, Avatar, Accordion, Table } from '@mantine/core';
-import { IconTrendingUp, IconActivity, IconArrowUpRight } from '@tabler/icons-react';
+import { IconTrendingUp, IconActivity, IconArrowUpRight, IconTrash } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { useExercises } from '../../hooks/useExercises';
 import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { useState } from 'react';
 import './DashboardPage.css';
 
 export function DashboardPage() {
     const { t } = useTranslation();
-    const { logs, isLoading } = useWorkouts();
+    const { logs, isLoading, deleteWorkout, isDeleting } = useWorkouts();
     const { data: exercises = [] } = useExercises();
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [workoutToDelete, setWorkoutToDelete] = useState<string | null>(null);
+
+    const handleDeleteClick = (id: string, e: React.MouseEvent) => {
+        e.stopPropagation();
+        setWorkoutToDelete(id);
+        setDeleteConfirmOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (workoutToDelete) {
+            deleteWorkout(workoutToDelete);
+            setDeleteConfirmOpen(false);
+            setWorkoutToDelete(null);
+        }
+    };
 
     // Create a map of exercise IDs to exercise names
     const exerciseMap = exercises.reduce((acc, exercise) => {
@@ -167,6 +185,17 @@ export function DashboardPage() {
                                             </Accordion.Control>
                                             <Accordion.Panel>
                                                 <Stack gap="md">
+                                                    <Group justify="flex-end">
+                                                        <ThemeIcon
+                                                            variant="light"
+                                                            color="red"
+                                                            size="md"
+                                                            style={{ cursor: 'pointer' }}
+                                                            onClick={(e) => handleDeleteClick(log.id!, e)}
+                                                        >
+                                                            <IconTrash size={16} />
+                                                        </ThemeIcon>
+                                                    </Group>
                                                     <div>
                                                         <Text fw={600} size="sm" mb="sm">
                                                             {t('dashboard.exercise')}:
@@ -226,6 +255,17 @@ export function DashboardPage() {
                     </div>
                 </Stack>
             </Container>
-        </Box>
+            <ConfirmDialog
+                opened={deleteConfirmOpen}
+                title={t('common.deleteWorkoutConfirmTitle')}
+                message={t('common.deleteWorkoutConfirmMessage')}
+                confirmLabel={t('common.delete')}
+                cancelLabel={t('common.cancel')}
+                onConfirm={confirmDelete}
+                onCancel={() => setDeleteConfirmOpen(false)}
+                isLoading={isDeleting}
+                isDangerous
+            />
+        </Box >
     );
 }

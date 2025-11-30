@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { Container, Title, Text, Image, Badge, Group, Button, Paper, Grid, Tabs, Stack, Checkbox, Box, Avatar, Table, ActionIcon, Modal, NumberInput } from '@mantine/core';
 import { DatePickerInput } from '@mantine/dates';
-import { IconArrowLeft, IconCalendar, IconChartLine, IconList, IconHistory, IconPencil } from '@tabler/icons-react';
+import { IconArrowLeft, IconCalendar, IconChartLine, IconList, IconHistory, IconPencil, IconTrash } from '@tabler/icons-react';
 import { useExercise } from '../../hooks/useExercises';
 import { WorkoutLogger } from '../workouts/WorkoutLogger';
 import { useWorkouts } from '../../hooks/useWorkouts';
@@ -10,6 +10,7 @@ import { ProgressChart } from '../charts/ProgressChart';
 import { WorkoutSet } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 
 
 export function ExerciseDetail() {
@@ -18,8 +19,10 @@ export function ExerciseDetail() {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
     const { data: exercise, isLoading: exerciseLoading } = useExercise(id || '');
-    const { logs, logWorkout, isLoading: isLogging, updateWorkout } = useWorkouts();
+    const { logs, logWorkout, isLoading: isLogging, updateWorkout, deleteWorkout, isDeleting } = useWorkouts();
     const { user } = useAuth();
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [workoutToDelete, setWorkoutToDelete] = useState<string | null>(null);
 
     // Get tab from query parameters, default to 'log'
     const initialTab = searchParams.get('tab') || 'log';
@@ -88,6 +91,19 @@ export function ExerciseDetail() {
 
         // Close the modal
         setEditingSet(null);
+    };
+
+    const handleDeleteClick = (logId: string) => {
+        setWorkoutToDelete(logId);
+        setDeleteConfirmOpen(true);
+    };
+
+    const confirmDelete = () => {
+        if (workoutToDelete) {
+            deleteWorkout(workoutToDelete);
+            setDeleteConfirmOpen(false);
+            setWorkoutToDelete(null);
+        }
     };
 
     const toggleStep = (index: number) => {
@@ -200,7 +216,17 @@ export function ExerciseDetail() {
                                                                 <Text fw={600} size="sm">
                                                                     {new Date(log.timestamp).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                                                 </Text>
-                                                                <Badge color="blue" variant="light">{log.sets?.length || 0} {t('dashboard.sets')}</Badge>
+                                                                <Group gap="xs">
+                                                                    <Badge color="blue" variant="light">{log.sets?.length || 0} {t('dashboard.sets')}</Badge>
+                                                                    <ActionIcon
+                                                                        variant="subtle"
+                                                                        color="red"
+                                                                        size="sm"
+                                                                        onClick={() => handleDeleteClick(log.id!)}
+                                                                    >
+                                                                        <IconTrash size={16} />
+                                                                    </ActionIcon>
+                                                                </Group>
                                                             </Group>
                                                             <Table striped highlightOnHover>
                                                                 <Table.Thead>
@@ -327,6 +353,18 @@ export function ExerciseDetail() {
                     </Group>
                 </Stack>
             </Modal>
+
+            <ConfirmDialog
+                opened={deleteConfirmOpen}
+                title={t('common.deleteWorkoutConfirmTitle')}
+                message={t('common.deleteWorkoutConfirmMessage')}
+                confirmLabel={t('common.delete')}
+                cancelLabel={t('common.cancel')}
+                onConfirm={confirmDelete}
+                onCancel={() => setDeleteConfirmOpen(false)}
+                isLoading={isDeleting}
+                isDangerous
+            />
         </>
     );
 }
