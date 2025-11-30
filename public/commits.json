@@ -1,5 +1,18 @@
 [
   {
+    "hash": "8ad7757ba14805bec714fe317ae040fbf0fb0cb7",
+    "message": "Update footer navigation and sync dialog",
+    "date": "2025-11-30 09:41:53 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "scripts/generate-commits.js",
+      "src/components/Footer.tsx",
+      "src/features/changelog/ChangelogPage.tsx",
+      "src/features/settings/SettingsPage.tsx"
+    ]
+  },
+  {
     "hash": "e2652a4c5280d0a3076c31fe2cf7698dc142b8ef",
     "message": "feat: fix changelog page with static json generation and ui improvements",
     "date": "2025-11-30 09:17:59 +0100",
