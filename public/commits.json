@@ -1,5 +1,24 @@
 [
   {
+    "hash": "7cb99873bf90ca26e2d187581a5a94fa4b35cbee",
+    "message": "Active icon on exercise detail page",
+    "date": "2025-11-30 10:36:56 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/components/Footer.tsx"
+    ]
+  },
+  {
+    "hash": "c6ec4cbd537ac2fbdcab253f48fa776ed11dafe7",
+    "message": "Add recently logged exercises accordion",
+    "date": "2025-11-30 10:10:49 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/features/exercises/ExerciseList.tsx"
+    ]
+  },
+  {
     "hash": "8ad7757ba14805bec714fe317ae040fbf0fb0cb7",
     "message": "Update footer navigation and sync dialog",
     "date": "2025-11-30 09:41:53 +0100",

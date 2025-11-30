@@ -122,9 +122,9 @@ export function ExerciseDetail() {
                         <Paper withBorder p="lg" radius="sm" shadow="sm" bg="white">
                             <Tabs defaultValue={initialTab} color="darkBlue" variant="pills" radius="xs">
                                 <Tabs.List mb="md" grow>
-                                    <Tabs.Tab value="log" leftSection={<IconList size={14} />}>Log</Tabs.Tab>
-                                    <Tabs.Tab value="history" leftSection={<IconHistory size={14} />}>History</Tabs.Tab>
-                                    <Tabs.Tab value="chart" leftSection={<IconChartLine size={14} />}>Progress</Tabs.Tab>
+                                    <Tabs.Tab value="log" leftSection={<IconList size={12} />} style={{ padding: '6px 10px', fontSize: '12px' }}>Log</Tabs.Tab>
+                                    <Tabs.Tab value="history" leftSection={<IconHistory size={12} />} style={{ padding: '6px 10px', fontSize: '12px' }}>History</Tabs.Tab>
+                                    <Tabs.Tab value="chart" leftSection={<IconChartLine size={12} />} style={{ padding: '6px 10px', fontSize: '12px' }}>Progress</Tabs.Tab>
                                 </Tabs.List>
 
                                 <Tabs.Panel value="log">
