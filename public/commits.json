@@ -1,5 +1,91 @@
 [
   {
+    "hash": "b31c1d3ff840f455767203ef2b92df336869a237",
+    "message": "fix: replace changelog infinite scroll with load more button, restrict future dates",
+    "body": "- Replace unreliable infinite scroll in Changelog with manual 'Load More' button\n- Add 'Load More' translation keys\n- Restrict WorkoutLogger date picker to prevent future date selection (maxDate=today)",
+    "date": "2025-11-30 17:44:48 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/changelog/ChangelogPage.tsx",
+      "src/features/workouts/WorkoutLogger.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
+    "hash": "50b9263417b23ebd7136d55777fc9a08873fa030",
+    "message": "feat: complete i18n for settings and exercise list, fix footer icon",
+    "body": "- Add i18n support to ExerciseList page (headers, search, filters)\n- Add i18n support to Settings page (menu items, dialogs, notifications)\n- Fix Footer 'Add' icon size to be consistent with other icons\n- Update English and Swedish translation files with all new keys",
+    "date": "2025-11-30 17:29:36 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/components/Footer.tsx",
+      "src/features/exercises/ExerciseList.tsx",
+      "src/features/settings/SettingsPage.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
+    "hash": "43f109ac48305b2e677a86f3a31a0a661ffbf167",
+    "message": "feat: add i18n support to WorkoutLogger component",
+    "body": "- Add useTranslation hook to WorkoutLogger\n- Replace table headers (Weight, Reps) with translations\n- Replace button labels (Add Set, Log Workout) with translations\n- Replace date picker labels (Workout Date, Pick date) with translations\n- Replace notification messages with translations\n- Add workoutLogger translation keys to both en and sv files",
+    "date": "2025-11-30 17:14:32 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/workouts/WorkoutLogger.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
+    "hash": "f263eeb0db24163bdf90ff04d424908852f2518e",
+    "message": "fix: improve changelog lazy load scroll detection",
+    "body": "- Use more reliable scroll position calculation (pageYOffset/scrollTop)\n- Reduce trigger threshold from 300px to 200px for better detection\n- Fix issue where lazy load wasn't triggering at page bottom",
+    "date": "2025-11-30 17:11:40 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/changelog/ChangelogPage.tsx"
+    ]
+  },
+  {
+    "hash": "919d2b45d7f6989d28da7f7d998800b615ed235b",
+    "message": "feat: add i18n support to ExerciseDetail page",
+    "body": "- Add useTranslation hook to ExerciseDetail component\n- Replace tab labels (Log, History, Progress) with translations\n- Replace table headers (Set, Weight, Reps, Actions) with translations\n- Replace modal content (Edit Workout Set, Date, Cancel, Save) with translations\n- Replace Instructions title and other UI text with translations\n- All exercise detail text now supports English and Swedish",
+    "date": "2025-11-30 17:09:18 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/exercises/ExerciseDetail.tsx"
+    ]
+  },
+  {
+    "hash": "777b1f3fb567ed34d258e020124dbcc05387b491",
+    "message": "feat: add i18n support and optimize changelog loading",
+    "body": "- Add internationalization to DashboardPage and ChangelogPage\n- Add comprehensive English and Swedish translations\n- Add exercise detail translation keys (ready for implementation)\n- Optimize changelog: 20 initial commits, 10 per lazy load batch\n- Replace all hardcoded English strings with translation calls",
+    "date": "2025-11-30 17:03:52 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/changelog/ChangelogPage.tsx",
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
+    "hash": "8048e3c95415f5644e92c3db7fbab5779ca7e0b6",
+    "message": "Edit sets in history and fixed errors",
+    "date": "2025-11-30 11:37:09 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/features/settings/SettingsPage.tsx",
+      "src/features/workouts/WorkoutLogger.tsx",
+      "src/types/index.ts"
+    ]
+  },
+  {
     "hash": "ea9aa62face2d8d35b18b91a40253b4b35cb64f1",
     "message": "Language toggle in the menu",
     "date": "2025-11-30 11:10:15 +0100",
