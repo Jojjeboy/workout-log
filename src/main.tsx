@@ -8,6 +8,7 @@ import App from './App';
 import { theme } from './theme';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import './i18n';
 import './index.css';
 
 const queryClient = new QueryClient({

@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "title": "Inställningar",
+    "language": "Språk",
+    "english": "Engelska",
+    "swedish": "Svenska"
+  },
+  "footer": {
+    "dashboard": "Översikt",
+    "add": "Lägg till",
+    "settings": "Inställningar"
+  }
+}

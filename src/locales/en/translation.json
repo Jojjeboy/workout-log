@@ -1,0 +1,13 @@
+{
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "english": "English",
+    "swedish": "Swedish"
+  },
+  "footer": {
+    "dashboard": "Dashboard",
+    "add": "Add",
+    "settings": "Settings"
+  }
+}

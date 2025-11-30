@@ -1,7 +1,8 @@
-import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider, Avatar } from '@mantine/core';
+import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider, Avatar, Button } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy, IconHistory } from '@tabler/icons-react';
+import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy, IconHistory, IconLanguage } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { authService } from '../../services/authService';
 import { useExerciseSync } from '../../hooks/useExerciseSync'; // Import hook directly to use in custom row
 import { showNotification } from '@mantine/notifications';
@@ -10,6 +11,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
 
 export function SettingsPage() {
+    const { t, i18n } = useTranslation();
     const navigate = useNavigate();
     const theme = useMantineTheme();
     const { syncFromJson, isSyncingFromJson } = useExerciseSync();
@@ -164,7 +166,7 @@ export function SettingsPage() {
                 <Group justify="space-between" align="center" mb="lg">
                     <div>
                         <Text size="xs" style={{ opacity: 0.8 }}>Preferences</Text>
-                        <Title order={2} style={{ color: 'white' }}>Settings</Title>
+                        <Title order={2} style={{ color: 'white' }}>{t('settings.title')}</Title>
                     </div>
                     <Avatar
                         src={user?.photoURL}
@@ -181,6 +183,32 @@ export function SettingsPage() {
 
             <Container size="md" px="md" style={{ marginTop: '-40px' }}>
                 <Stack gap="md">
+                    {/* Language Settings */}
+                    <Paper radius="sm" shadow="sm" bg="white" p="lg">
+                        <Group>
+                            <ThemeIcon variant="light" color="blue" size="lg" radius="sm">
+                                <IconLanguage size={20} />
+                            </ThemeIcon>
+                            <Text fw={500} size="sm">{t('settings.language')}</Text>
+                        </Group>
+                        <Group mt="md">
+                            <Button
+                                variant={i18n.language === 'en' ? 'filled' : 'light'}
+                                onClick={() => i18n.changeLanguage('en')}
+                                color="blue"
+                            >
+                                {t('settings.english')}
+                            </Button>
+                            <Button
+                                variant={i18n.language === 'sv' ? 'filled' : 'light'}
+                                onClick={() => i18n.changeLanguage('sv')}
+                                color="blue"
+                            >
+                                {t('settings.swedish')}
+                            </Button>
+                        </Group>
+                    </Paper>
+
                     {/* Main Settings Group */}
                     <Paper radius="sm" shadow="sm" bg="white" style={{ overflow: 'hidden' }}>
                         <SettingsRow

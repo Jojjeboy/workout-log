@@ -1,5 +1,15 @@
 [
   {
+    "hash": "cfcacd4420ac8008172849f157e3bef717405a51",
+    "message": "stuff",
+    "date": "2025-11-30 10:51:34 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/features/exercises/ExerciseDetail.tsx"
+    ]
+  },
+  {
     "hash": "7cb99873bf90ca26e2d187581a5a94fa4b35cbee",
     "message": "Active icon on exercise detail page",
     "date": "2025-11-30 10:36:56 +0100",
