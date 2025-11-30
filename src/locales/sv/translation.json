@@ -3,7 +3,33 @@
     "title": "Inställningar",
     "language": "Språk",
     "english": "Engelska",
-    "swedish": "Svenska"
+    "swedish": "Svenska",
+    "preferences": "Preferenser",
+    "myNotes": "Mina Anteckningar",
+    "syncExercises": "Synkronisera Övningar",
+    "changelog": "Ändringslogg",
+    "forceUpdate": "Tvinga Uppdatering",
+    "logout": "Logga ut",
+    "updateApp": "Uppdatera Applikation",
+    "updateMessage": "Detta rensar din cache och uppdaterar till senaste versionen. Appen laddas om.",
+    "updateNow": "Uppdatera Nu",
+    "syncConfirmTitle": "Synkronisera Övningar?",
+    "syncConfirmMessage": "Detta skriver över dina lokala övningar med standardlistan. Egna övningar kan gå förlorade. Är du säker?",
+    "sync": "Synkronisera",
+    "syncComplete": "Synkronisering Klar",
+    "syncCompleteMessage": "Övningar har återställts till standard.",
+    "syncFailed": "Synkronisering Misslyckades",
+    "syncFailedMessage": "Misslyckades att synkronisera övningar. Försök igen.",
+    "updateError": "Fel",
+    "swNotSupported": "Service worker stöds inte i denna webbläsare.",
+    "noSw": "Ingen SW",
+    "noSwMessage": "Ingen service worker registrering hittades.",
+    "noUpdate": "Ingen Uppdatering",
+    "noUpdateMessage": "Ingen uppdatering tillgänglig just nu.",
+    "updating": "Uppdaterar",
+    "updatingMessage": "Rensar cache och applicerar uppdatering. Laddar om...",
+    "updateFailed": "Uppdatering Misslyckades",
+    "updateFailedMessage": "Misslyckades att applicera uppdatering. Se konsolen för detaljer."
   },
   "footer": {
     "dashboard": "Översikt",
@@ -72,5 +98,13 @@
     "workoutLoggedMessage": "Ditt träningspass har sparats!",
     "workoutLoggedTitle": "Träning Loggad!",
     "workoutSyncMessage": "Ditt träningspass har sparats och kommer synkas till molnet."
+  },
+  "exerciseList": {
+    "library": "Bibliotek",
+    "exercises": "Övningar",
+    "searchPlaceholder": "Sök övningar...",
+    "filterByMuscle": "Filtrera efter muskel",
+    "recentlyLogged": "Nyligen Loggad",
+    "noExercisesFound": "Inga övningar hittades."
   }
 }

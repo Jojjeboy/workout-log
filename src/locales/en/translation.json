@@ -3,7 +3,33 @@
     "title": "Settings",
     "language": "Language",
     "english": "English",
-    "swedish": "Swedish"
+    "swedish": "Swedish",
+    "preferences": "Preferences",
+    "myNotes": "My Notes",
+    "syncExercises": "Sync Exercises",
+    "changelog": "Changelog",
+    "forceUpdate": "Force Update",
+    "logout": "Logout",
+    "updateApp": "Update Application",
+    "updateMessage": "This will clear your cache and update to the latest version. You'll be reloaded to the updated app.",
+    "updateNow": "Update Now",
+    "syncConfirmTitle": "Sync Exercises?",
+    "syncConfirmMessage": "This will overwrite your local exercises with the default list. Custom exercises may be lost. Are you sure?",
+    "sync": "Sync",
+    "syncComplete": "Sync Complete",
+    "syncCompleteMessage": "Exercises have been reset to default.",
+    "syncFailed": "Sync Failed",
+    "syncFailedMessage": "Failed to sync exercises. Please try again.",
+    "updateError": "Error",
+    "swNotSupported": "Service worker not supported in this browser.",
+    "noSw": "No SW",
+    "noSwMessage": "No service worker registration found.",
+    "noUpdate": "No Update",
+    "noUpdateMessage": "No update available right now.",
+    "updating": "Updating",
+    "updatingMessage": "Clearing cache and applying update. Reloading...",
+    "updateFailed": "Update Failed",
+    "updateFailedMessage": "Failed to apply update. See console for details."
   },
   "footer": {
     "dashboard": "Dashboard",
@@ -72,5 +98,13 @@
     "workoutLoggedMessage": "Your workout has been saved successfully!",
     "workoutLoggedTitle": "Workout Logged!",
     "workoutSyncMessage": "Your workout has been saved successfully and will be synced to the cloud."
+  },
+  "exerciseList": {
+    "library": "Library",
+    "exercises": "Exercises",
+    "searchPlaceholder": "Search exercises...",
+    "filterByMuscle": "Filter by muscle",
+    "recentlyLogged": "Recently Logged",
+    "noExercisesFound": "No exercises found."
   }
 }

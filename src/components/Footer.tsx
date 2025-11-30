@@ -96,7 +96,7 @@ export function Footer() {
             {/* Background color changes based on dark mode */}
             <Group h="100%" gap={0} bg="white" align="center">
                 <NavItem path="/" icon={IconHome} label={t('footer.dashboard')} color="blue" />
-                <NavItem path="/exercises" icon={IconPlus} label={t('footer.add')} color="cyan" large />
+                <NavItem path="/exercises" icon={IconPlus} label={t('footer.add')} color="cyan" />
                 <NavItem path="/settings" icon={IconSettings} label={t('footer.settings')} color="orange" />
             </Group>
         </AppShell.Footer>

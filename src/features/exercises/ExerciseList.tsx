@@ -7,11 +7,14 @@ import { Exercise } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
 import { useWorkouts } from '../../hooks/useWorkouts';
 
+import { useTranslation } from 'react-i18next';
+
 
 // Number of exercises to show per page
 const ITEMS_PER_PAGE = 20;
 
 export function ExerciseList() {
+    const { t } = useTranslation();
     const { data: exercises, isLoading } = useExercises();
     const { logs } = useWorkouts();
     const location = useLocation();
@@ -162,8 +165,8 @@ export function ExerciseList() {
             }}>
                 <Group justify="space-between" align="center" mb="lg">
                     <div>
-                        <Text size="xs" style={{ opacity: 0.8 }}>Library</Text>
-                        <Title order={2} style={{ color: 'white' }}>Exercises</Title>
+                        <Text size="xs" style={{ opacity: 0.8 }}>{t('exerciseList.library')}</Text>
+                        <Title order={2} style={{ color: 'white' }}>{t('exerciseList.exercises')}</Title>
                     </div>
                     <Group gap="sm">
                         <Avatar
@@ -181,7 +184,7 @@ export function ExerciseList() {
 
                 {/* Search Bar in Header */}
                 <TextInput
-                    placeholder="Search exercises..."
+                    placeholder={t('exerciseList.searchPlaceholder')}
                     leftSection={<IconSearch size={16} />}
                     rightSection={
                         <ActionIcon
@@ -215,7 +218,7 @@ export function ExerciseList() {
                             <Accordion variant="separated" radius="lg" defaultValue={null}>
                                 <Accordion.Item value="logged" style={{ border: 'none' }}>
                                     <Accordion.Control icon={<IconHistory size={20} color="#228be6" />}>
-                                        <Text fw={500} size="sm">Recently Logged ({loggedExercises.length})</Text>
+                                        <Text fw={500} size="sm">{t('exerciseList.recentlyLogged')} ({loggedExercises.length})</Text>
                                     </Accordion.Control>
                                     <Accordion.Panel p={0}>
                                         {loggedExercises.map((exercise, index) => (
@@ -235,7 +238,7 @@ export function ExerciseList() {
                     <Collapse in={showFilters}>
                         <Paper p="xs" radius="lg" shadow="sm" bg="white">
                             <MultiSelect
-                                placeholder="Filter by muscle"
+                                placeholder={t('exerciseList.filterByMuscle')}
                                 data={allMuscles}
                                 value={selectedMuscles}
                                 onChange={setSelectedMuscles}
@@ -257,7 +260,7 @@ export function ExerciseList() {
                             ))}
                         </Paper>
                     ) : (
-                        <Text ta="center" c="dimmed" mt="xl">No exercises found.</Text>
+                        <Text ta="center" c="dimmed" mt="xl">{t('exerciseList.noExercisesFound')}</Text>
                     )}
 
                     {/* Pagination */}

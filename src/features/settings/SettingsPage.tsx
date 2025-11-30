@@ -39,16 +39,16 @@ export function SettingsPage() {
             onSuccess: () => {
                 setSyncConfirmOpen(false);
                 showNotification({
-                    title: 'Sync Complete',
-                    message: 'Exercises have been reset to default.',
+                    title: t('settings.syncComplete'),
+                    message: t('settings.syncCompleteMessage'),
                     color: 'green'
                 });
             },
             onError: (error) => {
                 setSyncConfirmOpen(false);
                 showNotification({
-                    title: 'Sync Failed',
-                    message: 'Failed to sync exercises. Please try again.',
+                    title: t('settings.syncFailed'),
+                    message: t('settings.syncFailedMessage'),
                     color: 'red'
                 });
                 console.error(error);
@@ -60,7 +60,7 @@ export function SettingsPage() {
         setIsUpdating(true);
         try {
             if (!('serviceWorker' in navigator)) {
-                showNotification({ title: 'Error', message: 'Service worker not supported in this browser.', color: 'red' });
+                showNotification({ title: t('settings.updateError'), message: t('settings.swNotSupported'), color: 'red' });
                 setIsUpdating(false);
                 setUpdateConfirmOpen(false);
                 return;
@@ -68,7 +68,7 @@ export function SettingsPage() {
 
             const registration = await navigator.serviceWorker.getRegistration();
             if (!registration) {
-                showNotification({ title: 'No SW', message: 'No service worker registration found.', color: 'yellow' });
+                showNotification({ title: t('settings.noSw'), message: t('settings.noSwMessage'), color: 'yellow' });
                 setIsUpdating(false);
                 setUpdateConfirmOpen(false);
                 return;
@@ -84,13 +84,13 @@ export function SettingsPage() {
             // Apply the force update
             const applied = await forceUpdate();
             if (!applied) {
-                showNotification({ title: 'No Update', message: 'No update available right now.', color: 'gray' });
+                showNotification({ title: t('settings.noUpdate'), message: t('settings.noUpdateMessage'), color: 'gray' });
                 setIsUpdating(false);
                 setUpdateConfirmOpen(false);
             } else {
                 showNotification({
-                    title: 'Updating',
-                    message: 'Clearing cache and applying update. Reloading...',
+                    title: t('settings.updating'),
+                    message: t('settings.updatingMessage'),
                     color: 'blue'
                 });
                 // Reload after a short delay to ensure SW activated
@@ -100,7 +100,7 @@ export function SettingsPage() {
             }
         } catch (err) {
             console.error('Force update failed', err);
-            showNotification({ title: 'Update Failed', message: 'Failed to apply update. See console for details.', color: 'red' });
+            showNotification({ title: t('settings.updateFailed'), message: t('settings.updateFailedMessage'), color: 'red' });
             setIsUpdating(false);
             setUpdateConfirmOpen(false);
         }
@@ -166,7 +166,7 @@ export function SettingsPage() {
             }}>
                 <Group justify="space-between" align="center" mb="lg">
                     <div>
-                        <Text size="xs" style={{ opacity: 0.8 }}>Preferences</Text>
+                        <Text size="xs" style={{ opacity: 0.8 }}>{t('settings.preferences')}</Text>
                         <Title order={2} style={{ color: 'white' }}>{t('settings.title')}</Title>
                     </div>
                     <Avatar
@@ -189,14 +189,14 @@ export function SettingsPage() {
                         <SettingsRow
                             icon={<IconNote size={20} />}
                             color="darkBlue"
-                            label="My Notes"
+                            label={t('settings.myNotes')}
                             onClick={() => navigate('/notes')}
                         />
                         <Divider color="gray.1" />
                         <SettingsRow
                             icon={<IconDatabase size={20} />}
                             color="violet"
-                            label="Sync Exercises"
+                            label={t('settings.syncExercises')}
                             onClick={handleSyncClick}
                             loading={isSyncingFromJson}
                         />
@@ -217,14 +217,14 @@ export function SettingsPage() {
                         <SettingsRow
                             icon={<IconHistory size={20} />}
                             color="grape"
-                            label="Changelog"
+                            label={t('settings.changelog')}
                             onClick={() => navigate('/changelog')}
                         />
                         <Divider color="gray.1" />
                         <SettingsRow
                             icon={<IconDeviceFloppy size={20} />}
                             color="teal"
-                            label="Force Update"
+                            label={t('settings.forceUpdate')}
                             onClick={handleForceUpdate}
                             rightSection={
                                 <Group gap="xs">
@@ -242,7 +242,7 @@ export function SettingsPage() {
                         <SettingsRow
                             icon={<IconLogout size={20} />}
                             color="red"
-                            label="Logout"
+                            label={t('settings.logout')}
                             onClick={handleLogout}
                         />
                     </Paper>
@@ -270,9 +270,9 @@ export function SettingsPage() {
 
             <ConfirmDialog
                 opened={updateConfirmOpen}
-                title="Update Application"
-                message="This will clear your cache and update to the latest version. You'll be reloaded to the updated app."
-                confirmLabel="Update Now"
+                title={t('settings.updateApp')}
+                message={t('settings.updateMessage')}
+                confirmLabel={t('settings.updateNow')}
                 onConfirm={handleConfirmUpdate}
                 onCancel={() => setUpdateConfirmOpen(false)}
                 isLoading={isUpdating}
@@ -280,9 +280,9 @@ export function SettingsPage() {
 
             <ConfirmDialog
                 opened={syncConfirmOpen}
-                title="Sync Exercises?"
-                message="This will overwrite your local exercises with the default list. Custom exercises may be lost. Are you sure?"
-                confirmLabel="Sync"
+                title={t('settings.syncConfirmTitle')}
+                message={t('settings.syncConfirmMessage')}
+                confirmLabel={t('settings.sync')}
                 onConfirm={handleConfirmSync}
                 onCancel={() => setSyncConfirmOpen(false)}
                 isLoading={isSyncingFromJson}
