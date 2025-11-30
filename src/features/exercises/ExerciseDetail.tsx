@@ -9,9 +9,11 @@ import { useWorkouts } from '../../hooks/useWorkouts';
 import { ProgressChart } from '../charts/ProgressChart';
 import { WorkoutSet } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
+import { useTranslation } from 'react-i18next';
 
 
 export function ExerciseDetail() {
+    const { t } = useTranslation();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
@@ -44,8 +46,8 @@ export function ExerciseDetail() {
 
 
 
-    if (exerciseLoading) return <Text>Loading...</Text>;
-    if (!exercise) return <Text>Exercise not found</Text>;
+    if (exerciseLoading) return <Text>{t('exerciseDetail.loading')}</Text>;
+    if (!exercise) return <Text>{t('exerciseDetail.notFound')}</Text>;
 
     const handleSaveWorkout = (sets: WorkoutSet[], date: Date) => {
         if (!id) return;
@@ -117,7 +119,7 @@ export function ExerciseDetail() {
                             radius="xs"
                             style={{ backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', border: 'none' }}
                         >
-                            Back
+                            {t('exerciseDetail.back')}
                         </Button>
                         <Group gap="sm">
                             <Avatar
@@ -175,9 +177,9 @@ export function ExerciseDetail() {
                             <Paper withBorder p="lg" radius="sm" shadow="sm" bg="white">
                                 <Tabs defaultValue={initialTab} color="darkBlue" variant="pills" radius="xs">
                                     <Tabs.List mb="md" grow>
-                                        <Tabs.Tab value="log" leftSection={<IconList size={12} />} style={{ padding: '6px 10px', fontSize: '12px' }}>Log</Tabs.Tab>
-                                        <Tabs.Tab value="history" leftSection={<IconHistory size={12} />} style={{ padding: '6px 10px', fontSize: '12px' }}>History</Tabs.Tab>
-                                        <Tabs.Tab value="chart" leftSection={<IconChartLine size={12} />} style={{ padding: '6px 10px', fontSize: '12px' }}>Progress</Tabs.Tab>
+                                        <Tabs.Tab value="log" leftSection={<IconList size={12} />} style={{ padding: '6px 10px', fontSize: '12px' }}>{t('exerciseDetail.log')}</Tabs.Tab>
+                                        <Tabs.Tab value="history" leftSection={<IconHistory size={12} />} style={{ padding: '6px 10px', fontSize: '12px' }}>{t('exerciseDetail.history')}</Tabs.Tab>
+                                        <Tabs.Tab value="chart" leftSection={<IconChartLine size={12} />} style={{ padding: '6px 10px', fontSize: '12px' }}>{t('exerciseDetail.progress')}</Tabs.Tab>
                                     </Tabs.List>
 
                                     <Tabs.Panel value="log">
@@ -188,7 +190,7 @@ export function ExerciseDetail() {
                                         {(() => {
                                             const exerciseLogs = logs?.filter(log => log.exerciseId === id) || [];
                                             if (exerciseLogs.length === 0) {
-                                                return <Text c="dimmed" ta="center" py="xl">No workout history for this exercise yet.</Text>;
+                                                return <Text c="dimmed" ta="center" py="xl">{t('exerciseDetail.noHistory')}</Text>;
                                             }
                                             return (
                                                 <Stack gap="md">
@@ -198,15 +200,15 @@ export function ExerciseDetail() {
                                                                 <Text fw={600} size="sm">
                                                                     {new Date(log.timestamp).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
                                                                 </Text>
-                                                                <Badge color="blue" variant="light">{log.sets?.length || 0} Sets</Badge>
+                                                                <Badge color="blue" variant="light">{log.sets?.length || 0} {t('dashboard.sets')}</Badge>
                                                             </Group>
                                                             <Table striped highlightOnHover>
                                                                 <Table.Thead>
                                                                     <Table.Tr>
-                                                                        <Table.Th>Set</Table.Th>
-                                                                        <Table.Th>Weight (kg)</Table.Th>
-                                                                        <Table.Th>Reps</Table.Th>
-                                                                        <Table.Th>Actions</Table.Th>
+                                                                        <Table.Th>{t('dashboard.set')}</Table.Th>
+                                                                        <Table.Th>{t('dashboard.weight')}</Table.Th>
+                                                                        <Table.Th>{t('dashboard.reps')}</Table.Th>
+                                                                        <Table.Th>{t('exerciseDetail.actions')}</Table.Th>
                                                                     </Table.Tr>
                                                                 </Table.Thead>
                                                                 <Table.Tbody>
@@ -226,7 +228,7 @@ export function ExerciseDetail() {
                                                             </Table>
                                                             {log.note && (
                                                                 <Stack gap="xs" mt="md">
-                                                                    <Text fw={600} size="sm">Notes</Text>
+                                                                    <Text fw={600} size="sm">{t('dashboard.notes')}</Text>
                                                                     <Text size="sm" c="dimmed">{log.note}</Text>
                                                                 </Stack>
                                                             )}
@@ -247,7 +249,7 @@ export function ExerciseDetail() {
 
                     {/* Instructions - Below the main grid */}
                     <Paper p="lg" radius="sm" shadow="sm" bg="white" mt="lg">
-                        <Title order={4} mb="md">Instructions</Title>
+                        <Title order={4} mb="md">{t('exerciseDetail.instructions')}</Title>
                         <Stack gap="sm">
                             {exercise.instructions.map((step, index) => (
                                 <div
@@ -296,32 +298,32 @@ export function ExerciseDetail() {
             <Modal
                 opened={!!editingSet}
                 onClose={() => setEditingSet(null)}
-                title="Edit Workout Set"
+                title={t('exerciseDetail.editSet')}
             >
                 <Stack>
                     <DatePickerInput
-                        label="Date"
+                        label={t('exerciseDetail.date')}
                         value={currentDate}
                         onChange={(dateString: string | null) => setCurrentDate(dateString ? new Date(dateString) : null)}
                         maxDate={new Date()}
                         leftSection={<IconCalendar size={16} />}
                     />
                     <NumberInput
-                        label="Weight (kg)"
+                        label={t('dashboard.weight')}
                         value={currentWeight}
                         onChange={setCurrentWeight}
                         min={0}
                     />
                     <NumberInput
-                        label="Reps"
+                        label={t('dashboard.reps')}
                         value={currentReps}
                         onChange={setCurrentReps}
                         min={0}
                         allowDecimal={false}
                     />
                     <Group justify="flex-end" mt="md">
-                        <Button variant="default" onClick={() => setEditingSet(null)}>Cancel</Button>
-                        <Button onClick={handleUpdateSet}>Save</Button>
+                        <Button variant="default" onClick={() => setEditingSet(null)}>{t('exerciseDetail.cancel')}</Button>
+                        <Button onClick={handleUpdateSet}>{t('exerciseDetail.save')}</Button>
                     </Group>
                 </Stack>
             </Modal>
