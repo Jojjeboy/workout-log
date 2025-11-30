@@ -9,9 +9,10 @@ export function NotesPage() {
     const navigate = useNavigate();
     const { user } = useAuth();
     const [showForm, setShowForm] = useState(false);
+    const [editingId, setEditingId] = useState<string | null>(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const { data: notes, isLoading, error, addNote, isAdding, deleteNote } = useNotes() as any;
+    const { data: notes, isLoading, error, addNote, isAdding, deleteNote, updateNote } = useNotes() as any;
 
     useEffect(() => {
         console.log('NotesPage - data:', notes);
@@ -21,16 +22,34 @@ export function NotesPage() {
 
     const handleAdd = async () => {
         if (!title.trim()) return;
-        addNote({ title: title.trim(), content: content.trim() });
+        if (editingId) {
+            // Update existing note
+            updateNote({
+                id: editingId,
+                data: { title: title.trim(), content: content.trim() }
+            });
+            setEditingId(null);
+        } else {
+            // Add new note
+            addNote({ title: title.trim(), content: content.trim() });
+        }
         setTitle('');
         setContent('');
         setShowForm(false);
+    };
+
+    const handleEdit = (noteId: string, noteTitle: string, noteContent: string) => {
+        setEditingId(noteId);
+        setTitle(noteTitle);
+        setContent(noteContent);
+        setShowForm(true);
     };
 
     const handleCancel = () => {
         setTitle('');
         setContent('');
         setShowForm(false);
+        setEditingId(null);
     };
 
     return (
@@ -71,10 +90,15 @@ export function NotesPage() {
                         fullWidth
                         size="md"
                         leftSection={<IconPlus size={18} />}
-                        onClick={() => setShowForm(!showForm)}
+                        onClick={() => {
+                            setEditingId(null);
+                            setTitle('');
+                            setContent('');
+                            setShowForm(!showForm);
+                        }}
                         variant={showForm ? 'filled' : 'light'}
                     >
-                        {showForm ? 'Cancel' : 'Add New Note'}
+                        {showForm ? (editingId ? 'Cancel Edit' : 'Cancel') : 'Add New Note'}
                     </Button>
 
                     {/* Error Display */}
@@ -112,7 +136,7 @@ export function NotesPage() {
                                         leftSection={<IconPlus size={16} />}
                                         disabled={!title.trim()}
                                     >
-                                        Save Note
+                                        {editingId ? 'Update Note' : 'Save Note'}
                                     </Button>
                                 </Group>
                             </Stack>
@@ -134,14 +158,24 @@ export function NotesPage() {
                                                 <Text fw={600} size="md">{n.title}</Text>
                                                 <Text size="sm" className="muted-text" style={{ whiteSpace: 'pre-wrap' }}>{n.content}</Text>
                                             </Stack>
-                                            <ActionIcon
-                                                color="red"
-                                                variant="light"
-                                                onClick={() => deleteNote(n.id)}
-                                                title="Delete note"
-                                            >
-                                                <IconTrash size={18} />
-                                            </ActionIcon>
+                                            <Group gap="xs">
+                                                <ActionIcon
+                                                    color="blue"
+                                                    variant="light"
+                                                    onClick={() => handleEdit(n.id, n.title, n.content)}
+                                                    title="Edit note"
+                                                >
+                                                    <IconPlus size={18} style={{ transform: 'rotate(45deg)' }} />
+                                                </ActionIcon>
+                                                <ActionIcon
+                                                    color="red"
+                                                    variant="light"
+                                                    onClick={() => deleteNote(n.id)}
+                                                    title="Delete note"
+                                                >
+                                                    <IconTrash size={18} />
+                                                </ActionIcon>
+                                            </Group>
                                         </Group>
                                     </Card>
                                 ))
