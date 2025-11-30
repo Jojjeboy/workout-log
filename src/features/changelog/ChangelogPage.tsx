@@ -44,30 +44,14 @@ export function ChangelogPage() {
         fetchCommits();
     }, []);
 
-    // Infinite scroll effect
-    useEffect(() => {
-        const handleScroll = () => {
-            // Check if user is near the bottom of the page
-            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-            const windowHeight = window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-
-            // Trigger when within 200px of the bottom
-            const scrolledToBottom = scrollTop + windowHeight >= documentHeight - 200;
-
-            if (scrolledToBottom && !isLoadingMore && displayedCount < allCommits.length) {
-                setIsLoadingMore(true);
-                // Simulate a small delay for better UX
-                setTimeout(() => {
-                    setDisplayedCount(prev => Math.min(prev + 10, allCommits.length));
-                    setIsLoadingMore(false);
-                }, 300);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, [displayedCount, allCommits.length, isLoadingMore]);
+    const handleLoadMore = () => {
+        setIsLoadingMore(true);
+        // Simulate a small delay for better UX
+        setTimeout(() => {
+            setDisplayedCount(prev => Math.min(prev + 10, allCommits.length));
+            setIsLoadingMore(false);
+        }, 300);
+    };
 
     const commits = allCommits.slice(0, displayedCount);
 
@@ -214,14 +198,21 @@ export function ChangelogPage() {
                                 </Box>
                             )}
 
-                            <Text size="xs" c="dimmed">
+                            <Text size="xs" c="dimmed" mb="md">
                                 {t('changelog.showing')} {commits.length} {t('changelog.of')} {allCommits.length} {t('changelog.commits')}
-                                {displayedCount < allCommits.length && !isLoadingMore && (
-                                    <Text component="span" c="blue" style={{ marginLeft: '8px' }}>
-                                        {t('changelog.scrollToLoadMore')}
-                                    </Text>
-                                )}
                             </Text>
+
+                            {displayedCount < allCommits.length && (
+                                <Button
+                                    onClick={handleLoadMore}
+                                    loading={isLoadingMore}
+                                    variant="light"
+                                    color="blue"
+                                    size="sm"
+                                >
+                                    {t('changelog.loadMore')}
+                                </Button>
+                            )}
                         </Box>
                     </Paper>
                 )}

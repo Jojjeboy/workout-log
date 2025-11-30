@@ -153,6 +153,7 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
                 clearable={false}
                 valueFormat="DD MMM YYYY"
                 radius="xs"
+                maxDate={new Date()}
             />
 
             <Group grow>
