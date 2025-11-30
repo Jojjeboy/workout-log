@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const MAX_COMMITS = 100;
+const MAX_COMMITS = 10000;
 
 try {
     console.log('Generating commits.json...');

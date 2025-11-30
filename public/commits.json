@@ -1,5 +1,26 @@
 [
   {
+    "hash": "5820cbac3e61d9c2624e7a28ff83b1b2da48104d",
+    "message": "feat: add total commit count badge to changelog header",
+    "body": "- Display total number of commits in ChangelogPage header\n- Add translation keys for 'Total Commits'",
+    "date": "2025-11-30 19:27:03 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/changelog/ChangelogPage.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
+    "hash": "973486de84b331c3664a6ee7a278e68700d93c44",
+    "message": "commits",
+    "date": "2025-11-30 17:56:47 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json"
+    ]
+  },
+  {
     "hash": "b31c1d3ff840f455767203ef2b92df336869a237",
     "message": "fix: replace changelog infinite scroll with load more button, restrict future dates",
     "body": "- Replace unreliable infinite scroll in Changelog with manual 'Load More' button\n- Add 'Load More' translation keys\n- Restrict WorkoutLogger date picker to prevent future date selection (maxDate=today)",
