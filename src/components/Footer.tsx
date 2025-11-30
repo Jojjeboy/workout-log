@@ -21,7 +21,7 @@ export function Footer() {
                 location.pathname === '/notes';
         }
         if (path === '/exercises') {
-            return location.pathname === '/exercises' || location.pathname.startsWith('/exercise/');
+            return location.pathname === '/exercises' || location.pathname.startsWith('/exercises/');
         }
         return location.pathname === path;
     };
