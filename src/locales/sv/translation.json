@@ -62,5 +62,15 @@
     "date": "Datum",
     "cancel": "Avbryt",
     "save": "Spara"
+  },
+  "workoutLogger": {
+    "workoutDate": "Träningsdatum",
+    "pickDate": "Välj datum",
+    "addSet": "Lägg till Set",
+    "logWorkout": "Logga Träning",
+    "workoutLogged": "Träning Loggad",
+    "workoutLoggedMessage": "Ditt träningspass har sparats!",
+    "workoutLoggedTitle": "Träning Loggad!",
+    "workoutSyncMessage": "Ditt träningspass har sparats och kommer synkas till molnet."
   }
 }

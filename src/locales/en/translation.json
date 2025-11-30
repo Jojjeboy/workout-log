@@ -62,5 +62,15 @@
     "date": "Date",
     "cancel": "Cancel",
     "save": "Save"
+  },
+  "workoutLogger": {
+    "workoutDate": "Workout Date",
+    "pickDate": "Pick date",
+    "addSet": "Add Set",
+    "logWorkout": "Log Workout",
+    "workoutLogged": "Workout Logged",
+    "workoutLoggedMessage": "Your workout has been saved successfully!",
+    "workoutLoggedTitle": "Workout Logged!",
+    "workoutSyncMessage": "Your workout has been saved successfully and will be synced to the cloud."
   }
 }

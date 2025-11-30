@@ -4,6 +4,7 @@ import { DatePickerInput } from '@mantine/dates';
 import { IconPlus, IconTrash, IconCheck, IconCalendar } from '@tabler/icons-react';
 import { WorkoutSet } from '../../types';
 import { showNotification } from '@mantine/notifications';
+import { useTranslation } from 'react-i18next';
 
 interface WorkoutLoggerProps {
     onSave: (sets: WorkoutSet[], date: Date) => void;
@@ -14,6 +15,7 @@ interface WorkoutLoggerProps {
 }
 
 export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSaveSuccess }: WorkoutLoggerProps) {
+    const { t } = useTranslation();
     const [sets, setSets] = useState<WorkoutSet[]>(
         initialSets || [{ weight: 0, reps: 0 }]
     );
@@ -38,11 +40,11 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
     const handleSave = () => {
         if (!selectedDate) return;
         onSave(sets, selectedDate);
-        
+
         // Show success notification
         showNotification({
-            title: 'Workout Logged',
-            message: 'Your workout has been saved successfully!',
+            title: t('workoutLogger.workoutLogged'),
+            message: t('workoutLogger.workoutLoggedMessage'),
             color: 'green',
             icon: <IconCheck size={16} />,
             autoClose: 3000,
@@ -67,13 +69,13 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
             {showSuccess && (
                 <Alert
                     icon={<IconCheck size={16} />}
-                    title="Workout Logged!"
+                    title={t('workoutLogger.workoutLoggedTitle')}
                     color="green"
                     radius="md"
                     withCloseButton
                     onClose={() => setShowSuccess(false)}
                 >
-                    Your workout has been saved successfully and will be synced to the cloud.
+                    {t('workoutLogger.workoutSyncMessage')}
                 </Alert>
             )}
 
@@ -82,8 +84,8 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
                     <Table.Thead bg="#f8f9fa">
                         <Table.Tr>
                             <Table.Th style={{ width: '40px', textAlign: 'center' }}>#</Table.Th>
-                            <Table.Th>Weight (kg)</Table.Th>
-                            <Table.Th>Reps</Table.Th>
+                            <Table.Th>{t('dashboard.weight')}</Table.Th>
+                            <Table.Th>{t('dashboard.reps')}</Table.Th>
                             <Table.Th style={{ width: '40px' }}></Table.Th>
                         </Table.Tr>
                     </Table.Thead>
@@ -145,8 +147,8 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
                         setSelectedDate(value);
                     }
                 }}
-                label="Workout Date"
-                placeholder="Pick date"
+                label={t('workoutLogger.workoutDate')}
+                placeholder={t('workoutLogger.pickDate')}
                 leftSection={<IconCalendar size={16} />}
                 clearable={false}
                 valueFormat="DD MMM YYYY"
@@ -161,7 +163,7 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
                     onClick={addSet}
                     radius="xs"
                 >
-                    Add Set
+                    {t('workoutLogger.addSet')}
                 </Button>
                 <Button
                     onClick={handleSave}
@@ -169,7 +171,7 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
                     color="darkBlue"
                     radius="xs"
                 >
-                    Log Workout
+                    {t('workoutLogger.logWorkout')}
                 </Button>
             </Group>
         </Stack>
