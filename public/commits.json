@@ -1,5 +1,49 @@
 [
   {
+    "hash": "385f41a2582f604c53b24d52db3f43aecd4b8805",
+    "message": "fix: resolve syntax errors and duplicated content in DashboardPage",
+    "date": "2025-11-30 20:56:20 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/dashboard/DashboardPage.tsx"
+    ]
+  },
+  {
+    "hash": "78deaafc825f8e1cc74243c7d1c987bf0f9a1504",
+    "message": "feat: enhance dashboard with set deletion and workout editing",
+    "body": "- Replace status column with delete set button\n- Implement smart deletion: prompt to delete workout if last set is removed\n- Add edit workout button to navigate to history view\n- Update translations",
+    "date": "2025-11-30 20:50:00 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
+    "hash": "78c5de92a256129b16505bc13e4dafbe64003cfe",
+    "message": "feat: implement delete workout functionality with confirmation dialog",
+    "body": "- Add delete button to Dashboard recent workouts list\n- Add delete button to ExerciseDetail history tab\n- Implement ConfirmDialog for safe deletion\n- Add translation keys for delete actions",
+    "date": "2025-11-30 20:41:14 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
+    "hash": "597a3396fa47b3a88ee0a201ab36c26a055bd4c4",
+    "message": "Generate commits",
+    "date": "2025-11-30 19:40:51 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "scripts/generate-commits.js"
+    ]
+  },
+  {
     "hash": "5820cbac3e61d9c2624e7a28ff83b1b2da48104d",
     "message": "feat: add total commit count badge to changelog header",
     "body": "- Display total number of commits in ChangelogPage header\n- Add translation keys for 'Total Commits'",
