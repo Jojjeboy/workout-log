@@ -1,4 +1,4 @@
-import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider, Avatar, Button } from '@mantine/core';
+import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider, Avatar, Button, Modal } from '@mantine/core';
 import { useEffect, useState } from 'react';
 import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy, IconHistory, IconLanguage } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ export function SettingsPage() {
     const [updateConfirmOpen, setUpdateConfirmOpen] = useState(false);
     const [syncConfirmOpen, setSyncConfirmOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
+    const [langModalOpen, setLangModalOpen] = useState(false);
 
     const handleLogout = async () => {
         await authService.logout();
@@ -183,32 +184,6 @@ export function SettingsPage() {
 
             <Container size="md" px="md" style={{ marginTop: '-40px' }}>
                 <Stack gap="md">
-                    {/* Language Settings */}
-                    <Paper radius="sm" shadow="sm" bg="white" p="lg">
-                        <Group>
-                            <ThemeIcon variant="light" color="blue" size="lg" radius="sm">
-                                <IconLanguage size={20} />
-                            </ThemeIcon>
-                            <Text fw={500} size="sm">{t('settings.language')}</Text>
-                        </Group>
-                        <Group mt="md">
-                            <Button
-                                variant={i18n.language === 'en' ? 'filled' : 'light'}
-                                onClick={() => i18n.changeLanguage('en')}
-                                color="blue"
-                            >
-                                {t('settings.english')}
-                            </Button>
-                            <Button
-                                variant={i18n.language === 'sv' ? 'filled' : 'light'}
-                                onClick={() => i18n.changeLanguage('sv')}
-                                color="blue"
-                            >
-                                {t('settings.swedish')}
-                            </Button>
-                        </Group>
-                    </Paper>
-
                     {/* Main Settings Group */}
                     <Paper radius="sm" shadow="sm" bg="white" style={{ overflow: 'hidden' }}>
                         <SettingsRow
@@ -224,6 +199,19 @@ export function SettingsPage() {
                             label="Sync Exercises"
                             onClick={handleSyncClick}
                             loading={isSyncingFromJson}
+                        />
+                        <Divider color="gray.1" />
+                        <SettingsRow
+                            icon={<IconLanguage size={20} />}
+                            color="blue"
+                            label={t('settings.language')}
+                            onClick={() => setLangModalOpen(true)}
+                            rightSection={
+                                <Group gap="xs">
+                                    <Text size="sm" c="dimmed">{i18n.language.toUpperCase()}</Text>
+                                    <IconChevronRight size={18} color={theme.colors.gray[4]} />
+                                </Group>
+                            }
                         />
                         <Divider color="gray.1" />
                         <SettingsRow
@@ -260,6 +248,25 @@ export function SettingsPage() {
                     </Paper>
                 </Stack>
             </Container>
+
+            <Modal opened={langModalOpen} onClose={() => setLangModalOpen(false)} title={t('settings.language')}>
+                <Stack>
+                    <Button
+                        variant={i18n.language.startsWith('en') ? 'filled' : 'light'}
+                        onClick={() => { i18n.changeLanguage('en'); setLangModalOpen(false); }}
+                        color="blue"
+                    >
+                        {t('settings.english')}
+                    </Button>
+                    <Button
+                        variant={i18n.language === 'sv' ? 'filled' : 'light'}
+                        onClick={() => { i18n.changeLanguage('sv'); setLangModalOpen(false); }}
+                        color="blue"
+                    >
+                        {t('settings.swedish')}
+                    </Button>
+                </Stack>
+            </Modal>
 
             <ConfirmDialog
                 opened={updateConfirmOpen}
