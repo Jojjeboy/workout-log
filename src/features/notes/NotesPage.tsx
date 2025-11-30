@@ -4,6 +4,7 @@ import { Container, TextInput, Textarea, Button, Card, Group, Stack, Title, Load
 import { IconTrash, IconPlus, IconX, IconPencil } from '@tabler/icons-react';
 import { useNotes } from '../../hooks/useNotes';
 import { useAuth } from '../../hooks/useAuth';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 
 export function NotesPage() {
     const navigate = useNavigate();
@@ -12,6 +13,8 @@ export function NotesPage() {
     const [editingId, setEditingId] = useState<string | null>(null);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
     const { data: notes, isLoading, error, addNote, isAdding, deleteNote, updateNote } = useNotes() as any;
 
     useEffect(() => {
@@ -50,6 +53,19 @@ export function NotesPage() {
         setContent('');
         setShowForm(false);
         setEditingId(null);
+    };
+
+    const handleDeleteClick = (noteId: string) => {
+        setDeleteTargetId(noteId);
+        setDeleteConfirmOpen(true);
+    };
+
+    const handleConfirmDelete = () => {
+        if (deleteTargetId) {
+            deleteNote(deleteTargetId);
+            setDeleteConfirmOpen(false);
+            setDeleteTargetId(null);
+        }
     };
 
     return (
@@ -172,7 +188,7 @@ export function NotesPage() {
                                             <ActionIcon
                                                 color="red"
                                                 variant="light"
-                                                onClick={() => deleteNote(n.id)}
+                                                onClick={() => handleDeleteClick(n.id)}
                                                 title="Delete note"
                                             >
                                                 <IconTrash size={18} />
@@ -191,6 +207,20 @@ export function NotesPage() {
                     </Stack>
                 )}
             </Container>
+
+            <ConfirmDialog
+                opened={deleteConfirmOpen}
+                title="Delete Note"
+                message="Are you sure you want to delete this note? This action cannot be undone."
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+                isDangerous={true}
+                onConfirm={handleConfirmDelete}
+                onCancel={() => {
+                    setDeleteConfirmOpen(false);
+                    setDeleteTargetId(null);
+                }}
+            />
         </Box>
     );
 }
