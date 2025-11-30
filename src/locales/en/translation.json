@@ -81,7 +81,11 @@
     "deleteWorkoutConfirmTitle": "Delete Workout?",
     "deleteWorkoutConfirmMessage": "Are you sure you want to delete this workout? This action cannot be undone.",
     "delete": "Delete",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "deleteSet": "Delete Set",
+    "deleteSetConfirmTitle": "Delete Set?",
+    "deleteSetConfirmMessage": "Are you sure you want to delete this set?",
+    "deleteLastSetConfirmMessage": "This is the last set. Deleting it will remove the entire workout. Are you sure?"
   },
   "exerciseDetail": {
     "back": "Back",

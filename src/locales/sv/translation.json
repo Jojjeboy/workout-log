@@ -45,7 +45,7 @@
     "streak": "Streak",
     "days": "dagar",
     "activity": "Aktivitet",
-    "recentTransactions": "Senaste Träningspass",
+    "recentTransactions": "Senaste träningspass",
     "seeAll": "Se Alla",
     "noWorkouts": "Inga träningspass loggade än.",
     "workoutSession": "Träningspass",
@@ -81,7 +81,11 @@
     "deleteWorkoutConfirmTitle": "Ta bort pass?",
     "deleteWorkoutConfirmMessage": "Är du säker på att du vill ta bort detta pass? Detta går inte att ångra.",
     "delete": "Ta bort",
-    "cancel": "Avbryt"
+    "cancel": "Avbryt",
+    "deleteSet": "Ta bort set",
+    "deleteSetConfirmTitle": "Ta bort set?",
+    "deleteSetConfirmMessage": "Är du säker på att du vill ta bort detta set?",
+    "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort det raderas hela passet. Är du säker?"
   },
   "exerciseDetail": {
     "back": "Tillbaka",
@@ -93,7 +97,7 @@
     "progress": "Framsteg",
     "noHistory": "Ingen träningshistorik för denna övning än.",
     "actions": "Åtgärder",
-    "editSet": "Redigera Set",
+    "editSet": "Redigera set",
     "date": "Datum",
     "cancel": "Avbryt",
     "save": "Spara"
@@ -101,11 +105,11 @@
   "workoutLogger": {
     "workoutDate": "Träningsdatum",
     "pickDate": "Välj datum",
-    "addSet": "Lägg till Set",
-    "logWorkout": "Logga Träning",
-    "workoutLogged": "Träning Loggad",
+    "addSet": "Lägg till set",
+    "logWorkout": "Logga träning",
+    "workoutLogged": "Träning loggad",
     "workoutLoggedMessage": "Ditt träningspass har sparats!",
-    "workoutLoggedTitle": "Träning Loggad!",
+    "workoutLoggedTitle": "Träning loggad!",
     "workoutSyncMessage": "Ditt träningspass har sparats och kommer synkas till molnet."
   },
   "exerciseList": {
