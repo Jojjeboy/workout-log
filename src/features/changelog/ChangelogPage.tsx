@@ -1,5 +1,5 @@
-import { Container, Box, Title, Text, Timeline, ThemeIcon, Loader, Center, Paper } from '@mantine/core';
-import { IconGitCommit } from '@tabler/icons-react';
+import { Container, Box, Title, Text, Timeline, ThemeIcon, Loader, Center, Paper, Code, Collapse, Button } from '@mantine/core';
+import { IconGitCommit, IconFileCode, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
 interface Commit {
@@ -8,12 +8,14 @@ interface Commit {
     body?: string;
     date: string;
     author: string;
+    files?: string[];
 }
 
 export function ChangelogPage() {
     const [commits, setCommits] = useState<Commit[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [expandedFiles, setExpandedFiles] = useState<Record<string, boolean>>({});
 
     useEffect(() => {
         const fetchCommits = async () => {
@@ -37,6 +39,13 @@ export function ChangelogPage() {
 
         fetchCommits();
     }, []);
+
+    const toggleFiles = (hash: string) => {
+        setExpandedFiles(prev => ({
+            ...prev,
+            [hash]: !prev[hash]
+        }));
+    };
 
     const formatDate = (dateString: string) => {
         const date = new Date(dateString);
@@ -131,10 +140,35 @@ export function ChangelogPage() {
                                             {commit.hash.substring(0, 7)}
                                         </Text>
                                     </Text>
+
                                     {commit.body && (
                                         <Text c="dimmed" size="xs" mt={8} style={{ whiteSpace: 'pre-wrap', opacity: 0.7 }}>
                                             {commit.body}
                                         </Text>
+                                    )}
+
+                                    {commit.files && commit.files.length > 0 && (
+                                        <Box mt="xs">
+                                            <Button
+                                                variant="subtle"
+                                                size="xs"
+                                                color="gray"
+                                                leftSection={<IconFileCode size={14} />}
+                                                rightSection={expandedFiles[commit.hash] ? <IconChevronUp size={14} /> : <IconChevronDown size={14} />}
+                                                onClick={() => toggleFiles(commit.hash)}
+                                                styles={{ root: { paddingLeft: 0 } }}
+                                            >
+                                                {commit.files.length} changed {commit.files.length === 1 ? 'file' : 'files'}
+                                            </Button>
+
+                                            <Collapse in={expandedFiles[commit.hash]}>
+                                                <Paper withBorder p="xs" bg="gray.0" mt={4}>
+                                                    <Code block style={{ fontSize: '11px', lineHeight: 1.4, maxHeight: '200px', overflowY: 'auto' }}>
+                                                        {commit.files.join('\n')}
+                                                    </Code>
+                                                </Paper>
+                                            </Collapse>
+                                        </Box>
                                     )}
                                 </Timeline.Item>
                             ))}
@@ -145,4 +179,3 @@ export function ChangelogPage() {
         </Box>
     );
 }
-

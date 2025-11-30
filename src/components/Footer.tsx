@@ -14,7 +14,17 @@ export function Footer() {
     const theme = useMantineTheme();
 
     // Check if the current route matches the given path
-    const isActive = (path: string) => location.pathname === path;
+    const isActive = (path: string) => {
+        if (path === '/settings') {
+            return location.pathname === '/settings' ||
+                location.pathname === '/changelog' ||
+                location.pathname === '/notes';
+        }
+        if (path === '/exercises') {
+            return location.pathname === '/exercises' || location.pathname.startsWith('/exercise/');
+        }
+        return location.pathname === path;
+    };
 
     // Shared button container style to avoid repetition
     const buttonContainerStyle: React.CSSProperties = {

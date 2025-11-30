@@ -1,196 +1,425 @@
 [
   {
+    "hash": "e2652a4c5280d0a3076c31fe2cf7698dc142b8ef",
+    "message": "feat: fix changelog page with static json generation and ui improvements",
+    "date": "2025-11-30 09:17:59 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "package.json",
+      "public/commits.json",
+      "scripts/generate-commits.js",
+      "src/features/changelog/ChangelogPage.tsx"
+    ]
+  },
+  {
     "hash": "885a33ca98c6380bc1024c49a4cb948cbbb7acfa",
     "message": "Add Changelog page with Timeline to Settings menu",
     "date": "2025-11-30 08:56:48 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/App.tsx",
+      "src/features/changelog/ChangelogPage.tsx",
+      "src/features/settings/SettingsPage.tsx",
+      "src/services/commitService.ts",
+      "tsconfig.app.tsbuildinfo"
+    ]
   },
   {
     "hash": "ea1585b5a18b40b4bb65f95a5791847b4890bb7a",
     "message": "Add confirmation dialog to Force Update with cache clearing and page reload",
     "date": "2025-11-30 08:52:12 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/settings/SettingsPage.tsx"
+    ]
   },
   {
     "hash": "834195f604e2c54c77752f32a02ca5692b188fa0",
     "message": "Add styled confirmation dialog for delete actions",
     "date": "2025-11-30 08:46:29 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/components/ConfirmDialog.tsx",
+      "src/features/notes/NotesPage.tsx",
+      "tsconfig.app.tsbuildinfo"
+    ]
   },
   {
     "hash": "10e08a4871d12923463de0afd450b02aeda3dcde",
     "message": "Move Add New Note to separate section below header and change edit icon to pencil",
     "date": "2025-11-30 08:40:53 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/notes/NotesPage.tsx"
+    ]
   },
   {
     "hash": "815b30f2c8348e0a858f509f436c51b58d2c94d5",
     "message": "Add edit functionality to notes and reorder UI to show Add New Note button after header",
     "date": "2025-11-30 08:38:16 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/notes/NotesPage.tsx"
+    ]
   },
   {
     "hash": "9d1e832cf02bb52e9d7f5f803b23ff03a2074b17",
     "message": "Add standard header to NotesPage to match other pages",
     "date": "2025-11-30 00:10:34 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/notes/NotesPage.tsx"
+    ]
   },
   {
     "hash": "93ef6c509ea17b811e7d433f8f7ba4eeea9df1e8",
     "message": "Fix update modal re-opening: guard while applying update + reload fallback",
     "date": "2025-11-30 00:06:39 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/components/UpdateNotification.tsx"
+    ]
   },
   {
     "hash": "c1bb78671585393b5f7213f9d935b5c512eeb20c",
     "message": "Implement history tab to display all logged workouts for each exercise",
     "date": "2025-11-30 00:02:36 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/exercises/ExerciseDetail.tsx"
+    ]
   },
   {
     "hash": "b01860be8d490e17946ad827569a18f31b1dfe06",
     "message": "Show exercise name instead of ID in recent transactions and make it clickable to navigate to history tab",
     "date": "2025-11-30 00:00:16 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/features/exercises/ExerciseDetail.tsx"
+    ]
   },
   {
     "hash": "3f4c933f1e8313ee041db66cb72d56d05527f343",
     "message": "Add success alert and form reset to WorkoutLogger",
     "body": "- Show styled green success alert at top when workout is logged\n- Display notification toast with 'Workout Logged' message\n- Reset form fields (sets, date) after successful save\n- Auto-hide success alert after 3 seconds\n- Add optional onSaveSuccess callback for future extension",
     "date": "2025-11-29 23:57:01 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/features/workouts/WorkoutLogger.tsx"
+    ]
   },
   {
     "hash": "3b9e6c02c6398323a7eb504067eff87791a89769",
     "message": "Add expandable accordion for recent workouts with clickable set completion toggle",
     "body": "- Convert recent workouts list to Mantine Accordion with expandable panels\n- Display exercise details (sets, weight, reps) in table format when expanded\n- Add clickable status badges to toggle set completion between Done/Pending\n- Update set.completed in DB when user clicks the badge\n- Persist changes via updateWorkout mutation",
     "date": "2025-11-29 23:54:05 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/dashboard/DashboardPage.tsx"
+    ]
   },
   {
     "hash": "a2da7e209e25ffd342fdafdbe6b77006a7f5c26a",
     "message": "Datepicker",
     "date": "2025-11-29 23:40:45 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/features/workouts/WorkoutLogger.tsx",
+      "src/hooks/useWorkouts.ts"
+    ]
   },
   {
     "hash": "870a17ebebc953e3accaf1d9f7eb61fe7e39ace9",
     "message": "Complete PWA configuration with icons and iOS support",
     "date": "2025-11-29 23:21:46 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "index.html",
+      "public/apple-touch-icon.png",
+      "public/pwa-192x192.png",
+      "public/pwa-512x512.png",
+      "vite.config.ts"
+    ]
   },
   {
     "hash": "d4cdf1ce36f1eaa70655c139d5f5825f66d64427",
     "message": "Favicon",
     "date": "2025-11-29 23:17:20 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "index.html",
+      "public/favicon.png",
+      "src/components/UpdateNotification.tsx"
+    ]
   },
   {
     "hash": "920340487289bf619b5fbe11e581e897f9f0dd45",
     "message": "Fix duplicate profile picture on Dashboard",
     "date": "2025-11-29 23:10:47 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/dashboard/DashboardPage.tsx"
+    ]
   },
   {
     "hash": "d654440ba207685258c3576ba4fbd6035a234a22",
     "message": "Update footer shadow styling",
     "date": "2025-11-29 23:09:12 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/components/Footer.tsx"
+    ]
   },
   {
     "hash": "529ccf4fb565317ec6098e320c3ecc269001d964",
     "message": "Move profile to headers and simplify footer navigation",
     "date": "2025-11-29 23:06:49 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/App.tsx",
+      "src/components/Footer.tsx",
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/features/exercises/ExerciseList.tsx",
+      "src/features/profile/ProfilePage.tsx",
+      "src/features/settings/SettingsPage.tsx"
+    ]
   },
   {
     "hash": "774a41d6785b709fcddeef42fa82c23dd71383b3",
     "message": "Remove dark mode and resize footer icon",
     "date": "2025-11-29 22:59:57 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/components/Footer.tsx",
+      "src/components/ThemeToggle.tsx",
+      "src/features/analysis/AnalysisPage.tsx",
+      "src/features/auth/LoginPage.tsx",
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/features/exercises/ExerciseList.tsx",
+      "src/features/profile/ProfilePage.tsx",
+      "src/features/settings/SettingsPage.tsx",
+      "src/main.tsx",
+      "tsconfig.app.tsbuildinfo"
+    ]
   },
   {
     "hash": "df45c1934c2e11d96773ed1424ecc294fb0e91ca",
     "message": "Login route",
     "date": "2025-11-29 22:52:28 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/auth/LoginPage.tsx"
+    ]
   },
   {
     "hash": "ef2066f892addc27fde9b845264a2a365d029f27",
     "message": "Looks",
     "date": "2025-11-29 22:45:40 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/App.tsx",
+      "src/components/Footer.tsx",
+      "src/components/SyncButton.tsx",
+      "src/features/analysis/AnalysisPage.tsx",
+      "src/features/auth/LoginPage.tsx",
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/features/exercises/ExerciseList.tsx",
+      "src/features/profile/ProfilePage.tsx",
+      "src/features/settings/SettingsPage.tsx",
+      "src/features/workouts/WorkoutLogger.tsx",
+      "src/index.css",
+      "src/theme.ts"
+    ]
   },
   {
     "hash": "36ba787f5aa3dae25e082a925dbfa08289c8b467",
     "message": "Add user-friendly update UX: notifications + force-update button",
     "date": "2025-11-28 13:59:03 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "package-lock.json",
+      "package.json",
+      "src/components/UpdateNotification.tsx",
+      "src/features/settings/SettingsPage.tsx",
+      "src/lib/sw.ts",
+      "src/main.tsx",
+      "tsconfig.app.tsbuildinfo"
+    ]
   },
   {
     "hash": "eada8f55366e6e71b474c12623e1c4f3e06d10fc",
     "message": "Add 'Force Update' button to Settings page (triggers SW SKIP_WAITING)\\n\\n- Add Application section with 'Force Update' button\\n- Implement handler that triggers SW update and activates waiting worker\\n- Provide user feedback via alerts when no update or on errors\\n",
     "date": "2025-11-28 13:38:42 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/settings/SettingsPage.tsx"
+    ]
   },
   {
     "hash": "e22549d078db3147000bb74806583e105a1d0e8f",
     "message": "Add service worker update notification dialog",
     "body": "- Create UpdateNotification component that detects new app versions\n- Shows modal dialog when new version is available\n- User can choose to update immediately or cancel and be asked again on next load\n- Checks for updates every 60 seconds\n- Updates vite PWA config with clientsClaim and skipWaiting false for manual control\n- Provides smooth update experience with automatic page reload after update",
     "date": "2025-11-28 13:34:32 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "public/sw-handler.js",
+      "src/App.tsx",
+      "src/components/UpdateNotification.tsx",
+      "tsconfig.app.tsbuildinfo",
+      "vite.config.ts"
+    ]
   },
   {
     "hash": "9e92e2c15d1d753bc8d81d21b2824739091b8557",
     "message": "Optimize tab sizing - make each tab take exactly one third width",
     "body": "- Shorten tab labels (Log, History, Progress)\n- Reduce font size and padding for better fit\n- Add flex: 1 to each tab for equal width distribution\n- Tabs now fit cleanly in one row on mobile and desktop",
     "date": "2025-11-28 13:30:22 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/exercises/ExerciseDetail.tsx"
+    ]
   },
   {
     "hash": "e491182fbe99306ecf279d32ac6edde5c521118b",
     "message": "Make exercise detail tabs fit in one row",
     "body": "- Add grow prop to Tabs.List to evenly distribute tabs\n- All three tabs (Log Workout, History, Progress) now fit in a single row",
     "date": "2025-11-28 13:28:46 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/exercises/ExerciseDetail.tsx"
+    ]
   },
   {
     "hash": "4d2aa6fc519c9bf8c90dcd69d245b5d03d044e9c",
     "message": "Reorganize ExerciseDetail layout - move logging above instructions",
     "body": "- Move workout logging section from right column to top right\n- Move instructions section below the main grid for full width\n- Better visual flow with logging prominently displayed\n- Instructions now span full width at the bottom",
     "date": "2025-11-28 13:26:48 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/exercises/ExerciseDetail.tsx"
+    ]
   },
   {
     "hash": "04ef8e0b43df38d58745f4d924e92e8df0d3054e",
     "message": "Redesign WorkoutLogger for cleaner dark mode appearance",
     "body": "- Replace table-based layout with Paper-based card design\n- Each set now displayed in its own Paper container with semi-transparent background\n- Improved spacing and alignment with Group components\n- Better visual hierarchy with clear header row\n- Dark text colors for better contrast\n- Cleaner, more modern appearance that works better in both light and dark modes",
     "date": "2025-11-28 13:17:15 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/workouts/WorkoutLogger.tsx"
+    ]
   },
   {
     "hash": "78b5ad53299e16e4c40f19e1d78137cab633464a",
     "message": "Fix dark mode visibility in exercise details logger section",
     "body": "- Add explicit white background to WorkoutLogger table container\n- Add white backgrounds to NumberInput fields\n- Add explicit dark text colors to table headers and row numbers\n- Add glass-card class to workout logging Paper container\n- Add dark text color to tab labels for better contrast",
     "date": "2025-11-28 13:12:05 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/features/workouts/WorkoutLogger.tsx"
+    ]
   },
   {
     "hash": "4f5ef37ff08d0278f21e80226196526c8c90b4ea",
     "message": "cleanup",
     "date": "2025-11-28 12:43:51 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "src/App.tsx",
+      "src/components/Footer.tsx",
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/features/exercises/ExerciseList.tsx",
+      "src/services/exerciseLoadService.ts"
+    ]
   },
   {
     "hash": "e0014cc95695a9448a84d6104f2caeaf9aedeb95",
     "message": "A lot",
     "date": "2025-11-28 12:18:02 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      "firestore.rules",
+      "src/App.tsx",
+      "src/components/Footer.tsx",
+      "src/components/ThemeToggle.tsx",
+      "src/features/analysis/AnalysisPage.tsx",
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/features/dashboard/DashboardPage.tsx.backup",
+      "src/features/exercises/ExerciseList.tsx",
+      "src/features/profile/ProfilePage.tsx",
+      "src/features/settings/SettingsPage.tsx",
+      "src/hooks/useWorkouts.ts",
+      "src/index.css",
+      "src/services/queueService.ts",
+      "src/theme.ts",
+      "tsconfig.app.tsbuildinfo"
+    ]
   },
   {
     "hash": "554c3c6dbd261c689fb2db0579db34a1cb5db352",
     "message": "Initial",
     "date": "2025-11-27 22:08:21 +0100",
-    "author": "Jojjeboy"
+    "author": "Jojjeboy",
+    "files": [
+      ".env",
+      ".firebaserc",
+      ".gitignore",
+      "README.md",
+      "eslint.config.js",
+      "firebase.json",
+      "firestore.indexes.json",
+      "firestore.rules",
+      "index.html",
+      "package-lock.json",
+      "package.json",
+      "postcss.config.cjs",
+      "public/exercises.json",
+      "public/vite.svg",
+      "src/App.css",
+      "src/App.tsx",
+      "src/assets/react.svg",
+      "src/components/ProtectedRoute.tsx",
+      "src/components/SyncButton.tsx",
+      "src/features/auth/LoginPage.tsx",
+      "src/features/charts/ProgressChart.tsx",
+      "src/features/dashboard/DashboardPage.css",
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/features/exercises/ExerciseList.tsx",
+      "src/features/notes/NotesPage.tsx",
+      "src/features/workouts/WorkoutLogger.tsx",
+      "src/hooks/useAuth.ts",
+      "src/hooks/useExerciseSync.ts",
+      "src/hooks/useExercises.ts",
+      "src/hooks/useNotes.ts",
+      "src/hooks/useQueueProcessor.ts",
+      "src/hooks/useWorkouts.ts",
+      "src/index.css",
+      "src/lib/firebase.ts",
+      "src/main.tsx",
+      "src/services/authService.ts",
+      "src/services/db.ts",
+      "src/services/exerciseLoadService.ts",
+      "src/services/exerciseSyncService.ts",
+      "src/services/notesService.ts",
+      "src/services/queueService.test.ts",
+      "src/services/queueService.ts",
+      "src/setupTests.ts",
+      "src/theme.ts",
+      "src/types/index.ts",
+      "src/vite-env.d.ts",
+      "tsconfig.app.json",
+      "tsconfig.app.tsbuildinfo",
+      "tsconfig.json",
+      "tsconfig.node.json",
+      "vite.config.ts"
+    ]
   }
 ]

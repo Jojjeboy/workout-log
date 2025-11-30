@@ -15,6 +15,7 @@ export function SettingsPage() {
     const { syncFromJson, isSyncingFromJson } = useExerciseSync();
     const { user } = useAuth();
     const [updateConfirmOpen, setUpdateConfirmOpen] = useState(false);
+    const [syncConfirmOpen, setSyncConfirmOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
 
     const handleLogout = async () => {
@@ -24,6 +25,32 @@ export function SettingsPage() {
 
     const handleForceUpdate = async () => {
         setUpdateConfirmOpen(true);
+    };
+
+    const handleSyncClick = () => {
+        setSyncConfirmOpen(true);
+    };
+
+    const handleConfirmSync = () => {
+        syncFromJson(undefined, {
+            onSuccess: () => {
+                setSyncConfirmOpen(false);
+                showNotification({
+                    title: 'Sync Complete',
+                    message: 'Exercises have been reset to default.',
+                    color: 'green'
+                });
+            },
+            onError: (error) => {
+                setSyncConfirmOpen(false);
+                showNotification({
+                    title: 'Sync Failed',
+                    message: 'Failed to sync exercises. Please try again.',
+                    color: 'red'
+                });
+                console.error(error);
+            }
+        });
     };
 
     const handleConfirmUpdate = async () => {
@@ -58,10 +85,10 @@ export function SettingsPage() {
                 setIsUpdating(false);
                 setUpdateConfirmOpen(false);
             } else {
-                showNotification({ 
-                    title: 'Updating', 
-                    message: 'Clearing cache and applying update. Reloading...', 
-                    color: 'blue' 
+                showNotification({
+                    title: 'Updating',
+                    message: 'Clearing cache and applying update. Reloading...',
+                    color: 'blue'
                 });
                 // Reload after a short delay to ensure SW activated
                 setTimeout(() => {
@@ -167,7 +194,7 @@ export function SettingsPage() {
                             icon={<IconDatabase size={20} />}
                             color="violet"
                             label="Sync Exercises"
-                            onClick={syncFromJson}
+                            onClick={handleSyncClick}
                             loading={isSyncingFromJson}
                         />
                         <Divider color="gray.1" />
@@ -214,6 +241,17 @@ export function SettingsPage() {
                 onConfirm={handleConfirmUpdate}
                 onCancel={() => setUpdateConfirmOpen(false)}
                 isLoading={isUpdating}
+            />
+
+            <ConfirmDialog
+                opened={syncConfirmOpen}
+                title="Sync Exercises?"
+                message="This will overwrite your local exercises with the default list. Custom exercises may be lost. Are you sure?"
+                confirmLabel="Sync"
+                onConfirm={handleConfirmSync}
+                onCancel={() => setSyncConfirmOpen(false)}
+                isLoading={isSyncingFromJson}
+                isDangerous={true}
             />
         </Box>
     );

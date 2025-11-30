@@ -13,28 +13,48 @@ try {
     console.log('Generating commits.json...');
 
     // Get git log in JSON-friendly format
-    const gitLogFormat = '%H%n%an%n%ae%n%ai%n%s%n%b%n---COMMIT-END---';
+    // We use specific delimiters to reliably parse the output
+    // ---COMMIT-START--- separates commits
+    // ---BODY-END--- separates the commit message body from the file list (which comes from --name-only)
+    const gitLogFormat = '---COMMIT-START---%n%H%n%an%n%ae%n%ai%n%s%n%b%n---BODY-END---';
     const gitLog = execSync(
-        `git log -${MAX_COMMITS} --pretty=format:"${gitLogFormat}"`,
+        `git log -${MAX_COMMITS} --pretty=format:"${gitLogFormat}" --name-only`,
         { encoding: 'utf-8' }
     );
 
     // Parse the git log output
     const commits = [];
-    const commitBlocks = gitLog.split('---COMMIT-END---').filter(block => block.trim());
+    // Split by commit start delimiter, ignore the first empty chunk if any
+    const commitBlocks = gitLog.split('---COMMIT-START---').filter(block => block.trim());
 
     for (const block of commitBlocks) {
-        const lines = block.trim().split('\n');
+        // Split into metadata+body and files parts
+        const [metaAndBody, filesPart] = block.split('---BODY-END---');
+
+        if (!metaAndBody) continue;
+
+        const lines = metaAndBody.trim().split('\n');
         if (lines.length >= 5) {
-            const [hash, author, , date, message, ...bodyLines] = lines;
+            const [hash, author, email, date, message, ...bodyLines] = lines;
             const body = bodyLines.join('\n').trim();
+
+            // Parse files
+            let files = [];
+            if (filesPart) {
+                files = filesPart
+                    .trim()
+                    .split('\n')
+                    .map(f => f.trim())
+                    .filter(f => f.length > 0);
+            }
 
             commits.push({
                 hash: hash.trim(),
                 message: message.trim(),
                 body: body || undefined,
                 date: date.trim(),
-                author: author.trim()
+                author: author.trim(),
+                files: files
             });
         }
     }
