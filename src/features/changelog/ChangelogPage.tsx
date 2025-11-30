@@ -1,10 +1,11 @@
-import { Container, Box, Title, Text, Timeline, Badge, Group, Stack, Paper, Loader, Center } from '@mantine/core';
-import { IconHistory } from '@tabler/icons-react';
+import { Container, Box, Title, Text, Timeline, ThemeIcon, Loader, Center, Paper } from '@mantine/core';
+import { IconGitCommit } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 
 interface Commit {
     hash: string;
     message: string;
+    body?: string;
     date: string;
     author: string;
 }
@@ -18,8 +19,8 @@ export function ChangelogPage() {
         const fetchCommits = async () => {
             try {
                 setIsLoading(true);
-                // Fetch commits from the git log
-                const response = await fetch('/api/commits');
+                // Fetch commits from the static JSON file
+                const response = await fetch('/commits.json');
                 if (!response.ok) {
                     throw new Error('Failed to fetch commits');
                 }
@@ -28,26 +29,37 @@ export function ChangelogPage() {
                 setError(null);
             } catch (err) {
                 console.error('Error fetching commits:', err);
-                setError(err instanceof Error ? err.message : 'Failed to fetch commits');
-                // Fallback: Try to get commits from git command
-                fetchCommitsFromGit();
+                setError(err instanceof Error ? err.message : 'Failed to load commits');
             } finally {
                 setIsLoading(false);
             }
         };
 
-        const fetchCommitsFromGit = async () => {
-            try {
-                // This would require a backend endpoint
-                // For now, we'll show a message to set up the endpoint
-                console.log('Please set up a backend endpoint to fetch git commits');
-            } catch (err) {
-                console.error('Error:', err);
-            }
-        };
-
         fetchCommits();
     }, []);
+
+    const formatDate = (dateString: string) => {
+        const date = new Date(dateString);
+        const now = new Date();
+        const diffMs = now.getTime() - date.getTime();
+        const diffMins = Math.floor(diffMs / 60000);
+        const diffHours = Math.floor(diffMs / 3600000);
+        const diffDays = Math.floor(diffMs / 86400000);
+
+        if (diffMins < 60) {
+            return `${diffMins} ${diffMins === 1 ? 'minute' : 'minutes'} ago`;
+        } else if (diffHours < 24) {
+            return `${diffHours} ${diffHours === 1 ? 'hour' : 'hours'} ago`;
+        } else if (diffDays < 7) {
+            return `${diffDays} ${diffDays === 1 ? 'day' : 'days'} ago`;
+        } else {
+            return date.toLocaleDateString(undefined, {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+    };
 
     if (isLoading) {
         return <Center style={{ height: 400 }}><Loader /></Center>;
@@ -65,70 +77,72 @@ export function ChangelogPage() {
                 boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
             }}>
                 <Container size="lg" px="md">
-                    <Group align="center" gap="md" mb="xs">
-                        <IconHistory size={32} stroke={1.5} />
-                        <Title order={1} style={{ margin: 0, color: 'white' }}>Changelog</Title>
-                    </Group>
-                    <Text size="sm" style={{ opacity: 0.9 }}>Track all updates and changes made to your workout app</Text>
+                    <Title order={1} style={{ margin: 0, color: 'white', marginBottom: '8px' }}>Changelog</Title>
+                    <Text size="sm" style={{ opacity: 0.9 }}>Track all updates and changes to the workout app</Text>
                 </Container>
             </div>
 
             <Container size="lg" px="md" style={{ marginTop: '40px' }}>
                 {error ? (
                     <Paper p="lg" radius="lg" withBorder bg="white">
-                        <Text c="red" fw={500}>{error}</Text>
-                        <Text size="sm" c="dimmed" mt="sm">
-                            To display commits, you need to set up a backend endpoint that serves your git history.
-                            The endpoint should return an array of commits with the following structure:
+                        <Text c="red" fw={500} mb="sm">⚠️ {error}</Text>
+                        <Text size="sm" c="dimmed">
+                            The commits.json file could not be loaded. Make sure to run the build script to generate it.
                         </Text>
-                        <Paper p="sm" radius="sm" bg="#f1f3f5" mt="md" style={{ overflow: 'auto' }}>
-                            <Text size="xs" component="pre" style={{ margin: 0, color: '#1a202c' }}>
-{`[
-  {
-    "hash": "abc1234",
-    "message": "Commit message",
-    "date": "2025-01-15T10:30:00Z",
-    "author": "Your Name"
-  }
-]`}
-                            </Text>
-                        </Paper>
                     </Paper>
                 ) : commits.length === 0 ? (
                     <Paper p="lg" radius="lg" withBorder bg="white" ta="center">
-                        <Text c="dimmed">No commits found. Make sure your git repository is properly configured.</Text>
+                        <Text c="dimmed">No commits found in the changelog.</Text>
                     </Paper>
                 ) : (
-                    <Stack gap="xl">
-                        <Timeline active={commits.length} bulletSize={24} lineWidth={2}>
-                            {commits.map((commit) => (
+                    <Paper p="lg" radius="lg" withBorder bg="white">
+                        <Timeline active={1} bulletSize={28} lineWidth={2} color="blue">
+                            {commits.map((commit, index) => (
                                 <Timeline.Item
                                     key={commit.hash}
-                                    bullet={<IconHistory size={12} />}
+                                    bullet={
+                                        <ThemeIcon
+                                            size={22}
+                                            variant="filled"
+                                            color={index === 0 ? 'blue' : 'gray'}
+                                            radius="xl"
+                                        >
+                                            <IconGitCommit size={14} />
+                                        </ThemeIcon>
+                                    }
                                     title={
-                                        <Group justify="space-between" mb="xs">
-                                            <Text fw={600} size="sm">{commit.message}</Text>
-                                            <Badge size="sm" variant="light" color="blue">
-                                                {commit.hash.substring(0, 7)}
-                                            </Badge>
-                                        </Group>
+                                        <div style={{ marginBottom: '4px' }}>
+                                            <Text fw={600} size="sm" style={{ lineHeight: 1.4 }}>
+                                                {commit.message}
+                                            </Text>
+                                        </div>
                                     }
                                 >
                                     <Text c="dimmed" size="sm" mt={4}>
-                                        {commit.author} • {new Date(commit.date).toLocaleDateString(undefined, {
-                                            year: 'numeric',
-                                            month: 'long',
-                                            day: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit'
-                                        })}
+                                        <Text component="span" c={index === 0 ? 'blue' : 'dimmed'} fw={500}>
+                                            {commit.author}
+                                        </Text>
+                                        {' • '}
+                                        <Text component="span" size="xs">
+                                            {formatDate(commit.date)}
+                                        </Text>
+                                        {' • '}
+                                        <Text component="span" size="xs" c="dimmed" style={{ fontFamily: 'monospace' }}>
+                                            {commit.hash.substring(0, 7)}
+                                        </Text>
                                     </Text>
+                                    {commit.body && (
+                                        <Text c="dimmed" size="xs" mt={8} style={{ whiteSpace: 'pre-wrap', opacity: 0.7 }}>
+                                            {commit.body}
+                                        </Text>
+                                    )}
                                 </Timeline.Item>
                             ))}
                         </Timeline>
-                    </Stack>
+                    </Paper>
                 )}
             </Container>
         </Box>
     );
 }
+
