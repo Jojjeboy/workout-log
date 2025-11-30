@@ -1,5 +1,5 @@
 import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider, Avatar } from '@mantine/core';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
@@ -7,12 +7,15 @@ import { useExerciseSync } from '../../hooks/useExerciseSync'; // Import hook di
 import { showNotification } from '@mantine/notifications';
 import { onUpdateAvailable, offUpdateAvailable, checkForUpdates, forceUpdate } from '../../lib/sw';
 import { useAuth } from '../../hooks/useAuth';
+import { ConfirmDialog } from '../../components/ConfirmDialog';
 
 export function SettingsPage() {
     const navigate = useNavigate();
     const theme = useMantineTheme();
     const { syncFromJson, isSyncingFromJson } = useExerciseSync();
     const { user } = useAuth();
+    const [updateConfirmOpen, setUpdateConfirmOpen] = useState(false);
+    const [isUpdating, setIsUpdating] = useState(false);
 
     const handleLogout = async () => {
         await authService.logout();
@@ -20,24 +23,56 @@ export function SettingsPage() {
     };
 
     const handleForceUpdate = async () => {
-        if (!('serviceWorker' in navigator)) {
-            window.alert('Service worker not supported in this browser.');
-            return;
-        }
+        setUpdateConfirmOpen(true);
+    };
 
+    const handleConfirmUpdate = async () => {
+        setIsUpdating(true);
         try {
+            if (!('serviceWorker' in navigator)) {
+                showNotification({ title: 'Error', message: 'Service worker not supported in this browser.', color: 'red' });
+                setIsUpdating(false);
+                setUpdateConfirmOpen(false);
+                return;
+            }
+
             const registration = await navigator.serviceWorker.getRegistration();
             if (!registration) {
                 showNotification({ title: 'No SW', message: 'No service worker registration found.', color: 'yellow' });
+                setIsUpdating(false);
+                setUpdateConfirmOpen(false);
                 return;
             }
+
+            // Clear all caches before updating
+            const cacheNames = await caches.keys();
+            await Promise.all(cacheNames.map(name => caches.delete(name)));
+
+            // Clear localStorage if needed (optional, adjust based on your needs)
+            // localStorage.clear();
+
+            // Apply the force update
             const applied = await forceUpdate();
             if (!applied) {
                 showNotification({ title: 'No Update', message: 'No update available right now.', color: 'gray' });
+                setIsUpdating(false);
+                setUpdateConfirmOpen(false);
+            } else {
+                showNotification({ 
+                    title: 'Updating', 
+                    message: 'Clearing cache and applying update. Reloading...', 
+                    color: 'blue' 
+                });
+                // Reload after a short delay to ensure SW activated
+                setTimeout(() => {
+                    window.location.reload();
+                }, 500);
             }
         } catch (err) {
             console.error('Force update failed', err);
-            showNotification({ title: 'Update Check Failed', message: 'Failed to check for updates. See console for details.', color: 'red' });
+            showNotification({ title: 'Update Failed', message: 'Failed to apply update. See console for details.', color: 'red' });
+            setIsUpdating(false);
+            setUpdateConfirmOpen(false);
         }
     };
 
@@ -163,6 +198,16 @@ export function SettingsPage() {
                     </Paper>
                 </Stack>
             </Container>
+
+            <ConfirmDialog
+                opened={updateConfirmOpen}
+                title="Update Application"
+                message="This will clear your cache and update to the latest version. You'll be reloaded to the updated app."
+                confirmLabel="Update Now"
+                onConfirm={handleConfirmUpdate}
+                onCancel={() => setUpdateConfirmOpen(false)}
+                isLoading={isUpdating}
+            />
         </Box>
     );
 }
