@@ -71,6 +71,7 @@
     "commits": "commits",
     "scrollToLoadMore": "• Scroll down to load more",
     "loadMore": "Load More",
+    "totalCommits": "Total Commits",
     "changedFiles": "changed",
     "file": "file",
     "files": "files"

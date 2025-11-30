@@ -71,6 +71,7 @@
     "commits": "commits",
     "scrollToLoadMore": "• Scrolla ner för att ladda fler",
     "loadMore": "Ladda fler",
+    "totalCommits": "Totalt antal commits",
     "changedFiles": "ändrade",
     "file": "fil",
     "files": "filer"

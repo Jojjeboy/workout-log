@@ -1,4 +1,4 @@
-import { Container, Box, Title, Text, Timeline, ThemeIcon, Loader, Center, Paper, Code, Collapse, Button } from '@mantine/core';
+import { Container, Box, Title, Text, Timeline, ThemeIcon, Loader, Center, Paper, Code, Collapse, Button, Badge, Group } from '@mantine/core';
 import { IconGitCommit, IconFileCode, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -101,8 +101,22 @@ export function ChangelogPage() {
                 boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
             }}>
                 <Container size="lg" px="md">
-                    <Title order={1} style={{ margin: 0, color: 'white', marginBottom: '8px' }}>{t('changelog.title')}</Title>
-                    <Text size="sm" style={{ opacity: 0.9 }}>{t('changelog.subtitle')}</Text>
+                    <Group justify="space-between" align="flex-start">
+                        <div>
+                            <Title order={1} style={{ margin: 0, color: 'white', marginBottom: '8px' }}>{t('changelog.title')}</Title>
+                            <Text size="sm" style={{ opacity: 0.9 }}>{t('changelog.subtitle')}</Text>
+                        </div>
+                        {!isLoading && (
+                            <Badge
+                                size="lg"
+                                variant="filled"
+                                color="rgba(255,255,255,0.2)"
+                                style={{ color: 'white', textTransform: 'none' }}
+                            >
+                                {t('changelog.totalCommits')}: {allCommits.length}
+                            </Badge>
+                        )}
+                    </Group>
                 </Container>
             </div>
 
