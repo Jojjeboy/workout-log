@@ -48,10 +48,14 @@ export function ChangelogPage() {
     useEffect(() => {
         const handleScroll = () => {
             // Check if user is near the bottom of the page
-            const scrollPosition = window.innerHeight + window.scrollY;
-            const bottomPosition = document.documentElement.scrollHeight - 300;
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
 
-            if (scrollPosition >= bottomPosition && !isLoadingMore && displayedCount < allCommits.length) {
+            // Trigger when within 200px of the bottom
+            const scrolledToBottom = scrollTop + windowHeight >= documentHeight - 200;
+
+            if (scrolledToBottom && !isLoadingMore && displayedCount < allCommits.length) {
                 setIsLoadingMore(true);
                 // Simulate a small delay for better UX
                 setTimeout(() => {
