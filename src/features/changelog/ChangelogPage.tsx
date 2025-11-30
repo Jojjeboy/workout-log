@@ -1,6 +1,7 @@
 import { Container, Box, Title, Text, Timeline, ThemeIcon, Loader, Center, Paper, Code, Collapse, Button } from '@mantine/core';
 import { IconGitCommit, IconFileCode, IconChevronDown, IconChevronUp } from '@tabler/icons-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface Commit {
     hash: string;
@@ -12,8 +13,11 @@ interface Commit {
 }
 
 export function ChangelogPage() {
-    const [commits, setCommits] = useState<Commit[]>([]);
+    const { t } = useTranslation();
+    const [allCommits, setAllCommits] = useState<Commit[]>([]);
+    const [displayedCount, setDisplayedCount] = useState(20);
     const [isLoading, setIsLoading] = useState(true);
+    const [isLoadingMore, setIsLoadingMore] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [expandedFiles, setExpandedFiles] = useState<Record<string, boolean>>({});
 
@@ -27,7 +31,7 @@ export function ChangelogPage() {
                     throw new Error('Failed to fetch commits');
                 }
                 const data = await response.json();
-                setCommits(data);
+                setAllCommits(data);
                 setError(null);
             } catch (err) {
                 console.error('Error fetching commits:', err);
@@ -39,6 +43,29 @@ export function ChangelogPage() {
 
         fetchCommits();
     }, []);
+
+    // Infinite scroll effect
+    useEffect(() => {
+        const handleScroll = () => {
+            // Check if user is near the bottom of the page
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const bottomPosition = document.documentElement.scrollHeight - 300;
+
+            if (scrollPosition >= bottomPosition && !isLoadingMore && displayedCount < allCommits.length) {
+                setIsLoadingMore(true);
+                // Simulate a small delay for better UX
+                setTimeout(() => {
+                    setDisplayedCount(prev => Math.min(prev + 10, allCommits.length));
+                    setIsLoadingMore(false);
+                }, 300);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, [displayedCount, allCommits.length, isLoadingMore]);
+
+    const commits = allCommits.slice(0, displayedCount);
 
     const toggleFiles = (hash: string) => {
         setExpandedFiles(prev => ({
@@ -86,22 +113,22 @@ export function ChangelogPage() {
                 boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
             }}>
                 <Container size="lg" px="md">
-                    <Title order={1} style={{ margin: 0, color: 'white', marginBottom: '8px' }}>Changelog</Title>
-                    <Text size="sm" style={{ opacity: 0.9 }}>Track all updates and changes to the workout app</Text>
+                    <Title order={1} style={{ margin: 0, color: 'white', marginBottom: '8px' }}>{t('changelog.title')}</Title>
+                    <Text size="sm" style={{ opacity: 0.9 }}>{t('changelog.subtitle')}</Text>
                 </Container>
             </div>
 
             <Container size="lg" px="md" style={{ marginTop: '40px' }}>
                 {error ? (
                     <Paper p="lg" radius="lg" withBorder bg="white">
-                        <Text c="red" fw={500} mb="sm">⚠️ {error}</Text>
+                        <Text c="red" fw={500} mb="sm">{t('changelog.errorTitle')}</Text>
                         <Text size="sm" c="dimmed">
-                            The commits.json file could not be loaded. Make sure to run the build script to generate it.
+                            {t('changelog.errorMessage')}
                         </Text>
                     </Paper>
                 ) : commits.length === 0 ? (
                     <Paper p="lg" radius="lg" withBorder bg="white" ta="center">
-                        <Text c="dimmed">No commits found in the changelog.</Text>
+                        <Text c="dimmed">{t('changelog.noCommits')}</Text>
                     </Paper>
                 ) : (
                     <Paper p="lg" radius="lg" withBorder bg="white">
@@ -135,7 +162,7 @@ export function ChangelogPage() {
                                         <Text component="span" size="xs">
                                             {formatDate(commit.date)}
                                         </Text>
-                                        {' • '}
+                                        {' •  '}
                                         <Text component="span" size="xs" c="dimmed" style={{ fontFamily: 'monospace' }}>
                                             {commit.hash.substring(0, 7)}
                                         </Text>
@@ -158,7 +185,7 @@ export function ChangelogPage() {
                                                 onClick={() => toggleFiles(commit.hash)}
                                                 styles={{ root: { paddingLeft: 0 } }}
                                             >
-                                                {commit.files.length} changed {commit.files.length === 1 ? 'file' : 'files'}
+                                                {commit.files.length} {t('changelog.changedFiles')} {commit.files.length === 1 ? t('changelog.file') : t('changelog.files')}
                                             </Button>
 
                                             <Collapse in={expandedFiles[commit.hash]}>
@@ -173,6 +200,25 @@ export function ChangelogPage() {
                                 </Timeline.Item>
                             ))}
                         </Timeline>
+
+                        {/* Loading indicator and count */}
+                        <Box mt="xl" style={{ textAlign: 'center' }}>
+                            {isLoadingMore && (
+                                <Box mb="md">
+                                    <Loader size="sm" />
+                                    <Text size="xs" c="dimmed" mt="xs">{t('changelog.loadingMore')}</Text>
+                                </Box>
+                            )}
+
+                            <Text size="xs" c="dimmed">
+                                {t('changelog.showing')} {commits.length} {t('changelog.of')} {allCommits.length} {t('changelog.commits')}
+                                {displayedCount < allCommits.length && !isLoadingMore && (
+                                    <Text component="span" c="blue" style={{ marginLeft: '8px' }}>
+                                        {t('changelog.scrollToLoadMore')}
+                                    </Text>
+                                )}
+                            </Text>
+                        </Box>
                     </Paper>
                 )}
             </Container>

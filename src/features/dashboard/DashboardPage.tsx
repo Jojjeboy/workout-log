@@ -4,9 +4,11 @@ import { useNavigate } from 'react-router-dom';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { useExercises } from '../../hooks/useExercises';
 import { useAuth } from '../../hooks/useAuth';
+import { useTranslation } from 'react-i18next';
 import './DashboardPage.css';
 
 export function DashboardPage() {
+    const { t } = useTranslation();
     const { logs, isLoading } = useWorkouts();
     const { data: exercises = [] } = useExercises();
     const { user } = useAuth();
@@ -49,8 +51,8 @@ export function DashboardPage() {
                 {/* Top Bar */}
                 <Group justify="space-between" align="center" mb="xl">
                     <div>
-                        <Text size="xs" style={{ opacity: 0.8 }}>Welcome back,</Text>
-                        <Text size="sm" fw={600}>{user?.displayName || 'Athlete'}</Text>
+                        <Text size="xs" style={{ opacity: 0.8 }}>{t('dashboard.welcomeBack')}</Text>
+                        <Text size="sm" fw={600}>{user?.displayName || t('dashboard.athlete')}</Text>
                     </div>
                     <Group gap="sm">
                         <Avatar
@@ -68,7 +70,7 @@ export function DashboardPage() {
 
                 {/* "Balance" / Key Stat */}
                 <Stack gap={0} align="center" mt="md" mb="sm">
-                    <Text size="sm" style={{ opacity: 0.9 }}>Total Workouts</Text>
+                    <Text size="sm" style={{ opacity: 0.9 }}>{t('dashboard.totalWorkouts')}</Text>
                     <Title order={1} style={{ fontSize: '42px', fontWeight: 700, letterSpacing: '-1px' }}>
                         {stats.totalWorkouts}
                     </Title>
@@ -81,7 +83,7 @@ export function DashboardPage() {
                         leftSection={<IconArrowUpRight size={14} />}
                         style={{ backgroundColor: 'rgba(255,255,255,0.15)', color: '#4ade80' }}
                     >
-                        +3 this week
+                        +3 {t('dashboard.thisWeek')}
                     </Badge>
                 </Stack>
             </div>
@@ -98,7 +100,7 @@ export function DashboardPage() {
                                     </ThemeIcon>
                                     <Text size="xs" fw={700} c="green">+12%</Text>
                                 </Group>
-                                <Text size="xs" c="dimmed" fw={600} tt="uppercase">Volume</Text>
+                                <Text size="xs" c="dimmed" fw={600} tt="uppercase">{t('dashboard.volume')}</Text>
                                 <Text size="xl" fw={700}>{stats.totalSets}</Text>
                             </Paper>
                         </Grid.Col>
@@ -110,8 +112,8 @@ export function DashboardPage() {
                                     </ThemeIcon>
                                     <Text size="xs" fw={700} c="red">-2%</Text>
                                 </Group>
-                                <Text size="xs" c="dimmed" fw={600} tt="uppercase">Streak</Text>
-                                <Text size="xl" fw={700}>{stats.thisWeek} <span style={{ fontSize: '12px', fontWeight: 400 }}>days</span></Text>
+                                <Text size="xs" c="dimmed" fw={600} tt="uppercase">{t('dashboard.streak')}</Text>
+                                <Text size="xl" fw={700}>{stats.thisWeek} <span style={{ fontSize: '12px', fontWeight: 400 }}>{t('dashboard.days')}</span></Text>
                             </Paper>
                         </Grid.Col>
                     </Grid>
@@ -119,8 +121,8 @@ export function DashboardPage() {
                     {/* Weekly Activity */}
                     <Paper p="lg" radius="lg" withBorder shadow="sm" bg="white">
                         <Group justify="space-between" mb="lg">
-                            <Title order={4}>Activity</Title>
-                            <Badge variant="dot" color="blue">This Week</Badge>
+                            <Title order={4}>{t('dashboard.activity')}</Title>
+                            <Badge variant="dot" color="blue">{t('dashboard.thisWeek')}</Badge>
                         </Group>
                         <div style={{ height: '120px', display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', paddingBottom: '10px' }}>
                             {[40, 70, 30, 85, 50, 65, 90].map((h, i) => (
@@ -135,13 +137,13 @@ export function DashboardPage() {
                     {/* Recent Workouts List */}
                     <div>
                         <Group justify="space-between" mb="md" px="xs">
-                            <Title order={4}>Recent Transactions</Title>
-                            <Text size="sm" c="blue" fw={500} style={{ cursor: 'pointer' }}>See All</Text>
+                            <Title order={4}>{t('dashboard.recentTransactions')}</Title>
+                            <Text size="sm" c="blue" fw={500} style={{ cursor: 'pointer' }}>{t('dashboard.seeAll')}</Text>
                         </Group>
 
                         <Paper radius="lg" withBorder shadow="sm" style={{ overflow: 'hidden', background: 'white' }}>
                             {(!logs || logs.length === 0) ? (
-                                <Text p="xl" ta="center" c="dimmed">No workouts logged yet.</Text>
+                                <Text p="xl" ta="center" c="dimmed">{t('dashboard.noWorkouts')}</Text>
                             ) : (
                                 <Accordion chevronPosition="right" defaultValue="" variant="separated">
                                     {logs.slice(0, 5).map((log, index) => (
@@ -153,13 +155,13 @@ export function DashboardPage() {
                                                             <IconActivity size={20} />
                                                         </ThemeIcon>
                                                         <div>
-                                                            <Text fw={600} size="sm">Workout Session</Text>
+                                                            <Text fw={600} size="sm">{t('dashboard.workoutSession')}</Text>
                                                             <Text size="xs" c="dimmed">{new Date(log.timestamp).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</Text>
                                                         </div>
                                                     </Group>
                                                     <div style={{ textAlign: 'right' }}>
-                                                        <Text fw={600} size="sm">{log.sets?.length || 0} Sets</Text>
-                                                        <Text size="xs" c="green" fw={500}>Completed</Text>
+                                                        <Text fw={600} size="sm">{log.sets?.length || 0} {t('dashboard.sets')}</Text>
+                                                        <Text size="xs" c="green" fw={500}>{t('dashboard.completed')}</Text>
                                                     </div>
                                                 </Group>
                                             </Accordion.Control>
@@ -167,11 +169,11 @@ export function DashboardPage() {
                                                 <Stack gap="md">
                                                     <div>
                                                         <Text fw={600} size="sm" mb="sm">
-                                                            Exercise: 
-                                                            <Text 
+                                                            {t('dashboard.exercise')}:
+                                                            <Text
                                                                 component="span"
-                                                                fw={600} 
-                                                                size="sm" 
+                                                                fw={600}
+                                                                size="sm"
                                                                 c="blue"
                                                                 style={{ cursor: 'pointer', marginLeft: '8px' }}
                                                                 onClick={() => navigate(`/exercises/${log.exerciseId}?tab=history`)}
@@ -182,10 +184,10 @@ export function DashboardPage() {
                                                         <Table striped highlightOnHover>
                                                             <Table.Thead>
                                                                 <Table.Tr>
-                                                                    <Table.Th>Set</Table.Th>
-                                                                    <Table.Th>Weight (kg)</Table.Th>
-                                                                    <Table.Th>Reps</Table.Th>
-                                                                    <Table.Th>Status</Table.Th>
+                                                                    <Table.Th>{t('dashboard.set')}</Table.Th>
+                                                                    <Table.Th>{t('dashboard.weight')}</Table.Th>
+                                                                    <Table.Th>{t('dashboard.reps')}</Table.Th>
+                                                                    <Table.Th>{t('dashboard.status')}</Table.Th>
                                                                 </Table.Tr>
                                                             </Table.Thead>
                                                             <Table.Tbody>
@@ -195,12 +197,12 @@ export function DashboardPage() {
                                                                         <Table.Td c="#1a202c">{set.weight}</Table.Td>
                                                                         <Table.Td c="#1a202c">{set.reps}</Table.Td>
                                                                         <Table.Td>
-                                                                            <Badge 
-                                                                                color={'green'} 
-                                                                                size="sm" 
+                                                                            <Badge
+                                                                                color={'green'}
+                                                                                size="sm"
                                                                                 variant="light"
                                                                             >
-                                                                                {'Done'}
+                                                                                {t('dashboard.done')}
                                                                             </Badge>
                                                                         </Table.Td>
                                                                     </Table.Tr>
@@ -210,7 +212,7 @@ export function DashboardPage() {
                                                     </div>
                                                     {log.note && (
                                                         <div>
-                                                            <Text fw={600} size="sm" mb="xs">Notes</Text>
+                                                            <Text fw={600} size="sm" mb="xs">{t('dashboard.notes')}</Text>
                                                             <Text size="sm" c="dimmed">{log.note}</Text>
                                                         </div>
                                                     )}
