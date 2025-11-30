@@ -15,29 +15,23 @@ interface WorkoutLoggerProps {
 
 export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSaveSuccess }: WorkoutLoggerProps) {
     const [sets, setSets] = useState<WorkoutSet[]>(
-        initialSets || [{ weight: 0, reps: 0, completed: false }]
+        initialSets || [{ weight: 0, reps: 0 }]
     );
     const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate || new Date());
     const [showSuccess, setShowSuccess] = useState(false);
 
     const addSet = () => {
         const lastSet = sets[sets.length - 1];
-        setSets([...sets, { ...lastSet, completed: false }]);
+        setSets([...sets, { ...lastSet }]);
     };
 
     const removeSet = (index: number) => {
         setSets(sets.filter((_, i) => i !== index));
     };
 
-    const updateSet = (index: number, field: keyof WorkoutSet, value: number) => {
+    const updateSet = (index: number, field: keyof Omit<WorkoutSet, 'rpe'>, value: number) => {
         const newSets = [...sets];
         newSets[index] = { ...newSets[index], [field]: value };
-        setSets(newSets);
-    };
-
-    const toggleComplete = (index: number) => {
-        const newSets = [...sets];
-        newSets[index] = { ...newSets[index], completed: !newSets[index].completed };
         setSets(newSets);
     };
 
@@ -55,7 +49,7 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
         });
 
         // Reset form
-        setSets([{ weight: 0, reps: 0, completed: false }]);
+        setSets([{ weight: 0, reps: 0 }]);
         setSelectedDate(new Date());
         setShowSuccess(true);
 
@@ -95,7 +89,7 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
                     </Table.Thead>
                     <Table.Tbody>
                         {sets.map((set, index) => (
-                            <Table.Tr key={index} bg={set.completed ? '#f0fff4' : undefined}>
+                            <Table.Tr key={index}>
                                 <Table.Td style={{ textAlign: 'center' }}>
                                     <Text size="sm" fw={500} c="dimmed">{index + 1}</Text>
                                 </Table.Td>
@@ -124,15 +118,6 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
                                 </Table.Td>
                                 <Table.Td>
                                     <Group gap={4} wrap="nowrap">
-                                        <ActionIcon
-                                            color={set.completed ? "green" : "gray"}
-                                            variant={set.completed ? "filled" : "subtle"}
-                                            onClick={() => toggleComplete(index)}
-                                            size="md"
-                                            radius="xs"
-                                        >
-                                            <IconCheck size={16} />
-                                        </ActionIcon>
                                         <ActionIcon
                                             color="red"
                                             variant="subtle"

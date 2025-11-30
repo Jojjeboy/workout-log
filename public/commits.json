@@ -1,5 +1,32 @@
 [
   {
+    "hash": "ea9aa62face2d8d35b18b91a40253b4b35cb64f1",
+    "message": "Language toggle in the menu",
+    "date": "2025-11-30 11:10:15 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/settings/SettingsPage.tsx"
+    ]
+  },
+  {
+    "hash": "7a19947739c20dcca8d961abf70646d79a69f9ac",
+    "message": "i18n language toggle support",
+    "date": "2025-11-30 11:04:30 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "package-lock.json",
+      "package.json",
+      "public/commits.json",
+      "src/components/Footer.tsx",
+      "src/features/settings/SettingsPage.tsx",
+      "src/i18n.ts",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json",
+      "src/main.tsx",
+      "tsconfig.app.tsbuildinfo"
+    ]
+  },
+  {
     "hash": "cfcacd4420ac8008172849f157e3bef717405a51",
     "message": "stuff",
     "date": "2025-11-30 10:51:34 +0100",

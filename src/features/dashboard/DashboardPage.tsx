@@ -7,7 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
 import './DashboardPage.css';
 
 export function DashboardPage() {
-    const { logs, isLoading, updateWorkout } = useWorkouts();
+    const { logs, isLoading } = useWorkouts();
     const { data: exercises = [] } = useExercises();
     const { user } = useAuth();
     const navigate = useNavigate();
@@ -29,23 +29,7 @@ export function DashboardPage() {
         }).length || 0,
     };
 
-    const handleToggleSetCompletion = (logId: string | undefined, setIdx: number) => {
-        if (!logId) return;
-        
-        const log = logs?.find(l => l.id === logId);
-        if (!log || !log.sets || !log.sets[setIdx]) return;
 
-        // Toggle the completion status
-        const updatedSets = log.sets.map((set, idx) =>
-            idx === setIdx ? { ...set, completed: !set.completed } : set
-        );
-
-        // Update the workout log
-        updateWorkout({
-            ...log,
-            sets: updatedSets,
-        });
-    };
 
     if (isLoading) {
         return <Center style={{ height: 400 }}><Loader /></Center>;
@@ -212,13 +196,11 @@ export function DashboardPage() {
                                                                         <Table.Td c="#1a202c">{set.reps}</Table.Td>
                                                                         <Table.Td>
                                                                             <Badge 
-                                                                                color={set.completed ? 'green' : 'gray'} 
+                                                                                color={'green'} 
                                                                                 size="sm" 
                                                                                 variant="light"
-                                                                                style={{ cursor: 'pointer' }}
-                                                                                onClick={() => handleToggleSetCompletion(log.id, setIdx)}
                                                                             >
-                                                                                {set.completed ? 'Done' : 'Pending'}
+                                                                                {'Done'}
                                                                             </Badge>
                                                                         </Table.Td>
                                                                     </Table.Tr>

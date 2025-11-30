@@ -21,7 +21,6 @@ export interface WorkoutSet {
     weight: number;
     reps: number;
     rpe?: number; // Rate of Perceived Exertion
-    completed: boolean;
 }
 
 export interface QueueItem {
