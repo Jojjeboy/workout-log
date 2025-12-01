@@ -1,5 +1,5 @@
 import { AppShell, Group, Text, UnstyledButton, useMantineTheme, ThemeIcon, Stack } from '@mantine/core';
-import { IconHome, IconPlus, IconSettings } from '@tabler/icons-react';
+import { IconPlus, IconSettings, IconBarbell } from '@tabler/icons-react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 
@@ -95,7 +95,7 @@ export function Footer() {
         >
             {/* Background color changes based on dark mode */}
             <Group h="100%" gap={0} bg="white" align="center">
-                <NavItem path="/" icon={IconHome} label={t('footer.dashboard')} color="blue" />
+                <NavItem path="/" icon={IconBarbell} label={t('footer.workouts')} color="blue" />
                 <NavItem path="/exercises" icon={IconPlus} label={t('footer.add')} color="cyan" />
                 <NavItem path="/settings" icon={IconSettings} label={t('footer.settings')} color="orange" />
             </Group>

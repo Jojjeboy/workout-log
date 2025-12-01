@@ -1,5 +1,26 @@
 [
   {
+    "hash": "868da7ce668c8fe3de9218cc21b246c91838cb97",
+    "message": "Workout sidan förbättrad steg 1",
+    "date": "2025-12-01 11:53:12 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/features/notes/NotesPage.tsx",
+      "src/features/workouts/WorkoutHistoryPage.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
+    "hash": "2d3789f895601777b550d8b68b9cfd0681f81826",
+    "message": "Update changelog",
+    "date": "2025-12-01 11:16:19 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json"
+    ]
+  },
+  {
     "hash": "103410b73926845733725336f5c962f2ba866a1c",
     "message": "Fix: Prevent generate-commits from overwriting full history in shallow clones",
     "date": "2025-12-01 11:13:35 +0100",

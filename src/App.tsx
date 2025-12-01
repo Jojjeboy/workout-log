@@ -5,7 +5,6 @@ import { ProtectedRoute } from './components/ProtectedRoute';
 import { ExerciseList } from './features/exercises/ExerciseList';
 import { ExerciseDetail } from './features/exercises/ExerciseDetail';
 import { NotesPage } from './features/notes/NotesPage';
-import { DashboardPage } from './features/dashboard/DashboardPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { ProfilePage } from './features/profile/ProfilePage';
 import { ChangelogPage } from './features/changelog/ChangelogPage';
@@ -39,10 +38,9 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
 
             <Route element={<ProtectedRoute />}>
-              <Route path="/" element={<DashboardPage />} />
+              <Route path="/" element={<WorkoutHistoryPage />} />
               <Route path="/exercises" element={<ExerciseList />} />
               <Route path="/exercises/:id" element={<ExerciseDetail />} />
-              <Route path="/workouts" element={<WorkoutHistoryPage />} />
               <Route path="/notes" element={<NotesPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/changelog" element={<ChangelogPage />} />
