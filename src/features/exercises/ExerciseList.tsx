@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
-import { TextInput, Text, Badge, Group, Container, MultiSelect, Loader, Center, Stack, Title, Box, Pagination, Paper, Avatar, Divider, ActionIcon, Collapse, Accordion } from '@mantine/core';
-import { IconSearch, IconChevronRight, IconFilter, IconHistory } from '@tabler/icons-react';
+import { TextInput, Text, Group, Container, MultiSelect, Loader, Center, Stack, Title, Box, Pagination, Paper, Avatar, ActionIcon, Collapse, Accordion } from '@mantine/core';
+import { IconSearch, IconFilter, IconHistory } from '@tabler/icons-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useExercises } from '../../hooks/useExercises';
 import { Exercise } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
 import { useWorkouts } from '../../hooks/useWorkouts';
+import { ExerciseItem } from '../../components/ExerciseItem';
 
 import { useTranslation } from 'react-i18next';
 
@@ -105,50 +106,6 @@ export function ExerciseList() {
     if (isLoading) {
         return <Center h={400}><Loader /></Center>;
     }
-
-    const ExerciseItem = ({ exercise, hasDivider = true }: { exercise: Exercise, hasDivider?: boolean }) => (
-        <div key={exercise.exerciseId}>
-            <div
-                style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}
-                onClick={() => navigate(`/exercises/${exercise.exerciseId}`)}
-                className="hover-bg-gray"
-            >
-                {/* Thumbnail */}
-                <Avatar
-                    src={exercise.gifUrl}
-                    size="lg"
-                    radius="md"
-                    color="blue"
-                    style={{ flexShrink: 0 }}
-                >
-                    {exercise.name[0]}
-                </Avatar>
-
-                {/* Content */}
-                <div style={{ marginLeft: '16px', flex: 1 }}>
-                    <Text fw={600} tt="capitalize" size="sm" lineClamp={1}>
-                        {exercise.name}
-                    </Text>
-                    <Text size="xs" c="dimmed" lineClamp={1}>
-                        {exercise.targetMuscles.join(', ')}
-                    </Text>
-                </div>
-
-                {/* Meta & Action */}
-                <Group gap="xs" style={{ flexShrink: 0 }}>
-                    <Badge color="gray" variant="light" size="sm" visibleFrom="xs">
-                        {exercise.bodyParts[0]}
-                    </Badge>
-                    <IconChevronRight size={18} color="#adb5bd" />
-                </Group>
-            </div>
-
-            {/* Indented Divider */}
-            {hasDivider && (
-                <Divider color="gray.2" style={{ marginLeft: '72px' }} />
-            )}
-        </div>
-    );
 
     return (
         <Box bg="#f8f9fa" style={{ minHeight: '100vh', paddingBottom: '100px' }}>

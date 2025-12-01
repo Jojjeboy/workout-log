@@ -1,5 +1,5 @@
-import { Container, Title, Text, Paper, Group, Stack, Badge, Box, Avatar, Select, SegmentedControl, Accordion, Table, ThemeIcon, ActionIcon, Loader, Center, Button } from '@mantine/core';
-import { IconActivity, IconArrowLeft, IconTrash, IconCalendar, IconTrendingUp, IconPencil, IconPlus } from '@tabler/icons-react';
+import { Container, Title, Text, Paper, Group, Stack, Badge, Box, Avatar, Select, SegmentedControl, Accordion, Table, ThemeIcon, Loader, Center, Button } from '@mantine/core';
+import { IconActivity, IconTrash, IconCalendar, IconTrendingUp, IconPencil, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { useExercises } from '../../hooks/useExercises';
@@ -112,19 +112,9 @@ export function WorkoutHistoryPage() {
                 boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
             }}>
                 <Group justify="space-between" align="center" mb="lg">
-                    <Group>
-                        <ActionIcon
-                            variant="subtle"
-                            color="white"
-                            size="lg"
-                            onClick={() => navigate('/')}
-                        >
-                            <IconArrowLeft size={20} />
-                        </ActionIcon>
-                        <div>
-                            <Title order={2} style={{ color: 'white' }}>{t('workoutHistory.title')}</Title>
-                        </div>
-                    </Group>
+                    <div>
+                        <Title order={2} style={{ color: 'white' }}>{t('workoutHistory.title')}</Title>
+                    </div>
                     <Avatar
                         src={user?.photoURL}
                         alt={user?.displayName || 'User'}

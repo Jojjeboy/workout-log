@@ -36,7 +36,8 @@
     "dashboard": "Dashboard",
     "workouts": "Workouts",
     "add": "Add",
-    "settings": "Settings"
+    "settings": "Settings",
+    "generator": "Generator"
   },
   "dashboard": {
     "welcomeBack": "Welcome back,",
@@ -140,7 +141,7 @@
     "deleteMessage": "Are you sure you want to delete this note? This action cannot be undone."
   },
   "workoutHistory": {
-    "title": "All Workouts",
+    "title": "Logged Workouts",
     "subtitle": "Workout History",
     "totalLogs": "Total Logs",
     "exercises": "Exercises",
@@ -162,5 +163,16 @@
     "workoutCount_one": "{{count}} workout",
     "workoutCount_other": "{{count}} workouts",
     "addNewWorkout": "Add New Workout"
+  },
+  "generator": {
+    "title": "Workout Generator",
+    "subtitle": "Generate a random workout routine",
+    "generate": "Generate Workout",
+    "numExercises": "Number of Exercises",
+    "muscleGroup": "Muscle Group",
+    "equipment": "Equipment",
+    "random": "Random",
+    "anyEquipment": "Any Equipment",
+    "regenerate": "Regenerate"
   }
 }

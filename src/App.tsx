@@ -9,6 +9,7 @@ import { SettingsPage } from './features/settings/SettingsPage';
 import { ProfilePage } from './features/profile/ProfilePage';
 import { ChangelogPage } from './features/changelog/ChangelogPage';
 import { WorkoutHistoryPage } from './features/workouts/WorkoutHistoryPage';
+import { WorkoutGeneratorPage } from './features/generator/WorkoutGeneratorPage';
 import { Footer } from './components/Footer';
 import { useAuth } from './hooks/useAuth';
 import { UpdateNotification } from './components/UpdateNotification';
@@ -45,6 +46,7 @@ function App() {
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/changelog" element={<ChangelogPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/generator" element={<WorkoutGeneratorPage />} />
             </Route>
 
             <Route path="*" element={<Navigate to="/" />} />

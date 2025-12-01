@@ -36,7 +36,8 @@
     "dashboard": "Översikt",
     "workouts": "Övningar",
     "add": "Lägg till",
-    "settings": "Inställningar"
+    "settings": "Inställningar",
+    "generator": "Generator"
   },
   "dashboard": {
     "welcomeBack": "Välkommen tillbaka,",
@@ -140,7 +141,7 @@
     "deleteMessage": "Är du säker på att du vill ta bort denna anteckning? Detta går inte att ångra."
   },
   "workoutHistory": {
-    "title": "Alla övningar",
+    "title": "Loggade övningar",
     "subtitle": "Träningshistorik",
     "totalLogs": "Antal övningar",
     "exercises": "Unika övningar",
@@ -162,5 +163,16 @@
     "workoutCount_one": "{{count}} övning",
     "workoutCount_other": "{{count}} övningar",
     "addNewWorkout": "Lägg till övning"
+  },
+  "generator": {
+    "title": "Träningsgenerator",
+    "subtitle": "Generera ett slumpmässigt träningspass",
+    "generate": "Generera Pass",
+    "numExercises": "Antal Övningar",
+    "muscleGroup": "Muskelgrupp",
+    "equipment": "Utrustning",
+    "random": "Slumpmässig",
+    "anyEquipment": "Valfri Utrustning",
+    "regenerate": "Generera igen"
   }
 }
