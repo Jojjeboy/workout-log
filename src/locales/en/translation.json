@@ -29,7 +29,8 @@
     "updating": "Updating",
     "updatingMessage": "Clearing cache and applying update. Reloading...",
     "updateFailed": "Update Failed",
-    "updateFailedMessage": "Failed to apply update. See console for details."
+    "updateFailedMessage": "Failed to apply update. See console for details.",
+    "viewAllCommits": "View all commits ({{count}})"
   },
   "footer": {
     "dashboard": "Dashboard",

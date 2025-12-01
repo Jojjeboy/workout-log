@@ -197,14 +197,6 @@ export function SettingsPage() {
                         />
                         <Divider color="gray.1" />
                         <SettingsRow
-                            icon={<IconDatabase size={20} />}
-                            color="violet"
-                            label={t('settings.syncExercises')}
-                            onClick={handleSyncClick}
-                            loading={isSyncingFromJson}
-                        />
-                        <Divider color="gray.1" />
-                        <SettingsRow
                             icon={<IconLanguage size={20} />}
                             color="blue"
                             label={t('settings.language')}
@@ -258,12 +250,12 @@ export function SettingsPage() {
                                             <Text size="xs" ff="monospace" fw={500}>{versionInfo.commitHashShort}</Text>
                                         </Group>
                                         <Group justify="space-between">
-                                            <Text size="xs" c="dimmed">Tag</Text>
-                                            <Badge variant="light" color="teal" radius="xs" size="sm">{versionInfo.latestTag}</Badge>
+                                            <Text size="xs" c="dimmed">Message</Text>
+                                            <Text size="xs" fw={500} style={{ textAlign: 'right', maxWidth: '200px' }}>{versionInfo.commitMessage}</Text>
                                         </Group>
                                         <Group justify="space-between">
-                                            <Text size="xs" c="dimmed">Total Commits</Text>
-                                            <Text size="xs" fw={500}>{versionInfo.commitCount}</Text>
+                                            <Text size="xs" c="dimmed">Tag</Text>
+                                            <Badge variant="light" color="teal" radius="xs" size="sm">{versionInfo.latestTag}</Badge>
                                         </Group>
                                         <Group justify="space-between">
                                             <Text size="xs" c="dimmed">Build Date</Text>
@@ -285,7 +277,7 @@ export function SettingsPage() {
                                             fullWidth
                                             onClick={() => navigate('/changelog')}
                                         >
-                                            View Full Changelog
+                                            {t('settings.viewAllCommits', { count: versionInfo.commitCount })}
                                         </Button>
                                     </Stack>
                                 </Box>
@@ -310,6 +302,14 @@ export function SettingsPage() {
 
                     {/* Account Group */}
                     <Paper radius="sm" shadow="sm" bg="white" style={{ overflow: 'hidden' }}>
+                        <SettingsRow
+                            icon={<IconDatabase size={20} />}
+                            color="violet"
+                            label={t('settings.syncExercises')}
+                            onClick={handleSyncClick}
+                            loading={isSyncingFromJson}
+                        />
+                        <Divider color="gray.1" />
                         <SettingsRow
                             icon={<IconLogout size={20} />}
                             color="red"

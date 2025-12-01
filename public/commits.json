@@ -1,5 +1,15 @@
 [
   {
+    "hash": "d7cada402e7959fabab842d6e677614dc84d88e3",
+    "message": "Buttons 50%",
+    "date": "2025-12-01 14:32:19 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/features/workouts/WorkoutHistoryPage.tsx"
+    ]
+  },
+  {
     "hash": "65256bb1c110cb993953c2cfa50e2d52e5147d74",
     "message": "Service worker fix",
     "date": "2025-12-01 14:28:48 +0100",

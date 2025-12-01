@@ -27,6 +27,7 @@ try {
     const commitHashShort = gitCommand('git rev-parse --short HEAD', 'unknown');
     const commitCount = gitCommand('git rev-list --count HEAD', '0');
     const latestTag = gitCommand('git describe --tags --abbrev=0', 'v0.0.0');
+    const commitMessage = gitCommand('git log -1 --pretty=%s', 'No commit message');
     const timestamp = new Date().toISOString();
 
     const versionInfo = {
@@ -35,6 +36,7 @@ try {
         commitHashShort,
         commitCount: parseInt(commitCount),
         latestTag,
+        commitMessage,
         buildDate: timestamp
     };
 
@@ -143,6 +145,7 @@ try {
         commitHashShort: 'unknown',
         commitCount: 0,
         latestTag: 'v0.0.0',
+        commitMessage: 'No commit message',
         buildDate: new Date().toISOString()
     }, null, 2), 'utf-8');
 

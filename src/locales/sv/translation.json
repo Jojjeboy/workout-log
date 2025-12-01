@@ -29,7 +29,8 @@
     "updating": "Uppdaterar",
     "updatingMessage": "Rensar cache och applicerar uppdatering. Laddar om...",
     "updateFailed": "Uppdatering Misslyckades",
-    "updateFailedMessage": "Misslyckades att applicera uppdatering. Se konsolen för detaljer."
+    "updateFailedMessage": "Misslyckades att applicera uppdatering. Se konsolen för detaljer.",
+    "viewAllCommits": "Visa alla commits ({{count}})"
   },
   "footer": {
     "dashboard": "Översikt",
@@ -80,7 +81,7 @@
     "files": "filer"
   },
   "common": {
-    "deleteWorkout": "Ta bort övning",
+    "deleteWorkout": "Ta bort",
     "deleteWorkoutConfirmTitle": "Ta bort övningen?",
     "deleteWorkoutConfirmMessage": "Är du säker på att du vill ta bort denna övning? Detta går inte att ångra.",
     "delete": "Ta bort",
@@ -157,7 +158,7 @@
     "deleteSetConfirmTitle": "Ta bort set?",
     "deleteSetConfirmMessage": "Är du säker på att du vill ta bort detta set?",
     "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort det raderas hela övningen. Är du säker?",
-    "editWorkout": "Redigera övning",
+    "editWorkout": "Redigera",
     "workoutCount_one": "{{count}} övning",
     "workoutCount_other": "{{count}} övningar",
     "addNewWorkout": "Lägg till övning"

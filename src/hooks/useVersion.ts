@@ -6,6 +6,7 @@ export interface VersionInfo {
     commitHashShort: string;
     commitCount: number;
     latestTag: string;
+    commitMessage: string;
     buildDate: string;
 }
 
