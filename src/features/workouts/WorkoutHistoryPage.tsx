@@ -1,5 +1,5 @@
-import { Container, Title, Text, Paper, Group, Stack, Badge, Box, Avatar, Select, SegmentedControl, Accordion, Table, ThemeIcon, ActionIcon, Loader, Center } from '@mantine/core';
-import { IconActivity, IconArrowLeft, IconTrash, IconCalendar, IconTrendingUp } from '@tabler/icons-react';
+import { Container, Title, Text, Paper, Group, Stack, Badge, Box, Avatar, Select, SegmentedControl, Accordion, Table, ThemeIcon, ActionIcon, Loader, Center, Button } from '@mantine/core';
+import { IconActivity, IconArrowLeft, IconTrash, IconCalendar, IconTrendingUp, IconPencil } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { useExercises } from '../../hooks/useExercises';
@@ -122,8 +122,8 @@ export function WorkoutHistoryPage() {
                             <IconArrowLeft size={20} />
                         </ActionIcon>
                         <div>
-                            <Text size="xs" style={{ opacity: 0.8 }}>Workout History</Text>
-                            <Title order={2} style={{ color: 'white' }}>All Workouts</Title>
+                            <Text size="xs" style={{ opacity: 0.8 }}>{t('workoutHistory.subtitle')}</Text>
+                            <Title order={2} style={{ color: 'white' }}>{t('workoutHistory.title')}</Title>
                         </div>
                     </Group>
                     <Avatar
@@ -142,15 +142,15 @@ export function WorkoutHistoryPage() {
                 <Group justify="space-around" mt="xl">
                     <div style={{ textAlign: 'center' }}>
                         <Text size="xl" fw={700}>{stats.total}</Text>
-                        <Text size="xs" style={{ opacity: 0.8 }}>Total Logs</Text>
+                        <Text size="xs" style={{ opacity: 0.8 }}>{t('workoutHistory.totalLogs')}</Text>
                     </div>
                     <div style={{ textAlign: 'center' }}>
                         <Text size="xl" fw={700}>{stats.exercises}</Text>
-                        <Text size="xs" style={{ opacity: 0.8 }}>Exercises</Text>
+                        <Text size="xs" style={{ opacity: 0.8 }}>{t('workoutHistory.exercises')}</Text>
                     </div>
                     <div style={{ textAlign: 'center' }}>
                         <Text size="xl" fw={700}>{stats.sets}</Text>
-                        <Text size="xs" style={{ opacity: 0.8 }}>Total Sets</Text>
+                        <Text size="xs" style={{ opacity: 0.8 }}>{t('workoutHistory.totalSets')}</Text>
                     </div>
                 </Group>
             </div>
@@ -165,14 +165,14 @@ export function WorkoutHistoryPage() {
                                     value={groupBy}
                                     onChange={setGroupBy}
                                     data={[
-                                        { label: 'By Date', value: 'date' },
-                                        { label: 'By Exercise', value: 'exercise' }
+                                        { label: t('workoutHistory.byDate'), value: 'date' },
+                                        { label: t('workoutHistory.byExercise'), value: 'exercise' }
                                     ]}
                                     fullWidth
                                 />
                             </Group>
                             <Select
-                                placeholder="Filter by exercise"
+                                placeholder={t('workoutHistory.filterByExercise')}
                                 data={uniqueExercises}
                                 value={filterExercise}
                                 onChange={setFilterExercise}
@@ -186,7 +186,7 @@ export function WorkoutHistoryPage() {
                     {/* Grouped Workouts */}
                     {Object.keys(groupedLogs).length === 0 ? (
                         <Paper p="xl" radius="sm" shadow="sm" bg="white">
-                            <Text ta="center" c="dimmed">No workouts found</Text>
+                            <Text ta="center" c="dimmed">{t('workoutHistory.noWorkouts')}</Text>
                         </Paper>
                     ) : (
                         Object.entries(groupedLogs).map(([group, groupLogs]) => (
@@ -197,21 +197,21 @@ export function WorkoutHistoryPage() {
                                             <ThemeIcon variant="light" color="blue" size="sm">
                                                 {groupBy === 'date' ? <IconCalendar size={16} /> : <IconTrendingUp size={16} />}
                                             </ThemeIcon>
-                                            <Text fw={600} size="sm">{group}</Text>
+                                            <Text fw={600} size="sm" tt="capitalize">{group}</Text>
                                         </Group>
                                         <Badge variant="light" color="blue" size="sm">
-                                            {groupLogs.length} {groupLogs.length === 1 ? 'workout' : 'workouts'}
+                                            {t('workoutHistory.workoutCount', { count: groupLogs.length })}
                                         </Badge>
                                     </Group>
                                 </Box>
 
-                                <Accordion variant="contained" chevronPosition="right">
+                                <Accordion variant="contained" chevronPosition="right" styles={{ content: { backgroundColor: 'white' } }}>
                                     {groupLogs.map((log, index) => (
                                         <Accordion.Item key={log.id || index} value={log.id || index.toString()}>
                                             <Accordion.Control>
                                                 <Group justify="space-between" style={{ width: '100%' }}>
                                                     <div>
-                                                        <Text fw={600} size="sm">
+                                                        <Text fw={600} size="sm" tt="capitalize">
                                                             {groupBy === 'date'
                                                                 ? exerciseMap[log.exerciseId] || log.exerciseId
                                                                 : new Date(log.timestamp).toLocaleDateString(undefined, {
@@ -223,7 +223,7 @@ export function WorkoutHistoryPage() {
                                                             }
                                                         </Text>
                                                         <Text size="xs" c="dimmed">
-                                                            {log.sets?.length || 0} sets
+                                                            {log.sets?.length || 0} {t('workoutHistory.sets')}
                                                         </Text>
                                                     </div>
                                                 </Group>
@@ -231,21 +231,32 @@ export function WorkoutHistoryPage() {
                                             <Accordion.Panel>
                                                 <Stack gap="md">
                                                     <Group justify="flex-end">
-                                                        <ActionIcon
+                                                        <Button
+                                                            variant="light"
+                                                            size="xs"
+                                                            leftSection={<IconPencil size={14} />}
+                                                            onClick={() => {
+                                                                navigate(`/exercises/${log.exerciseId}`);
+                                                            }}
+                                                        >
+                                                            {t('workoutHistory.editWorkout')}
+                                                        </Button>
+                                                        <Button
                                                             variant="light"
                                                             color="red"
-                                                            size="sm"
+                                                            size="xs"
+                                                            leftSection={<IconTrash size={14} />}
                                                             onClick={() => handleDeleteClick(log.id!)}
                                                         >
-                                                            <IconTrash size={16} />
-                                                        </ActionIcon>
+                                                            {t('common.deleteWorkout')}
+                                                        </Button>
                                                     </Group>
                                                     <Table striped highlightOnHover>
                                                         <Table.Thead>
                                                             <Table.Tr>
-                                                                <Table.Th>Set</Table.Th>
-                                                                <Table.Th>Weight</Table.Th>
-                                                                <Table.Th>Reps</Table.Th>
+                                                                <Table.Th>{t('workoutHistory.set')}</Table.Th>
+                                                                <Table.Th>{t('workoutHistory.weight')}</Table.Th>
+                                                                <Table.Th>{t('workoutHistory.reps')}</Table.Th>
                                                             </Table.Tr>
                                                         </Table.Thead>
                                                         <Table.Tbody>
@@ -260,7 +271,7 @@ export function WorkoutHistoryPage() {
                                                     </Table>
                                                     {log.note && (
                                                         <div>
-                                                            <Text fw={600} size="sm" mb="xs">Notes</Text>
+                                                            <Text fw={600} size="sm" mb="xs">{t('workoutHistory.notes')}</Text>
                                                             <Text size="sm" c="dimmed">{log.note}</Text>
                                                         </div>
                                                     )}

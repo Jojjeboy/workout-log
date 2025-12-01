@@ -119,5 +119,43 @@
     "filterByMuscle": "Filter by muscle",
     "recentlyLogged": "Recently Logged",
     "noExercisesFound": "No exercises found."
+  },
+  "notes": {
+    "title": "Notes",
+    "subtitle": "Keep track of ideas and future improvements",
+    "addNew": "Add New Note",
+    "cancelEdit": "Cancel Edit",
+    "cancel": "Cancel",
+    "error": "Error",
+    "titlePlaceholder": "Note title",
+    "contentPlaceholder": "Write your note here...",
+    "update": "Update Note",
+    "save": "Save Note",
+    "noNotes": "No notes yet — click \"Add New Note\" to create one",
+    "deleteTitle": "Delete Note",
+    "deleteMessage": "Are you sure you want to delete this note? This action cannot be undone."
+  },
+  "workoutHistory": {
+    "title": "All Workouts",
+    "subtitle": "Workout History",
+    "totalLogs": "Total Logs",
+    "exercises": "Exercises",
+    "totalSets": "Total Sets",
+    "filterByExercise": "Filter by exercise",
+    "byDate": "By Date",
+    "byExercise": "By Exercise",
+    "noWorkouts": "No workouts found",
+    "sets": "sets",
+    "set": "Set",
+    "weight": "Weight",
+    "reps": "Reps",
+    "notes": "Notes",
+    "deleteSet": "Delete Set",
+    "deleteSetConfirmTitle": "Delete Set?",
+    "deleteSetConfirmMessage": "Are you sure you want to delete this set?",
+    "deleteLastSetConfirmMessage": "This is the last set. Deleting it will remove the entire workout. Are you sure?",
+    "editWorkout": "Edit Workout",
+    "workoutCount_one": "{{count}} workout",
+    "workoutCount_other": "{{count}} workouts"
   }
 }

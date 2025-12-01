@@ -5,8 +5,10 @@ import { IconTrash, IconPlus, IconX, IconPencil } from '@tabler/icons-react';
 import { useNotes } from '../../hooks/useNotes';
 import { useAuth } from '../../hooks/useAuth';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { useTranslation } from 'react-i18next';
 
 export function NotesPage() {
+    const { t } = useTranslation();
     const navigate = useNavigate();
     const { user } = useAuth();
     const [showForm, setShowForm] = useState(false);
@@ -18,10 +20,8 @@ export function NotesPage() {
     const { data: notes, isLoading, error, addNote, isAdding, deleteNote, updateNote } = useNotes() as any;
 
     useEffect(() => {
-        console.log('NotesPage - data:', notes);
-        console.log('NotesPage - isLoading:', isLoading);
-        console.log('NotesPage - error:', error);
-    }, [notes, isLoading, error]);
+        // console.log('NotesPage - data:', notes);
+    }, [notes]);
 
     const handleAdd = async () => {
         if (!title.trim()) return;
@@ -80,9 +80,9 @@ export function NotesPage() {
             }}>
                 <Group justify="space-between" align="center" mb="xl">
                     <div>
-                        <Text size="xs" style={{ opacity: 0.8 }}>Notes</Text>
-                        <Title order={2} style={{ color: 'white', fontSize: '28px' }} mb="xs">Notes</Title>
-                        <Text c="white" style={{ opacity: 0.8 }} size="sm">Keep track of ideas and future improvements</Text>
+                        <Text size="xs" style={{ opacity: 0.8 }}>{t('notes.title')}</Text>
+                        <Title order={2} style={{ color: 'white', fontSize: '28px' }} mb="xs">{t('notes.title')}</Title>
+                        <Text c="white" style={{ opacity: 0.8 }} size="sm">{t('notes.subtitle')}</Text>
                     </div>
                     <Group gap="sm">
                         <Avatar
@@ -115,14 +115,14 @@ export function NotesPage() {
                         variant={showForm ? 'filled' : 'light'}
                         style={{ borderRadius: 0 }}
                     >
-                        {showForm ? (editingId ? 'Cancel Edit' : 'Cancel') : 'Add New Note'}
+                        {showForm ? (editingId ? t('notes.cancelEdit') : t('notes.cancel')) : t('notes.addNew')}
                     </Button>
 
                     {/* Error Display */}
                     {error && (
                         <Card className="glass-card" p="md" style={{ backgroundColor: 'rgba(255, 100, 100, 0.1)', borderRadius: 0, borderTop: '1px solid #e9ecef' }}>
                             <Text size="sm" c="red">
-                                Error: {error?.message || JSON.stringify(error)}
+                                {t('notes.error')}: {error?.message || JSON.stringify(error)}
                             </Text>
                         </Card>
                     )}
@@ -132,20 +132,20 @@ export function NotesPage() {
                         <Card className="glass-card" p="lg" style={{ borderRadius: 0, borderTop: '1px solid #e9ecef' }}>
                             <Stack>
                                 <TextInput
-                                    placeholder="Note title"
+                                    placeholder={t('notes.titlePlaceholder')}
                                     value={title}
                                     onChange={(e) => setTitle(e.currentTarget.value)}
                                     autoFocus
                                 />
                                 <Textarea
-                                    placeholder="Write your note here..."
+                                    placeholder={t('notes.contentPlaceholder')}
                                     value={content}
                                     onChange={(e) => setContent(e.currentTarget.value)}
                                     minRows={4}
                                 />
                                 <Group justify="flex-end">
                                     <Button variant="light" onClick={handleCancel} leftSection={<IconX size={16} />}>
-                                        Cancel
+                                        {t('notes.cancel')}
                                     </Button>
                                     <Button
                                         onClick={handleAdd}
@@ -153,7 +153,7 @@ export function NotesPage() {
                                         leftSection={<IconPlus size={16} />}
                                         disabled={!title.trim()}
                                     >
-                                        {editingId ? 'Update Note' : 'Save Note'}
+                                        {editingId ? t('notes.update') : t('notes.save')}
                                     </Button>
                                 </Group>
                             </Stack>
@@ -200,7 +200,7 @@ export function NotesPage() {
                         ) : (
                             <Card className="glass-card" p="lg">
                                 <Text ta="center" className="muted-text">
-                                    No notes yet — click "Add New Note" to create one
+                                    {t('notes.noNotes')}
                                 </Text>
                             </Card>
                         )}
@@ -210,10 +210,10 @@ export function NotesPage() {
 
             <ConfirmDialog
                 opened={deleteConfirmOpen}
-                title="Delete Note"
-                message="Are you sure you want to delete this note? This action cannot be undone."
-                confirmLabel="Delete"
-                cancelLabel="Cancel"
+                title={t('notes.deleteTitle')}
+                message={t('notes.deleteMessage')}
+                confirmLabel={t('common.delete')}
+                cancelLabel={t('common.cancel')}
                 isDangerous={true}
                 onConfirm={handleConfirmDelete}
                 onCancel={() => {

@@ -119,5 +119,43 @@
     "filterByMuscle": "Filtrera efter muskel",
     "recentlyLogged": "Nyligen Loggad",
     "noExercisesFound": "Inga övningar hittades."
+  },
+  "notes": {
+    "title": "Anteckningar",
+    "subtitle": "Håll koll på idéer och framtida förbättringar",
+    "addNew": "Lägg till ny anteckning",
+    "cancelEdit": "Avbryt redigering",
+    "cancel": "Avbryt",
+    "error": "Fel",
+    "titlePlaceholder": "Titel",
+    "contentPlaceholder": "Skriv din anteckning här...",
+    "update": "Uppdatera anteckning",
+    "save": "Spara anteckning",
+    "noNotes": "Inga anteckningar än — klicka på \"Lägg till ny anteckning\" för att skapa en",
+    "deleteTitle": "Ta bort anteckning",
+    "deleteMessage": "Är du säker på att du vill ta bort denna anteckning? Detta går inte att ångra."
+  },
+  "workoutHistory": {
+    "title": "Alla Träningspass",
+    "subtitle": "Träningshistorik",
+    "totalLogs": "Totalt Antal Loggar",
+    "exercises": "Övningar",
+    "totalSets": "Totalt Antal Set",
+    "filterByExercise": "Filtrera efter övning",
+    "byDate": "Efter Datum",
+    "byExercise": "Efter Övning",
+    "noWorkouts": "Inga träningspass hittades",
+    "sets": "set",
+    "set": "Set",
+    "weight": "Vikt",
+    "reps": "Reps",
+    "notes": "Anteckningar",
+    "deleteSet": "Ta bort set",
+    "deleteSetConfirmTitle": "Ta bort set?",
+    "deleteSetConfirmMessage": "Är du säker på att du vill ta bort detta set?",
+    "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort det raderas hela passet. Är du säker?",
+    "editWorkout": "Redigera pass",
+    "workoutCount_one": "{{count}} träningspass",
+    "workoutCount_other": "{{count}} träningspass"
   }
 }
