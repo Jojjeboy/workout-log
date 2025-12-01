@@ -1,5 +1,26 @@
 [
   {
+    "hash": "e4228332f8da7a3cdf1e838e8ad39fa3efc290ab",
+    "message": "Husky post commit issue fixed",
+    "date": "2025-12-01 10:54:54 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      ".husky/post-commit",
+      ".husky/pre-commit",
+      "package-lock.json",
+      "package.json"
+    ]
+  },
+  {
+    "hash": "966363d8de5552b710c486b04899a2fcb3941609",
+    "message": "Update changelog with all 58 commits for production",
+    "date": "2025-12-01 10:46:08 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json"
+    ]
+  },
+  {
     "hash": "314266f5507c83c17681fbaf8cd6abb5e0c4f1c1",
     "message": "Adding Workout page - generate commits",
     "date": "2025-12-01 10:22:41 +0100",
