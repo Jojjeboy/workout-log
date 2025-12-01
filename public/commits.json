@@ -1,5 +1,19 @@
 [
   {
+    "hash": "08cbce560a2e034aa83e5c04152b9857ad9cb009",
+    "message": "Version in settings",
+    "date": "2025-12-01 10:02:45 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      ".gitignore",
+      "public/commits.json",
+      "scripts/generate-commits.js",
+      "src/features/settings/SettingsPage.tsx",
+      "src/hooks/useVersion.ts",
+      "tsconfig.app.tsbuildinfo"
+    ]
+  },
+  {
     "hash": "d3b8be2a80338c2d52993510de274825bd3c5f76",
     "message": "Firebase workout sync 2",
     "date": "2025-12-01 09:54:02 +0100",

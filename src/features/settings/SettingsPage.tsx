@@ -1,6 +1,6 @@
 import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider, Avatar, Button, Modal } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy, IconHistory, IconLanguage, IconGitBranch } from '@tabler/icons-react';
+import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy, IconHistory, IconLanguage } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { authService } from '../../services/authService';
@@ -22,6 +22,7 @@ export function SettingsPage() {
     const [syncConfirmOpen, setSyncConfirmOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
     const [langModalOpen, setLangModalOpen] = useState(false);
+    const [changelogExpanded, setChangelogExpanded] = useState(false);
 
     const handleLogout = async () => {
         await authService.logout();
@@ -216,12 +217,80 @@ export function SettingsPage() {
                             }
                         />
                         <Divider color="gray.1" />
-                        <SettingsRow
-                            icon={<IconHistory size={20} />}
-                            color="grape"
-                            label={t('settings.changelog')}
-                            onClick={() => navigate('/changelog')}
-                        />
+                        {/* Changelog Accordion */}
+                        <div>
+                            <div
+                                onClick={() => setChangelogExpanded(!changelogExpanded)}
+                                className="hover-bg-gray"
+                                style={{
+                                    padding: '16px',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'space-between'
+                                }}
+                            >
+                                <Group>
+                                    <ThemeIcon variant="light" color="grape" size="lg" radius="sm">
+                                        <IconHistory size={20} />
+                                    </ThemeIcon>
+                                    <Text fw={500} size="sm">{t('settings.changelog')}</Text>
+                                </Group>
+                                <IconChevronRight
+                                    size={18}
+                                    color={theme.colors.gray[4]}
+                                    style={{
+                                        transform: changelogExpanded ? 'rotate(90deg)' : 'rotate(0deg)',
+                                        transition: 'transform 0.2s'
+                                    }}
+                                />
+                            </div>
+
+                            {changelogExpanded && versionInfo && (
+                                <Box px="md" pb="md" pt="xs" bg="#f8f9fa">
+                                    <Stack gap="xs">
+                                        <Group justify="space-between">
+                                            <Text size="xs" c="dimmed">Branch</Text>
+                                            <Badge variant="light" color="blue" radius="xs" size="sm">{versionInfo.branch}</Badge>
+                                        </Group>
+                                        <Group justify="space-between">
+                                            <Text size="xs" c="dimmed">Commit</Text>
+                                            <Text size="xs" ff="monospace" fw={500}>{versionInfo.commitHashShort}</Text>
+                                        </Group>
+                                        <Group justify="space-between">
+                                            <Text size="xs" c="dimmed">Tag</Text>
+                                            <Badge variant="light" color="teal" radius="xs" size="sm">{versionInfo.latestTag}</Badge>
+                                        </Group>
+                                        <Group justify="space-between">
+                                            <Text size="xs" c="dimmed">Total Commits</Text>
+                                            <Text size="xs" fw={500}>{versionInfo.commitCount}</Text>
+                                        </Group>
+                                        <Group justify="space-between">
+                                            <Text size="xs" c="dimmed">Build Date</Text>
+                                            <Text size="xs" c="dimmed">
+                                                {new Date(versionInfo.buildDate).toLocaleDateString(undefined, {
+                                                    month: 'short',
+                                                    day: 'numeric',
+                                                    year: 'numeric',
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                })}
+                                            </Text>
+                                        </Group>
+                                        <Divider my="xs" />
+                                        <Button
+                                            variant="light"
+                                            color="grape"
+                                            size="xs"
+                                            fullWidth
+                                            onClick={() => navigate('/changelog')}
+                                        >
+                                            View Full Changelog
+                                        </Button>
+                                    </Stack>
+                                </Box>
+                            )}
+                        </div>
                         <Divider color="gray.1" />
                         <SettingsRow
                             icon={<IconDeviceFloppy size={20} />}
@@ -238,48 +307,6 @@ export function SettingsPage() {
                             }
                         />
                     </Paper>
-
-                    {/* Version Info Group */}
-                    {versionInfo && (
-                        <Paper radius="sm" shadow="sm" bg="white" p="md">
-                            <Group gap="xs" mb="sm">
-                                <ThemeIcon variant="light" color="gray" size="sm" radius="sm">
-                                    <IconGitBranch size={16} />
-                                </ThemeIcon>
-                                <Text fw={600} size="sm" c="dimmed">Version Info</Text>
-                            </Group>
-                            <Stack gap="xs">
-                                <Group justify="space-between">
-                                    <Text size="xs" c="dimmed">Branch</Text>
-                                    <Badge variant="light" color="blue" radius="xs" size="sm">{versionInfo.branch}</Badge>
-                                </Group>
-                                <Group justify="space-between">
-                                    <Text size="xs" c="dimmed">Commit</Text>
-                                    <Text size="xs" ff="monospace" fw={500}>{versionInfo.commitHashShort}</Text>
-                                </Group>
-                                <Group justify="space-between">
-                                    <Text size="xs" c="dimmed">Tag</Text>
-                                    <Badge variant="light" color="teal" radius="xs" size="sm">{versionInfo.latestTag}</Badge>
-                                </Group>
-                                <Group justify="space-between">
-                                    <Text size="xs" c="dimmed">Total Commits</Text>
-                                    <Text size="xs" fw={500}>{versionInfo.commitCount}</Text>
-                                </Group>
-                                <Group justify="space-between">
-                                    <Text size="xs" c="dimmed">Build Date</Text>
-                                    <Text size="xs" c="dimmed">
-                                        {new Date(versionInfo.buildDate).toLocaleDateString(undefined, {
-                                            month: 'short',
-                                            day: 'numeric',
-                                            year: 'numeric',
-                                            hour: '2-digit',
-                                            minute: '2-digit'
-                                        })}
-                                    </Text>
-                                </Group>
-                            </Stack>
-                        </Paper>
-                    )}
 
                     {/* Account Group */}
                     <Paper radius="sm" shadow="sm" bg="white" style={{ overflow: 'hidden' }}>
