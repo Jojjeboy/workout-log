@@ -244,7 +244,7 @@ export function WorkoutHistoryPage() {
                                             </Accordion.Control>
                                             <Accordion.Panel>
                                                 <Stack gap="md">
-                                                    <Group justify="flex-end">
+                                                    <Group grow>
                                                         <Button
                                                             variant="light"
                                                             size="xs"
