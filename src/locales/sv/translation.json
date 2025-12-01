@@ -80,15 +80,15 @@
     "files": "filer"
   },
   "common": {
-    "deleteWorkout": "Ta bort pass",
-    "deleteWorkoutConfirmTitle": "Ta bort pass?",
-    "deleteWorkoutConfirmMessage": "Är du säker på att du vill ta bort detta pass? Detta går inte att ångra.",
+    "deleteWorkout": "Ta bort övning",
+    "deleteWorkoutConfirmTitle": "Ta bort övningen?",
+    "deleteWorkoutConfirmMessage": "Är du säker på att du vill ta bort denna övning? Detta går inte att ångra.",
     "delete": "Ta bort",
     "cancel": "Avbryt",
     "deleteSet": "Ta bort set",
     "deleteSetConfirmTitle": "Ta bort set?",
     "deleteSetConfirmMessage": "Är du säker på att du vill ta bort detta set?",
-    "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort det raderas hela passet. Är du säker?"
+    "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort settet raderas hela övningen. Är du säker?"
   },
   "exerciseDetail": {
     "back": "Tillbaka",
@@ -156,8 +156,8 @@
     "deleteSet": "Ta bort set",
     "deleteSetConfirmTitle": "Ta bort set?",
     "deleteSetConfirmMessage": "Är du säker på att du vill ta bort detta set?",
-    "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort det raderas hela passet. Är du säker?",
-    "editWorkout": "Redigera pass",
+    "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort det raderas hela övningen. Är du säker?",
+    "editWorkout": "Redigera övning",
     "workoutCount_one": "{{count}} övning",
     "workoutCount_other": "{{count}} övningar",
     "addNewWorkout": "Lägg till övning"

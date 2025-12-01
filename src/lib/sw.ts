@@ -1,4 +1,5 @@
 const emitter = new EventTarget();
+let updateListenerAdded = false;
 
 export function onUpdateAvailable(cb: () => void) {
   emitter.addEventListener('update-available', cb as EventListener);
@@ -26,28 +27,30 @@ export async function checkForUpdates() {
   const reg = await getRegistration();
   if (!reg) return;
 
-  // If there's already a waiting worker, notify
-  if (reg.waiting) {
-    emitUpdateAvailable();
-    return;
-  }
+  // Don't add multiple update listeners
+  if (!updateListenerAdded) {
+    updateListenerAdded = true;
 
-  try {
-    await reg.update();
-
-    if (reg.waiting) {
-      emitUpdateAvailable();
-      return;
-    }
-
-    // listen for updatefound
     reg.addEventListener('updatefound', () => {
       const installing = reg.installing;
       if (!installing) return;
+
       installing.addEventListener('statechange', () => {
-        if (reg.waiting) emitUpdateAvailable();
+        if (installing.state === 'installed' && reg.waiting) {
+          emitUpdateAvailable();
+        }
       });
     });
+  }
+
+  try {
+    // Trigger an update check
+    await reg.update();
+
+    // After update check, if there's a waiting worker, emit immediately
+    if (reg.waiting) {
+      emitUpdateAvailable();
+    }
   } catch (err) {
     console.error('checkForUpdates error', err);
   }

@@ -4,35 +4,68 @@ import { IconAlertCircle } from '@tabler/icons-react';
 import { onUpdateAvailable, offUpdateAvailable, checkForUpdates, forceUpdate } from '../lib/sw';
 import { showNotification } from '@mantine/notifications';
 
+const UPDATE_COOLDOWN_KEY = 'sw-update-timestamp';
+const COOLDOWN_MS = 10000; // 10 seconds cooldown after update
+
+function isInCooldown(): boolean {
+  const lastUpdate = localStorage.getItem(UPDATE_COOLDOWN_KEY);
+  if (!lastUpdate) return false;
+  const elapsed = Date.now() - parseInt(lastUpdate, 10);
+  return elapsed < COOLDOWN_MS;
+}
+
+function setUpdateTimestamp() {
+  localStorage.setItem(UPDATE_COOLDOWN_KEY, Date.now().toString());
+}
+
 export function UpdateNotification() {
   const [updateAvailable, setUpdateAvailable] = useState(false);
-  // prevent re-showing the modal while an update is being applied
   const applyingRef = useRef(false);
 
   useEffect(() => {
-    const handle = () => setUpdateAvailable(true);
+    const handle = () => {
+      // Don't show modal if we just completed an update
+      if (!isInCooldown() && !applyingRef.current) {
+        setUpdateAvailable(true);
+      }
+    };
+
     onUpdateAvailable(handle);
-    // Trigger an initial check
-    checkForUpdates();
-    return () => offUpdateAvailable(handle);
+
+    // Delay the initial check to let the service worker settle after page load
+    const checkTimer = setTimeout(() => {
+      if (!isInCooldown()) {
+        checkForUpdates();
+      }
+    }, 2000);
+
+    return () => {
+      offUpdateAvailable(handle);
+      clearTimeout(checkTimer);
+    };
   }, []);
 
   useEffect(() => {
-    const onController = () => setUpdateAvailable(false);
+    const onController = () => {
+      setUpdateAvailable(false);
+      applyingRef.current = false;
+    };
     navigator.serviceWorker.addEventListener('controllerchange', onController);
     return () => navigator.serviceWorker.removeEventListener('controllerchange', onController);
   }, []);
 
   const handleUpdate = async () => {
-    if (applyingRef.current) return; // guard
+    if (applyingRef.current) return;
     applyingRef.current = true;
+
     const applied = await forceUpdate();
     if (applied) {
-      // hide modal immediately to avoid re-show
+      // Mark the update timestamp to prevent re-showing
+      setUpdateTimestamp();
       setUpdateAvailable(false);
       showNotification({ title: 'Updating', message: 'Applying update and reloading...', color: 'blue' });
 
-      // If controllerchange doesn't fire (browser quirk), fallback to reload after short delay
+      // Fallback reload if controllerchange doesn't fire
       const reloadTimeout = setTimeout(() => {
         try {
           window.location.reload();
@@ -41,11 +74,10 @@ export function UpdateNotification() {
         }
       }, 2000);
 
-      // clear timeout if controllerchange happens first
+      // Clear timeout and reload when controller changes
       const onControllerOnce = () => {
         clearTimeout(reloadTimeout);
-        // reload to ensure new content is shown
-        try { window.location.reload(); } catch (e) {}
+        try { window.location.reload(); } catch (e) { }
       };
       navigator.serviceWorker.addEventListener('controllerchange', onControllerOnce, { once: true });
     } else {

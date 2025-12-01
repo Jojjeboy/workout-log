@@ -1,5 +1,15 @@
 [
   {
+    "hash": "5580c0d9a3333f0c038513c60fcbe3b155e4f4a5",
+    "message": "Translation",
+    "date": "2025-12-01 14:15:56 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
     "hash": "bf9a54702ec1b54e40b7955198324ac0a98198de",
     "message": "Css in workout page",
     "date": "2025-12-01 14:05:42 +0100",
