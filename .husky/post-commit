@@ -1,0 +1,22 @@
+#!/bin/sh
+# Avoid infinite loop - check if the last commit was "Update changelog"
+last_msg=$(git log -1 --pretty=%s)
+if [ "$last_msg" = "Update changelog" ]; then
+  exit 0
+fi
+
+echo "🔄 Auto-generating changelog..."
+
+# Generate commits.json and version.json
+npm run generate-commits
+
+# Check if there are changes to the generated files
+git diff --quiet --exit-code public/commits.json public/version.json
+if [ $? -ne 0 ]; then
+   echo "📝 Changes detected, creating 'Update changelog' commit..."
+   git add public/commits.json public/version.json
+   git commit -m "Update changelog"
+   echo "✅ Changelog updated!"
+else
+   echo "✨ No changelog updates needed."
+fi
