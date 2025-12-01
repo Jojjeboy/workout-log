@@ -26,6 +26,7 @@ export function useWorkouts() {
             try {
                 // Fetch logs from Firebase
                 const firebaseLogs = await workoutService.fetchUserLogs(currentUser.uid);
+                const firebaseLogIds = new Set(firebaseLogs.map(log => log.id));
 
                 // Get existing local logs
                 const localLogs = await db.logs.toArray();
@@ -35,6 +36,13 @@ export function useWorkouts() {
                 for (const firebaseLog of firebaseLogs) {
                     if (firebaseLog.id && !localLogIds.has(firebaseLog.id)) {
                         await db.logs.add(firebaseLog);
+                    }
+                }
+
+                // Remove local logs that are no longer in Firebase (were deleted)
+                for (const localLog of localLogs) {
+                    if (localLog.id && !firebaseLogIds.has(localLog.id)) {
+                        await db.logs.delete(localLog.id);
                     }
                 }
 
@@ -100,11 +108,22 @@ export function useWorkouts() {
                 throw new Error('User must be authenticated to delete workouts');
             }
 
-            // Delete from local DB
-            await db.logs.delete(logId);
+            // Try to delete from Firebase immediately if online
+            if (navigator.onLine) {
+                try {
+                    await workoutService.deleteLogFromFirebase(logId);
+                } catch (error) {
+                    console.error('Failed to delete from Firebase, will queue for retry:', error);
+                    // Queue for retry if immediate delete fails
+                    await queueService.enqueue('DELETE_WORKOUT', { logId, uid });
+                }
+            } else {
+                // Queue for sync when back online
+                await queueService.enqueue('DELETE_WORKOUT', { logId, uid });
+            }
 
-            // Queue delete for sync
-            await queueService.enqueue('DELETE_WORKOUT', { logId, uid });
+            // Delete from local DB regardless
+            await db.logs.delete(logId);
 
             return logId;
         },

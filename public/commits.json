@@ -1,5 +1,19 @@
 [
   {
+    "hash": "fa416f18de326ed40609636083623057be28d083",
+    "message": "Settingspage fixes",
+    "date": "2025-12-01 14:44:40 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "scripts/generate-commits.js",
+      "src/features/settings/SettingsPage.tsx",
+      "src/hooks/useVersion.ts",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
     "hash": "d7cada402e7959fabab842d6e677614dc84d88e3",
     "message": "Buttons 50%",
     "date": "2025-12-01 14:32:19 +0100",
