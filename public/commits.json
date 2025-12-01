@@ -1,5 +1,23 @@
 [
   {
+    "hash": "78f5da30fa0b75209ae29d2917b161638b4e9e86",
+    "message": "Generate random exercises",
+    "date": "2025-12-01 18:45:07 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/App.tsx",
+      "src/components/ExerciseItem.tsx",
+      "src/components/Footer.tsx",
+      "src/features/exercises/ExerciseList.tsx",
+      "src/features/generator/WorkoutGeneratorPage.tsx",
+      "src/features/workouts/WorkoutHistoryPage.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json",
+      "tsconfig.app.tsbuildinfo"
+    ]
+  },
+  {
     "hash": "f417b05d8d67f3a681223be25930afa13e365aec",
     "message": "chore: update commits.json",
     "date": "2025-12-01 17:58:29 +0100",

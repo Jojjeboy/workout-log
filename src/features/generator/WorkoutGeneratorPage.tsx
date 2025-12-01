@@ -4,7 +4,7 @@ import { IconWand, IconRefresh } from '@tabler/icons-react';
 import { useTranslation } from 'react-i18next';
 import { useExercises } from '../../hooks/useExercises';
 import { ExerciseItem } from '../../components/ExerciseItem';
-import { Exercise } from '../../types';
+import { useGeneratedExercises } from '../../contexts/GeneratedExercisesContext';
 
 export function WorkoutGeneratorPage() {
     const { t } = useTranslation();
@@ -13,7 +13,7 @@ export function WorkoutGeneratorPage() {
     const [numExercises, setNumExercises] = useState('3');
     const [muscleGroup, setMuscleGroup] = useState<string | null>('random');
     const [equipment, setEquipment] = useState<string | null>('any');
-    const [generatedExercises, setGeneratedExercises] = useState<Exercise[]>([]);
+    const { generatedExercises, setGeneratedExercises } = useGeneratedExercises();
 
     const { allMuscles, allEquipment } = useMemo(() => {
         if (!exercises) return { allMuscles: [], allEquipment: [] };
