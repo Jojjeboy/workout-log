@@ -9,6 +9,7 @@ import { DashboardPage } from './features/dashboard/DashboardPage';
 import { SettingsPage } from './features/settings/SettingsPage';
 import { ProfilePage } from './features/profile/ProfilePage';
 import { ChangelogPage } from './features/changelog/ChangelogPage';
+import { WorkoutHistoryPage } from './features/workouts/WorkoutHistoryPage';
 import { Footer } from './components/Footer';
 import { useAuth } from './hooks/useAuth';
 import { UpdateNotification } from './components/UpdateNotification';
@@ -41,6 +42,7 @@ function App() {
               <Route path="/" element={<DashboardPage />} />
               <Route path="/exercises" element={<ExerciseList />} />
               <Route path="/exercises/:id" element={<ExerciseDetail />} />
+              <Route path="/workouts" element={<WorkoutHistoryPage />} />
               <Route path="/notes" element={<NotesPage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/changelog" element={<ChangelogPage />} />

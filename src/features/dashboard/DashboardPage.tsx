@@ -187,7 +187,7 @@ export function DashboardPage() {
                     <div>
                         <Group justify="space-between" mb="md" px="xs">
                             <Title order={4}>{t('dashboard.recentTransactions')}</Title>
-                            <Text size="sm" c="blue" fw={500} style={{ cursor: 'pointer' }}>{t('dashboard.seeAll')}</Text>
+                            <Text size="sm" c="blue" fw={500} style={{ cursor: 'pointer' }} onClick={() => navigate('/workouts')}>{t('dashboard.seeAll')}</Text>
                         </Group>
 
                         <Paper radius="lg" withBorder shadow="sm" style={{ overflow: 'hidden', background: 'white' }}>

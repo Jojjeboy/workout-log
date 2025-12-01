@@ -1,5 +1,15 @@
 [
   {
+    "hash": "3c40adced975a6b847fe38a605e1998d865779e8",
+    "message": "Settingspage accordion",
+    "date": "2025-12-01 10:13:17 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/features/settings/SettingsPage.tsx"
+    ]
+  },
+  {
     "hash": "08cbce560a2e034aa83e5c04152b9857ad9cb009",
     "message": "Version in settings",
     "date": "2025-12-01 10:02:45 +0100",
