@@ -1,16 +1,16 @@
 import Dexie, { Table } from 'dexie';
-import { Exercise, WorkoutLog, QueueItem } from '../types';
+import { Exercise, QueueItem } from '../types';
 
 export class IronLogDatabase extends Dexie {
     exercises!: Table<Exercise, string>;
-    logs!: Table<WorkoutLog, string>; // Using string ID (UUID)
+
     queue!: Table<QueueItem, number>;
 
     constructor() {
         super('IronLogDB');
         this.version(1).stores({
             exercises: 'exerciseId, name, *targetMuscles, *bodyParts, *equipments',
-            logs: 'id, exerciseId, timestamp',
+
             queue: '++id, status, timestamp'
         });
     }

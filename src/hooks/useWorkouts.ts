@@ -1,60 +1,52 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { db } from '../services/db';
-import { queueService } from '../services/queueService';
-import { workoutService } from '../services/workoutService';
+import { useMutation } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 import { WorkoutLog } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 import { authService } from '../services/authService';
+import { collection, query, where, orderBy, onSnapshot } from 'firebase/firestore';
+import { db as firestore } from '../lib/firebase';
+import { useAuth } from './useAuth';
+import { workoutService } from '../services/workoutService'; // Added back for direct calls
 
 export function useWorkouts() {
-    const queryClient = useQueryClient();
+    const { user } = useAuth(); // Get user from useAuth hook
 
-    const logsQuery = useQuery({
-        queryKey: ['logs'],
-        queryFn: async () => {
-            return await db.logs.orderBy('timestamp').reverse().toArray();
-        }
-    });
+    const [logs, setLogs] = useState<WorkoutLog[]>([]); // Local state for logs
+    const [isLoadingLogs, setIsLoadingLogs] = useState(true);
+    const [errorLoadingLogs, setErrorLoadingLogs] = useState<any>(null);
 
-    // Sync logs from Firebase on mount
     useEffect(() => {
-        const syncLogsFromFirebase = async () => {
-            const currentUser = authService.getCurrentUser();
-            if (!currentUser?.uid) return;
+        if (!user?.uid) {
+            setLogs([]);
+            setIsLoadingLogs(false);
+            return;
+        }
 
-            try {
-                // Fetch logs from Firebase
-                const firebaseLogs = await workoutService.fetchUserLogs(currentUser.uid);
-                const firebaseLogIds = new Set(firebaseLogs.map(log => log.id));
+        setIsLoadingLogs(true);
+        setErrorLoadingLogs(null);
 
-                // Get existing local logs
-                const localLogs = await db.logs.toArray();
-                const localLogIds = new Set(localLogs.map(log => log.id));
+        const logsCollectionRef = collection(firestore, 'logs');
+        const userLogsQuery = query(
+            logsCollectionRef,
+            where('uid', '==', user.uid),
+            orderBy('timestamp', 'desc')
+        );
 
-                // Add Firebase logs that aren't in local DB (avoiding duplicates)
-                for (const firebaseLog of firebaseLogs) {
-                    if (firebaseLog.id && !localLogIds.has(firebaseLog.id)) {
-                        await db.logs.add(firebaseLog);
-                    }
-                }
+        const unsubscribe = onSnapshot(userLogsQuery, (snapshot) => {
+            const fetchedLogs: WorkoutLog[] = snapshot.docs.map(doc => ({
+                id: doc.id,
+                ...doc.data() as WorkoutLog
+            }));
+            setLogs(fetchedLogs);
+            setIsLoadingLogs(false);
+        }, (error) => {
+            console.error("Failed to fetch real-time logs:", error);
+            setErrorLoadingLogs(error);
+            setIsLoadingLogs(false);
+        });
 
-                // Remove local logs that are no longer in Firebase (were deleted)
-                for (const localLog of localLogs) {
-                    if (localLog.id && !firebaseLogIds.has(localLog.id)) {
-                        await db.logs.delete(localLog.id);
-                    }
-                }
-
-                // Refresh the query to show merged data
-                queryClient.invalidateQueries({ queryKey: ['logs'] });
-            } catch (error) {
-                console.error('Failed to sync logs from Firebase:', error);
-            }
-        };
-
-        syncLogsFromFirebase();
-    }, [queryClient]);
+        return () => unsubscribe(); // Cleanup listener on unmount
+    }, [user?.uid]); // Re-run effect if user changes
 
     const logWorkoutMutation = useMutation({
         mutationFn: async (log: Omit<WorkoutLog, 'id' | 'uid'>) => {
@@ -71,31 +63,35 @@ export function useWorkouts() {
                 uid,
             };
 
-            // Save to local DB
-            await db.logs.add(newLog);
-
-            // Queue for sync
-            await queueService.enqueue('LOG_WORKOUT', newLog);
+            // Directly call workoutService to save to Firebase
+            await workoutService.syncLogToFirebase(newLog);
 
             return newLog;
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['logs'] });
+            // onSnapshot listener will automatically update the UI
         },
     });
 
     const updateWorkoutMutation = useMutation({
         mutationFn: async (log: WorkoutLog) => {
-            // Update in local DB
-            await db.logs.put(log);
+            const currentUser = authService.getCurrentUser();
+            const uid = currentUser?.uid;
 
-            // Queue for sync
-            await queueService.enqueue('LOG_WORKOUT', log);
+            if (!uid) {
+                throw new Error('User must be authenticated to update workouts');
+            }
+            if (log.uid !== uid) {
+                throw new Error('User does not have permission to update this workout');
+            }
+
+            // Directly call workoutService to update in Firebase
+            await workoutService.syncLogToFirebase(log);
 
             return log;
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['logs'] });
+            // onSnapshot listener will automatically update the UI
         },
     });
 
@@ -107,35 +103,22 @@ export function useWorkouts() {
             if (!uid) {
                 throw new Error('User must be authenticated to delete workouts');
             }
+            // Permission check will happen on server side via Firestore rules
 
-            // Try to delete from Firebase immediately if online
-            if (navigator.onLine) {
-                try {
-                    await workoutService.deleteLogFromFirebase(logId);
-                    // If remote delete succeeds, also delete from local DB
-                    await db.logs.delete(logId);
-                } catch (error) {
-                    console.error('Failed to delete from Firebase, will queue for retry:', error);
-                    // If remote delete fails, just queue it for later. 
-                    // DO NOT delete locally, so it will reappear on refresh, indicating it wasn't truly deleted.
-                    await queueService.enqueue('DELETE_WORKOUT', { logId, uid });
-                }
-            } else {
-                // If offline, queue for sync and delete locally for optimistic UI
-                await queueService.enqueue('DELETE_WORKOUT', { logId, uid });
-                await db.logs.delete(logId);
-            }
+            // Directly call workoutService to delete from Firebase
+            await workoutService.deleteLogFromFirebase(logId);
 
             return logId;
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['logs'] });
+            // onSnapshot listener will automatically update the UI
         },
     });
 
     return {
-        logs: logsQuery.data,
-        isLoading: logsQuery.isLoading,
+        logs: logs,
+        isLoading: isLoadingLogs,
+        error: errorLoadingLogs,
         logWorkout: logWorkoutMutation.mutate,
         isLogging: logWorkoutMutation.isPending,
         updateWorkout: updateWorkoutMutation.mutate,

@@ -1,5 +1,15 @@
 [
   {
+    "hash": "ca8cc275b6e245455563256571ce6d1dbe54fae9",
+    "message": "Fixing typeerror",
+    "date": "2025-12-01 16:25:31 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/hooks/useWorkouts.ts"
+    ]
+  },
+  {
     "hash": "c1d610e6f9afa8a27a969a3de0112885d99d492d",
     "message": "Delete fix 2",
     "date": "2025-12-01 15:19:33 +0100",

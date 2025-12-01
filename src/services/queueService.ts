@@ -1,7 +1,6 @@
 import { db } from './db';
 import { QueueItem } from '../types';
-import { auth } from '../lib/firebase';
-import { workoutService } from './workoutService';
+
 
 const MAX_RETRIES = 3;
 
@@ -46,20 +45,7 @@ export const queueService = {
     processItem: async (item: QueueItem) => {
         // This switch handles the actual logic for each queue type
         switch (item.type) {
-            case 'LOG_WORKOUT':
-                // Use workoutService to properly sync with ID preservation
-                try {
-                    const payload = { ...item.payload } as any;
-                    const currentUser = auth.currentUser;
-                    if (!payload.uid && currentUser?.uid) {
-                        payload.uid = currentUser.uid;
-                    }
-                    // Use syncLogToFirebase which handles ID preservation correctly
-                    await workoutService.syncLogToFirebase(payload);
-                } catch (err) {
-                    throw err;
-                }
-                break;
+
 
             case 'SYNC_EXERCISES':
                 // This might be a large payload, handled by exerciseSyncService usually, 
@@ -105,13 +91,7 @@ export const queueService = {
                 }
                 break;
 
-            case 'DELETE_WORKOUT':
-                // Delete workout log from Firebase
-                const { logId, uid } = item.payload;
-                if (logId && uid) {
-                    await workoutService.deleteLogFromFirebase(logId);
-                }
-                break;
+
 
             default:
                 throw new Error(`Unknown queue item type: ${item.type}`);
