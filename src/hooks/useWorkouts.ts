@@ -112,18 +112,19 @@ export function useWorkouts() {
             if (navigator.onLine) {
                 try {
                     await workoutService.deleteLogFromFirebase(logId);
+                    // If remote delete succeeds, also delete from local DB
+                    await db.logs.delete(logId);
                 } catch (error) {
                     console.error('Failed to delete from Firebase, will queue for retry:', error);
-                    // Queue for retry if immediate delete fails
+                    // If remote delete fails, just queue it for later. 
+                    // DO NOT delete locally, so it will reappear on refresh, indicating it wasn't truly deleted.
                     await queueService.enqueue('DELETE_WORKOUT', { logId, uid });
                 }
             } else {
-                // Queue for sync when back online
+                // If offline, queue for sync and delete locally for optimistic UI
                 await queueService.enqueue('DELETE_WORKOUT', { logId, uid });
+                await db.logs.delete(logId);
             }
-
-            // Delete from local DB regardless
-            await db.logs.delete(logId);
 
             return logId;
         },

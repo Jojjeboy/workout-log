@@ -1,5 +1,16 @@
 [
   {
+    "hash": "c1d610e6f9afa8a27a969a3de0112885d99d492d",
+    "message": "Delete fix 2",
+    "date": "2025-12-01 15:19:33 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/services/queueService.ts",
+      "src/services/workoutService.ts"
+    ]
+  },
+  {
     "hash": "a69cd499de02c4f2ee66c2c243276eaf72e71b81",
     "message": "Delete persisted",
     "date": "2025-12-01 15:07:56 +0100",
