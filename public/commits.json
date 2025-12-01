@@ -1,5 +1,15 @@
 [
   {
+    "hash": "6a99349b510a0a4340900845ca628e4679a4685f",
+    "message": "Translation",
+    "date": "2025-12-01 19:24:05 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
     "hash": "30501d0b092dc0ffe82e7f73de659b7ab94282f0",
     "message": "Generator exercises is saved when the user goes back",
     "date": "2025-12-01 19:18:17 +0100",
