@@ -1,5 +1,15 @@
 [
   {
+    "hash": "a69cd499de02c4f2ee66c2c243276eaf72e71b81",
+    "message": "Delete persisted",
+    "date": "2025-12-01 15:07:56 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/hooks/useWorkouts.ts"
+    ]
+  },
+  {
     "hash": "fa416f18de326ed40609636083623057be28d083",
     "message": "Settingspage fixes",
     "date": "2025-12-01 14:44:40 +0100",

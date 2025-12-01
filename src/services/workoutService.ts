@@ -1,4 +1,4 @@
-import { collection, getDocs, addDoc, updateDoc, deleteDoc, doc, query, where } from 'firebase/firestore';
+import { collection, getDocs, addDoc, setDoc, deleteDoc, doc, query, where } from 'firebase/firestore';
 import { db as firestore } from '../lib/firebase';
 import { WorkoutLog } from '../types';
 
@@ -33,12 +33,12 @@ export const workoutService = {
     syncLogToFirebase: async (log: WorkoutLog): Promise<string> => {
         try {
             if (log.id) {
-                // Update existing log
+                // Create or update log with the existing ID using setDoc
                 const docRef = doc(firestore, 'logs', log.id);
-                await updateDoc(docRef, { ...log });
+                await setDoc(docRef, { ...log });
                 return log.id;
             } else {
-                // Create new log
+                // Create new log with auto-generated ID
                 const docRef = await addDoc(collection(firestore, 'logs'), log);
                 return docRef.id;
             }

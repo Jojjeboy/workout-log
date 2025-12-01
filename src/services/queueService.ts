@@ -1,7 +1,6 @@
 import { db } from './db';
 import { QueueItem } from '../types';
-import { collection, addDoc } from 'firebase/firestore';
-import { db as firestore, auth } from '../lib/firebase';
+import { auth } from '../lib/firebase';
 import { workoutService } from './workoutService';
 
 const MAX_RETRIES = 3;
@@ -48,14 +47,15 @@ export const queueService = {
         // This switch handles the actual logic for each queue type
         switch (item.type) {
             case 'LOG_WORKOUT':
-                // Ensure the payload contains the user's uid. If it's missing, try to attach current auth uid.
+                // Use workoutService to properly sync with ID preservation
                 try {
                     const payload = { ...item.payload } as any;
                     const currentUser = auth.currentUser;
                     if (!payload.uid && currentUser?.uid) {
                         payload.uid = currentUser.uid;
                     }
-                    await addDoc(collection(firestore, 'logs'), payload);
+                    // Use syncLogToFirebase which handles ID preservation correctly
+                    await workoutService.syncLogToFirebase(payload);
                 } catch (err) {
                     throw err;
                 }
