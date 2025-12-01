@@ -1,5 +1,28 @@
 [
   {
+    "hash": "d3b8be2a80338c2d52993510de274825bd3c5f76",
+    "message": "Firebase workout sync 2",
+    "date": "2025-12-01 09:54:02 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "src/services/workoutService.ts"
+    ]
+  },
+  {
+    "hash": "fbd30994cd3fedd15250962eb47fc5bff243bd48",
+    "message": "Firebase workout sync",
+    "date": "2025-12-01 09:53:44 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "firestore.rules",
+      "public/commits.json",
+      "src/hooks/useWorkouts.ts",
+      "src/services/queueService.ts",
+      "src/types/index.ts",
+      "tsconfig.app.tsbuildinfo"
+    ]
+  },
+  {
     "hash": "12ac9d724226f01192c7d88bb75d29c00b2c8b58",
     "message": "Generate commits",
     "date": "2025-11-30 20:59:45 +0100",

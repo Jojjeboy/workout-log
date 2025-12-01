@@ -1,6 +1,6 @@
 import { Container, Title, Text, Paper, Group, Stack, useMantineTheme, ThemeIcon, Box, Badge, Divider, Avatar, Button, Modal } from '@mantine/core';
 import { useEffect, useState } from 'react';
-import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy, IconHistory, IconLanguage } from '@tabler/icons-react';
+import { IconLogout, IconChevronRight, IconNote, IconRefresh, IconDatabase, IconDeviceFloppy, IconHistory, IconLanguage, IconGitBranch } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { authService } from '../../services/authService';
@@ -9,6 +9,7 @@ import { showNotification } from '@mantine/notifications';
 import { onUpdateAvailable, offUpdateAvailable, checkForUpdates, forceUpdate } from '../../lib/sw';
 import { useAuth } from '../../hooks/useAuth';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { useVersion } from '../../hooks/useVersion';
 
 export function SettingsPage() {
     const { t, i18n } = useTranslation();
@@ -16,6 +17,7 @@ export function SettingsPage() {
     const theme = useMantineTheme();
     const { syncFromJson, isSyncingFromJson } = useExerciseSync();
     const { user } = useAuth();
+    const { data: versionInfo } = useVersion();
     const [updateConfirmOpen, setUpdateConfirmOpen] = useState(false);
     const [syncConfirmOpen, setSyncConfirmOpen] = useState(false);
     const [isUpdating, setIsUpdating] = useState(false);
@@ -236,6 +238,48 @@ export function SettingsPage() {
                             }
                         />
                     </Paper>
+
+                    {/* Version Info Group */}
+                    {versionInfo && (
+                        <Paper radius="sm" shadow="sm" bg="white" p="md">
+                            <Group gap="xs" mb="sm">
+                                <ThemeIcon variant="light" color="gray" size="sm" radius="sm">
+                                    <IconGitBranch size={16} />
+                                </ThemeIcon>
+                                <Text fw={600} size="sm" c="dimmed">Version Info</Text>
+                            </Group>
+                            <Stack gap="xs">
+                                <Group justify="space-between">
+                                    <Text size="xs" c="dimmed">Branch</Text>
+                                    <Badge variant="light" color="blue" radius="xs" size="sm">{versionInfo.branch}</Badge>
+                                </Group>
+                                <Group justify="space-between">
+                                    <Text size="xs" c="dimmed">Commit</Text>
+                                    <Text size="xs" ff="monospace" fw={500}>{versionInfo.commitHashShort}</Text>
+                                </Group>
+                                <Group justify="space-between">
+                                    <Text size="xs" c="dimmed">Tag</Text>
+                                    <Badge variant="light" color="teal" radius="xs" size="sm">{versionInfo.latestTag}</Badge>
+                                </Group>
+                                <Group justify="space-between">
+                                    <Text size="xs" c="dimmed">Total Commits</Text>
+                                    <Text size="xs" fw={500}>{versionInfo.commitCount}</Text>
+                                </Group>
+                                <Group justify="space-between">
+                                    <Text size="xs" c="dimmed">Build Date</Text>
+                                    <Text size="xs" c="dimmed">
+                                        {new Date(versionInfo.buildDate).toLocaleDateString(undefined, {
+                                            month: 'short',
+                                            day: 'numeric',
+                                            year: 'numeric',
+                                            hour: '2-digit',
+                                            minute: '2-digit'
+                                        })}
+                                    </Text>
+                                </Group>
+                            </Stack>
+                        </Paper>
+                    )}
 
                     {/* Account Group */}
                     <Paper radius="sm" shadow="sm" bg="white" style={{ overflow: 'hidden' }}>
