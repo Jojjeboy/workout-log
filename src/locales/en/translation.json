@@ -157,6 +157,7 @@
     "deleteLastSetConfirmMessage": "This is the last set. Deleting it will remove the entire workout. Are you sure?",
     "editWorkout": "Edit Workout",
     "workoutCount_one": "{{count}} workout",
-    "workoutCount_other": "{{count}} workouts"
+    "workoutCount_other": "{{count}} workouts",
+    "addNewWorkout": "Add New Workout"
   }
 }

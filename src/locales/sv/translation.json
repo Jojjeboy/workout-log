@@ -157,6 +157,7 @@
     "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort det raderas hela passet. Är du säker?",
     "editWorkout": "Redigera pass",
     "workoutCount_one": "{{count}} träningspass",
-    "workoutCount_other": "{{count}} träningspass"
+    "workoutCount_other": "{{count}} träningspass",
+    "addNewWorkout": "Lägg till nytt pass"
   }
 }

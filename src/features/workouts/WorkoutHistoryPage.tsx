@@ -1,5 +1,5 @@
 import { Container, Title, Text, Paper, Group, Stack, Badge, Box, Avatar, Select, SegmentedControl, Accordion, Table, ThemeIcon, ActionIcon, Loader, Center, Button } from '@mantine/core';
-import { IconActivity, IconArrowLeft, IconTrash, IconCalendar, IconTrendingUp, IconPencil } from '@tabler/icons-react';
+import { IconActivity, IconArrowLeft, IconTrash, IconCalendar, IconTrendingUp, IconPencil, IconPlus } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { useExercises } from '../../hooks/useExercises';
@@ -182,6 +182,15 @@ export function WorkoutHistoryPage() {
                             />
                         </Stack>
                     </Paper>
+
+                    <Button
+                        fullWidth
+                        size="md"
+                        leftSection={<IconPlus size={16} />}
+                        onClick={() => navigate('/exercises')}
+                    >
+                        {t('workoutHistory.addNewWorkout')}
+                    </Button>
 
                     {/* Grouped Workouts */}
                     {Object.keys(groupedLogs).length === 0 ? (

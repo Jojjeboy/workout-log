@@ -1,5 +1,18 @@
 [
   {
+    "hash": "dc83228e5fafb6398062236aef30d8bda36c6ddb",
+    "message": "Landing page",
+    "date": "2025-12-01 12:38:30 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/App.tsx",
+      "src/components/Footer.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
     "hash": "868da7ce668c8fe3de9218cc21b246c91838cb97",
     "message": "Workout sidan förbättrad steg 1",
     "date": "2025-12-01 11:53:12 +0100",
