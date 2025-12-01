@@ -174,5 +174,15 @@
     "random": "Random",
     "anyEquipment": "Any Equipment",
     "regenerate": "Regenerate"
+  },
+  "prs": {
+    "title": "Personal Records",
+    "maxWeight": "Max Weight",
+    "maxReps": "Max Reps",
+    "maxVolume": "Max Volume",
+    "estimated1RM": "Est. 1RM",
+    "reps": "reps",
+    "noRecords": "No records yet. Log your first workout to set your PRs!",
+    "new": "NEW!"
   }
 }

@@ -174,5 +174,15 @@
     "random": "Slumpmässig",
     "anyEquipment": "Valfri Utrustning",
     "regenerate": "Generera igen"
+  },
+  "prs": {
+    "title": "Personliga Rekord",
+    "maxWeight": "Max Vikt",
+    "maxReps": "Max Reps",
+    "maxVolume": "Max Volym",
+    "estimated1RM": "Est. 1RM",
+    "reps": "reps",
+    "noRecords": "Inga rekord ännu. Logga ditt första pass för att sätta dina PRs!",
+    "new": "NY!"
   }
 }

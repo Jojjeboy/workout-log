@@ -14,3 +14,5 @@ Here are three feature suggestions that would be a good addition to your workout
     *   **Description:** Enable users to create and save multi-exercise workout routines (e.g., "Push Day," "Leg Day," "Full Body"). Users could then "start" a routine, and the app would guide them through logging each exercise within that predefined structure.
     *   **Impact:** Helps users with structured training plans and significantly simplifies the process of logging repetitive workouts. It encourages consistency and progression.
     *   **Complexity:** High (requires designing new data models for routines, building UI for routine creation and management, and integrating the routine selection and tracking into the main workout logging flow).
+
+Suggestion 1: Implement a "Share Workout" feature.

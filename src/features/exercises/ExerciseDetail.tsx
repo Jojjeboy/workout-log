@@ -11,6 +11,8 @@ import { WorkoutSet } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
+import { usePersonalRecords } from '../../hooks/usePersonalRecords';
+import { PersonalRecordsCard } from '../../components/PersonalRecordsCard';
 
 
 export function ExerciseDetail() {
@@ -21,6 +23,7 @@ export function ExerciseDetail() {
     const { data: exercise, isLoading: exerciseLoading } = useExercise(id || '');
     const { logs, logWorkout, isLoading: isLogging, updateWorkout, deleteWorkout, isDeleting } = useWorkouts();
     const { user } = useAuth();
+    const { prs, isLoading: prsLoading, recalculatePRs } = usePersonalRecords(id);
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [workoutToDelete, setWorkoutToDelete] = useState<string | null>(null);
 
@@ -52,13 +55,18 @@ export function ExerciseDetail() {
     if (exerciseLoading) return <Text>{t('exerciseDetail.loading')}</Text>;
     if (!exercise) return <Text>{t('exerciseDetail.notFound')}</Text>;
 
-    const handleSaveWorkout = (sets: WorkoutSet[], date: Date) => {
+    const handleSaveWorkout = async (sets: WorkoutSet[], date: Date) => {
         if (!id) return;
         logWorkout({
             exerciseId: id,
             timestamp: date.getTime(),
             sets,
         });
+
+        // Trigger PR recalculation after a short delay
+        setTimeout(() => {
+            recalculatePRs();
+        }, 500);
     };
 
     const handleUpdateSet = () => {
@@ -162,7 +170,7 @@ export function ExerciseDetail() {
                 </div>
 
                 <Container size="lg" px="md" style={{ marginTop: '-60px' }}>
-                    <Grid gutter="lg">
+                    <Grid gutter="lg" mt="lg">
                         {/* Left Column - Exercise Info */}
                         <Grid.Col span={{ base: 12, md: 6 }}>
                             <Stack gap="lg">
@@ -272,6 +280,9 @@ export function ExerciseDetail() {
                             </Paper>
                         </Grid.Col>
                     </Grid>
+
+                    {/* Personal Records Card */}
+                    <PersonalRecordsCard prs={prs} isLoading={prsLoading} />
 
                     {/* Instructions - Below the main grid */}
                     <Paper p="lg" radius="sm" shadow="sm" bg="white" mt="lg">

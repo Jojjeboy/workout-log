@@ -49,3 +49,23 @@ export interface Note {
     createdAt?: any;
     updatedAt?: any;
 }
+
+export interface PRRecord {
+    value: number;
+    achievedAt: number; // Timestamp
+    workoutLogId: string;
+    setIndex: number;
+    weight?: number; // For context
+    reps?: number; // For context
+}
+
+export interface PersonalRecord {
+    id?: string; // Document ID in Firestore
+    exerciseId: string;
+    uid: string;
+    maxWeight?: PRRecord;
+    maxReps?: PRRecord;
+    maxVolume?: PRRecord;
+    estimatedOneRepMax?: PRRecord;
+    lastUpdated: number;
+}
