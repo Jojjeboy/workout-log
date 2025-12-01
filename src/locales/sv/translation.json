@@ -110,8 +110,8 @@
   "workoutLogger": {
     "workoutDate": "Träningsdatum",
     "pickDate": "Välj datum",
-    "addSet": "Lägg till set",
-    "logWorkout": "Logga träning",
+    "addSet": "Lägg till",
+    "logWorkout": "Spara",
     "workoutLogged": "Träning loggad",
     "workoutLoggedMessage": "Din övning har sparats!",
     "workoutLoggedTitle": "Träning loggad!",

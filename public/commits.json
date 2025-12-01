@@ -1,5 +1,18 @@
 [
   {
+    "hash": "30501d0b092dc0ffe82e7f73de659b7ab94282f0",
+    "message": "Generator exercises is saved when the user goes back",
+    "date": "2025-12-01 19:18:17 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/App.tsx",
+      "src/contexts/GeneratedExercisesContext.tsx",
+      "src/features/generator/WorkoutGeneratorPage.tsx",
+      "tsconfig.app.tsbuildinfo"
+    ]
+  },
+  {
     "hash": "78f5da30fa0b75209ae29d2917b161638b4e9e86",
     "message": "Generate random exercises",
     "date": "2025-12-01 18:45:07 +0100",
