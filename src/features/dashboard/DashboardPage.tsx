@@ -1,12 +1,12 @@
 import { Container, Grid, Text, Title, Loader, Center, Stack, Group, ThemeIcon, Badge, Paper, Box, Avatar, Accordion, Table, ActionIcon } from '@mantine/core';
-import { IconTrendingUp, IconActivity, IconArrowUpRight, IconTrash, IconPencil } from '@tabler/icons-react';
+import { IconTrendingUp, IconActivity, IconArrowUpRight, IconTrash, IconPencil, IconCalendar } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { useExercises } from '../../hooks/useExercises';
 import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import './DashboardPage.css';
 
 export function DashboardPage() {
@@ -68,6 +68,37 @@ export function DashboardPage() {
         acc[exercise.exerciseId] = exercise.name;
         return acc;
     }, {} as Record<string, string>);
+
+    const groupedLogs = useMemo(() => {
+        if (!logs) return {};
+        const groups = logs.reduce((acc, log) => {
+            const date = new Date(log.timestamp).toLocaleDateString(undefined, {
+                weekday: 'long',
+                month: 'long',
+                day: 'numeric'
+            });
+            if (!acc[date]) {
+                acc[date] = [];
+            }
+            acc[date].push(log);
+            return acc;
+        }, {} as Record<string, typeof logs>);
+
+        // Sort dates so newest are first
+        const sortedDates = Object.keys(groups).sort((a, b) => {
+            const dateA = groups[a][0].timestamp;
+            const dateB = groups[b][0].timestamp;
+            return dateB - dateA;
+        });
+
+        // Take top 5 dates and create a new object
+        const recentGroupedLogs: Record<string, typeof logs> = {};
+        for (const date of sortedDates.slice(0, 5)) {
+            recentGroupedLogs[date] = groups[date];
+        }
+
+        return recentGroupedLogs;
+    }, [logs]);
 
     const stats = {
         totalWorkouts: logs?.length || 0,
@@ -194,99 +225,102 @@ export function DashboardPage() {
                             {(!logs || logs.length === 0) ? (
                                 <Text p="xl" ta="center" c="dimmed">{t('dashboard.noWorkouts')}</Text>
                             ) : (
-                                <Accordion chevronPosition="right" defaultValue="" variant="separated">
-                                    {logs.slice(0, 5).map((log, index) => (
-                                        <Accordion.Item key={log.id || index} value={log.id || index.toString()}>
+                                <Accordion
+                                    chevronPosition="right"
+                                    defaultValue={Object.keys(groupedLogs)[0] || ''}
+                                    variant="separated"
+                                    styles={{
+                                        item: { backgroundColor: 'white' },
+                                        control: { '&:hover': { backgroundColor: '#f8f9fa' } },
+                                    }}
+                                >
+                                    {Object.entries(groupedLogs).map(([date, logsForDate]) => (
+                                        <Accordion.Item key={date} value={date}>
                                             <Accordion.Control>
                                                 <Group justify="space-between" style={{ width: '100%' }}>
                                                     <Group style={{ flex: 1 }}>
                                                         <ThemeIcon size={40} radius="xl" color="blue" variant="light">
-                                                            <IconActivity size={20} />
+                                                            <IconCalendar size={20} />
                                                         </ThemeIcon>
                                                         <div>
-                                                            <Text fw={600} size="sm">{t('dashboard.workoutSession')}</Text>
-                                                            <Text size="xs" c="dimmed">{new Date(log.timestamp).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</Text>
+                                                            <Text fw={600} size="sm">{date}</Text>
+                                                            <Text size="xs" c="dimmed">{t('dashboard.workoutsOnThisDay', { count: logsForDate.length })}</Text>
                                                         </div>
                                                     </Group>
-                                                    <div style={{ textAlign: 'right' }}>
-                                                        <Text fw={600} size="sm">{log.sets?.length || 0} {t('dashboard.sets')}</Text>
-                                                        <Text size="xs" c="green" fw={500}>{t('dashboard.completed')}</Text>
-                                                    </div>
                                                 </Group>
                                             </Accordion.Control>
                                             <Accordion.Panel>
-                                                <Stack gap="md">
-                                                    <Group justify="flex-end" gap="xs">
-                                                        <ThemeIcon
-                                                            variant="light"
-                                                            color="blue"
-                                                            size="md"
-                                                            style={{ cursor: 'pointer' }}
-                                                            onClick={() => navigate(`/exercises/${log.exerciseId}?tab=history`)}
-                                                        >
-                                                            <IconPencil size={16} />
-                                                        </ThemeIcon>
-                                                        <ThemeIcon
-                                                            variant="light"
-                                                            color="red"
-                                                            size="md"
-                                                            style={{ cursor: 'pointer' }}
-                                                            onClick={(e) => handleDeleteClick(log.id!, e)}
-                                                        >
-                                                            <IconTrash size={16} />
-                                                        </ThemeIcon>
-                                                    </Group>
-                                                    <div>
-                                                        <Text fw={600} size="sm" mb="sm">
-                                                            {t('dashboard.exercise')}:
-                                                            <Text
-                                                                component="span"
-                                                                fw={600}
-                                                                size="sm"
-                                                                c="blue"
-                                                                style={{ cursor: 'pointer', marginLeft: '8px' }}
-                                                                onClick={() => navigate(`/exercises/${log.exerciseId}?tab=history`)}
-                                                            >
-                                                                {exerciseMap[log.exerciseId] || log.exerciseId}
-                                                            </Text>
-                                                        </Text>
-                                                        <Table striped highlightOnHover>
-                                                            <Table.Thead>
-                                                                <Table.Tr>
-                                                                    <Table.Th>{t('dashboard.set')}</Table.Th>
-                                                                    <Table.Th>{t('dashboard.weight')}</Table.Th>
-                                                                    <Table.Th>{t('dashboard.reps')}</Table.Th>
-                                                                    <Table.Th style={{ width: '50px' }}></Table.Th>
-                                                                </Table.Tr>
-                                                            </Table.Thead>
-                                                            <Table.Tbody>
-                                                                {log.sets?.map((set, setIdx) => (
-                                                                    <Table.Tr key={setIdx}>
-                                                                        <Table.Td c="#1a202c">{setIdx + 1}</Table.Td>
-                                                                        <Table.Td c="#1a202c">{set.weight}</Table.Td>
-                                                                        <Table.Td c="#1a202c">{set.reps}</Table.Td>
-                                                                        <Table.Td>
-                                                                            <ActionIcon
-                                                                                variant="subtle"
-                                                                                color="red"
-                                                                                size="sm"
-                                                                                onClick={() => handleDeleteSetClick(log.id!, setIdx, log.sets.length)}
-                                                                            >
-                                                                                <IconTrash size={16} />
-                                                                            </ActionIcon>
-                                                                        </Table.Td>
-                                                                    </Table.Tr>
-                                                                ))}
-                                                            </Table.Tbody>
-                                                        </Table>
-                                                    </div>
-                                                    {log.note && (
-                                                        <div>
-                                                            <Text fw={600} size="sm" mb="xs">{t('dashboard.notes')}</Text>
-                                                            <Text size="sm" c="dimmed">{log.note}</Text>
-                                                        </div>
-                                                    )}
-                                                </Stack>
+                                                <Accordion chevronPosition="right" variant="contained">
+                                                    {logsForDate.map((log) => (
+                                                        <Accordion.Item key={log.id} value={log.id!}>
+                                                            <Accordion.Control>
+                                                                <Group justify="space-between">
+                                                                    <Text fw={500}>{exerciseMap[log.exerciseId] || log.exerciseId}</Text>
+                                                                    <Badge size="sm" variant="light">{log.sets?.length} {t('dashboard.sets')}</Badge>
+                                                                </Group>
+                                                            </Accordion.Control>
+                                                            <Accordion.Panel>
+                                                                <Stack gap="md">
+                                                                    <Group justify="flex-end" gap="xs">
+                                                                        <ThemeIcon
+                                                                            variant="light"
+                                                                            color="blue"
+                                                                            size="sm"
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            onClick={() => navigate(`/exercises/${log.exerciseId}?tab=history`)}
+                                                                        >
+                                                                            <IconPencil size={14} />
+                                                                        </ThemeIcon>
+                                                                        <ThemeIcon
+                                                                            variant="light"
+                                                                            color="red"
+                                                                            size="sm"
+                                                                            style={{ cursor: 'pointer' }}
+                                                                            onClick={(e) => handleDeleteClick(log.id!, e)}
+                                                                        >
+                                                                            <IconTrash size={14} />
+                                                                        </ThemeIcon>
+                                                                    </Group>
+                                                                    <Table striped highlightOnHover>
+                                                                        <Table.Thead>
+                                                                            <Table.Tr>
+                                                                                <Table.Th>{t('dashboard.set')}</Table.Th>
+                                                                                <Table.Th>{t('dashboard.weight')}</Table.Th>
+                                                                                <Table.Th>{t('dashboard.reps')}</Table.Th>
+                                                                                <Table.Th style={{ width: '50px' }}></Table.Th>
+                                                                            </Table.Tr>
+                                                                        </Table.Thead>
+                                                                        <Table.Tbody>
+                                                                            {log.sets?.map((set, setIdx) => (
+                                                                                <Table.Tr key={setIdx}>
+                                                                                    <Table.Td c="#1a202c">{setIdx + 1}</Table.Td>
+                                                                                    <Table.Td c="#1a202c">{set.weight}</Table.Td>
+                                                                                    <Table.Td c="#1a202c">{set.reps}</Table.Td>
+                                                                                    <Table.Td>
+                                                                                        <ActionIcon
+                                                                                            variant="subtle"
+                                                                                            color="red"
+                                                                                            size="sm"
+                                                                                            onClick={() => handleDeleteSetClick(log.id!, setIdx, log.sets.length)}
+                                                                                        >
+                                                                                            <IconTrash size={16} />
+                                                                                        </ActionIcon>
+                                                                                    </Table.Td>
+                                                                                </Table.Tr>
+                                                                            ))}
+                                                                        </Table.Tbody>
+                                                                    </Table>
+                                                                    {log.note && (
+                                                                        <Box mt="sm">
+                                                                            <Text fw={600} size="xs" mb={2}>{t('dashboard.notes')}</Text>
+                                                                            <Text size="sm" c="dimmed">{log.note}</Text>
+                                                                        </Box>
+                                                                    )}
+                                                                </Stack>
+                                                            </Accordion.Panel>
+                                                        </Accordion.Item>
+                                                    ))}
+                                                </Accordion>
                                             </Accordion.Panel>
                                         </Accordion.Item>
                                     ))}

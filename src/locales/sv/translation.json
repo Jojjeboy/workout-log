@@ -58,7 +58,9 @@
     "reps": "Reps",
     "status": "Status",
     "done": "Klar",
-    "notes": "Anteckningar"
+    "notes": "Anteckningar",
+    "workoutsOnThisDay_one": "{{count}} träningspass denna dag",
+    "workoutsOnThisDay_other": "{{count}} träningspass denna dag"
   },
   "changelog": {
     "title": "Ändringslogg",

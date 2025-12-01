@@ -122,7 +122,6 @@ export function WorkoutHistoryPage() {
                             <IconArrowLeft size={20} />
                         </ActionIcon>
                         <div>
-                            <Text size="xs" style={{ opacity: 0.8 }}>{t('workoutHistory.subtitle')}</Text>
                             <Title order={2} style={{ color: 'white' }}>{t('workoutHistory.title')}</Title>
                         </div>
                     </Group>
@@ -200,7 +199,7 @@ export function WorkoutHistoryPage() {
                     ) : (
                         Object.entries(groupedLogs).map(([group, groupLogs]) => (
                             <Paper key={group} radius="sm" shadow="sm" bg="white" style={{ overflow: 'hidden' }}>
-                                <Box p="md" bg="#f8f9fa">
+                                <Box p="md" bg="white">
                                     <Group justify="space-between">
                                         <Group gap="xs">
                                             <ThemeIcon variant="light" color="blue" size="sm">
@@ -214,7 +213,13 @@ export function WorkoutHistoryPage() {
                                     </Group>
                                 </Box>
 
-                                <Accordion variant="contained" chevronPosition="right" styles={{ content: { backgroundColor: 'white' } }}>
+                                <Accordion
+                                    variant="contained"
+                                    chevronPosition="right"
+                                    styles={{
+                                        item: { backgroundColor: 'white' }
+                                    }}
+                                >
                                     {groupLogs.map((log, index) => (
                                         <Accordion.Item key={log.id || index} value={log.id || index.toString()}>
                                             <Accordion.Control>

@@ -58,7 +58,9 @@
     "reps": "Reps",
     "status": "Status",
     "done": "Done",
-    "notes": "Notes"
+    "notes": "Notes",
+    "workoutsOnThisDay_one": "{{count}} workout on this day",
+    "workoutsOnThisDay_other": "{{count}} workouts on this day"
   },
   "changelog": {
     "title": "Changelog",
