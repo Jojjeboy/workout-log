@@ -33,23 +33,23 @@
   },
   "footer": {
     "dashboard": "Översikt",
-    "workouts": "Träningspass",
+    "workouts": "Övningar",
     "add": "Lägg till",
     "settings": "Inställningar"
   },
   "dashboard": {
     "welcomeBack": "Välkommen tillbaka,",
     "athlete": "Atlet",
-    "totalWorkouts": "Totalt Träningspass",
+    "totalWorkouts": "Totalt antal övningar",
     "thisWeek": "denna vecka",
     "volume": "Volym",
     "streak": "Streak",
     "days": "dagar",
     "activity": "Aktivitet",
-    "recentTransactions": "Senaste träningspass",
+    "recentTransactions": "Senaste övningar",
     "seeAll": "Se Alla",
-    "noWorkouts": "Inga träningspass loggade än.",
-    "workoutSession": "Träningspass",
+    "noWorkouts": "Inga övningar loggade än.",
+    "workoutSession": "Övningar",
     "sets": "Set",
     "completed": "Slutförd",
     "exercise": "Övning",
@@ -59,8 +59,8 @@
     "status": "Status",
     "done": "Klar",
     "notes": "Anteckningar",
-    "workoutsOnThisDay_one": "{{count}} träningspass denna dag",
-    "workoutsOnThisDay_other": "{{count}} träningspass denna dag"
+    "workoutsOnThisDay_one": "{{count}} övningar denna dag",
+    "workoutsOnThisDay_other": "{{count}} övningar denna dag"
   },
   "changelog": {
     "title": "Ändringslogg",
@@ -111,9 +111,9 @@
     "addSet": "Lägg till set",
     "logWorkout": "Logga träning",
     "workoutLogged": "Träning loggad",
-    "workoutLoggedMessage": "Ditt träningspass har sparats!",
+    "workoutLoggedMessage": "Din övning har sparats!",
     "workoutLoggedTitle": "Träning loggad!",
-    "workoutSyncMessage": "Ditt träningspass har sparats och kommer synkas till molnet."
+    "workoutSyncMessage": "Din övning har sparats och kommer synkas till molnet."
   },
   "exerciseList": {
     "library": "Bibliotek",
@@ -139,15 +139,15 @@
     "deleteMessage": "Är du säker på att du vill ta bort denna anteckning? Detta går inte att ångra."
   },
   "workoutHistory": {
-    "title": "Alla Träningspass",
+    "title": "Alla övningar",
     "subtitle": "Träningshistorik",
-    "totalLogs": "Totalt Antal Loggar",
-    "exercises": "Övningar",
-    "totalSets": "Totalt Antal Set",
+    "totalLogs": "Antal övningar",
+    "exercises": "Unika övningar",
+    "totalSets": "Totalt antal sets",
     "filterByExercise": "Filtrera efter övning",
     "byDate": "Efter Datum",
     "byExercise": "Efter Övning",
-    "noWorkouts": "Inga träningspass hittades",
+    "noWorkouts": "Inga övningar hittades",
     "sets": "set",
     "set": "Set",
     "weight": "Vikt",
@@ -158,8 +158,8 @@
     "deleteSetConfirmMessage": "Är du säker på att du vill ta bort detta set?",
     "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort det raderas hela passet. Är du säker?",
     "editWorkout": "Redigera pass",
-    "workoutCount_one": "{{count}} träningspass",
-    "workoutCount_other": "{{count}} träningspass",
-    "addNewWorkout": "Lägg till nytt pass"
+    "workoutCount_one": "{{count}} övning",
+    "workoutCount_other": "{{count}} övningar",
+    "addNewWorkout": "Lägg till övning"
   }
 }

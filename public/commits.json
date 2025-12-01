@@ -1,5 +1,18 @@
 [
   {
+    "hash": "bf9a54702ec1b54e40b7955198324ac0a98198de",
+    "message": "Css in workout page",
+    "date": "2025-12-01 14:05:42 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/features/dashboard/DashboardPage.tsx",
+      "src/features/workouts/WorkoutHistoryPage.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
     "hash": "08fd25bb6527694117b9939613883c42c7ab57ef",
     "message": "Add exercise",
     "date": "2025-12-01 12:51:20 +0100",
