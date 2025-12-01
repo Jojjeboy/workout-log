@@ -2,6 +2,7 @@ import { db } from './db';
 import { QueueItem } from '../types';
 import { collection, addDoc } from 'firebase/firestore';
 import { db as firestore, auth } from '../lib/firebase';
+import { workoutService } from './workoutService';
 
 const MAX_RETRIES = 3;
 
@@ -101,6 +102,14 @@ export const queueService = {
                     // Full sync should probably only happen when online.
                     // But if we MUST queue it... let's just log it for now.
                     console.warn("Queueing full sync is expensive. Processing...");
+                }
+                break;
+
+            case 'DELETE_WORKOUT':
+                // Delete workout log from Firebase
+                const { logId, uid } = item.payload;
+                if (logId && uid) {
+                    await workoutService.deleteLogFromFirebase(logId);
                 }
                 break;
 

@@ -11,6 +11,7 @@ export interface Exercise {
 
 export interface WorkoutLog {
     id?: string; // Optional for new logs before saving
+    uid: string; // User ID to associate log with user
     exerciseId: string;
     timestamp: number;
     sets: WorkoutSet[];
@@ -25,7 +26,7 @@ export interface WorkoutSet {
 
 export interface QueueItem {
     id?: number; // Auto-incremented by Dexie
-    type: 'LOG_WORKOUT' | 'SYNC_EXERCISES' | 'UPDATE_PROFILE';
+    type: 'LOG_WORKOUT' | 'SYNC_EXERCISES' | 'UPDATE_PROFILE' | 'DELETE_WORKOUT';
     payload: any;
     timestamp: number;
     retryCount: number;
