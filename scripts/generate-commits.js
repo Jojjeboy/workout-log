@@ -98,9 +98,34 @@ try {
 
     // Write to public/commits.json
     const outputPath = join(publicDir, 'commits.json');
-    writeFileSync(outputPath, JSON.stringify(commits, null, 2), 'utf-8');
 
-    console.log(`✅ Generated ${commits.length} commits to ${outputPath}`);
+    // Check if we should overwrite existing file
+    let shouldOverwrite = true;
+    try {
+        const fs = await import('fs');
+        if (fs.existsSync(outputPath)) {
+            const existingContent = fs.readFileSync(outputPath, 'utf-8');
+            const existingCommits = JSON.parse(existingContent);
+
+            // If existing file has significantly more commits than what we just generated,
+            // it means we're likely in a shallow clone environment (CI/CD)
+            // and we should preserve the existing full history
+            if (existingCommits.length > commits.length) {
+                console.log(`⚠️  Existing commits.json has ${existingCommits.length} commits, but we only generated ${commits.length}.`);
+                console.log('   Likely running in a shallow clone. Preserving existing full history.');
+                shouldOverwrite = false;
+            }
+        }
+    } catch (e) {
+        console.warn('Failed to check existing commits.json:', e.message);
+    }
+
+    if (shouldOverwrite) {
+        writeFileSync(outputPath, JSON.stringify(commits, null, 2), 'utf-8');
+        console.log(`✅ Generated ${commits.length} commits to ${outputPath}`);
+    } else {
+        console.log(`✅ Kept existing commits.json`);
+    }
 } catch (error) {
     console.error('❌ Error generating commits:', error.message);
     // Don't fail the build if git history isn't available
