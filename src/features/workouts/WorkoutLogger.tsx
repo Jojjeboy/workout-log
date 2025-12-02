@@ -14,24 +14,36 @@ interface WorkoutLoggerProps {
     onSaveSuccess?: () => void;
 }
 
+interface WorkoutSetInput {
+    weight: number | string;
+    reps: number | string;
+    rpe?: number;
+}
+
 export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSaveSuccess }: WorkoutLoggerProps) {
     const { t } = useTranslation();
-    const [sets, setSets] = useState<WorkoutSet[]>(
-        initialSets || [{ weight: 0, reps: 0 }]
+    // Initialize with empty strings for new sets to show placeholder
+    const [sets, setSets] = useState<WorkoutSetInput[]>(
+        initialSets ? initialSets.map(s => ({ ...s })) : [{ weight: '', reps: '' }]
     );
     const [selectedDate, setSelectedDate] = useState<Date | null>(initialDate || new Date());
     const [showSuccess, setShowSuccess] = useState(false);
 
     const addSet = () => {
+        // Copy the previous set's values if they exist, otherwise empty
         const lastSet = sets[sets.length - 1];
-        setSets([...sets, { ...lastSet }]);
+        if (lastSet && (lastSet.weight !== '' || lastSet.reps !== '')) {
+            setSets([...sets, { ...lastSet }]);
+        } else {
+            setSets([...sets, { weight: '', reps: '' }]);
+        }
     };
 
     const removeSet = (index: number) => {
         setSets(sets.filter((_, i) => i !== index));
     };
 
-    const updateSet = (index: number, field: keyof Omit<WorkoutSet, 'rpe'>, value: number) => {
+    const updateSet = (index: number, field: keyof Omit<WorkoutSetInput, 'rpe'>, value: number | string) => {
         const newSets = [...sets];
         newSets[index] = { ...newSets[index], [field]: value };
         setSets(newSets);
@@ -39,7 +51,29 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
 
     const handleSave = () => {
         if (!selectedDate) return;
-        onSave(sets, selectedDate);
+
+        // Validate sets
+        const validSets: WorkoutSet[] = [];
+        for (const set of sets) {
+            const weight = Number(set.weight);
+            const reps = Number(set.reps);
+
+            // Check if values are valid numbers and reps > 0 (weight can be 0 for bodyweight)
+            if (set.weight === '' || set.reps === '' || isNaN(weight) || isNaN(reps) || reps <= 0) {
+                showNotification({
+                    title: t('common.error'),
+                    message: t('workoutLogger.invalidSetsMessage'), // You might need to add this key or use a generic one
+                    color: 'red',
+                });
+                return;
+            }
+
+            validSets.push({ weight, reps, rpe: set.rpe });
+        }
+
+        if (validSets.length === 0) return;
+
+        onSave(validSets, selectedDate);
 
         // Show success notification
         showNotification({
@@ -51,7 +85,7 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
         });
 
         // Reset form
-        setSets([{ weight: 0, reps: 0 }]);
+        setSets([{ weight: '', reps: '' }]);
         setSelectedDate(new Date());
         setShowSuccess(true);
 
@@ -116,23 +150,28 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
                                 <Table.Td>
                                     <NumberInput
                                         value={set.weight}
-                                        onChange={(v) => updateSet(index, 'weight', Number(v))}
+                                        onChange={(v) => updateSet(index, 'weight', v)}
                                         min={0}
                                         step={2.5}
                                         hideControls
                                         variant="filled"
                                         radius="xs"
+                                        placeholder="0"
+                                        allowNegative={false}
                                         styles={{ input: { textAlign: 'center', fontWeight: 600 } }}
                                     />
                                 </Table.Td>
                                 <Table.Td>
                                     <NumberInput
                                         value={set.reps}
-                                        onChange={(v) => updateSet(index, 'reps', Number(v))}
+                                        onChange={(v) => updateSet(index, 'reps', v)}
                                         min={0}
                                         hideControls
                                         variant="filled"
                                         radius="xs"
+                                        placeholder="0"
+                                        allowNegative={false}
+                                        allowDecimal={false}
                                         styles={{ input: { textAlign: 'center', fontWeight: 600 } }}
                                     />
                                 </Table.Td>

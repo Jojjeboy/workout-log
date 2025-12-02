@@ -36,7 +36,7 @@ function SortableExerciseItem({ exercise, exerciseDetails, onRemove, onEdit }: S
         <Paper ref={setNodeRef} style={style} p="md" radius="sm" withBorder>
             <Group justify="space-between" align="flex-start" wrap="nowrap">
                 <Group gap="sm" style={{ flex: 1 }}>
-                    <ActionIcon {...attributes} {...listeners} variant="subtle" style={{ cursor: 'grab', marginTop: '4px' }}>
+                    <ActionIcon {...attributes} {...listeners} variant="subtle" style={{ cursor: 'grab', marginTop: '4px', touchAction: 'none' }}>
                         <IconGripVertical size={18} />
                     </ActionIcon>
                     <div style={{ flex: 1 }}>
@@ -94,7 +94,11 @@ export function CreateRoutinePage() {
     const [suggestedWeight, setSuggestedWeight] = useState<number | string>('');
 
     const sensors = useSensors(
-        useSensor(PointerSensor),
+        useSensor(PointerSensor, {
+            activationConstraint: {
+                distance: 8,
+            },
+        }),
         useSensor(KeyboardSensor, {
             coordinateGetter: sortableKeyboardCoordinates,
         })

@@ -29,14 +29,14 @@ export function ExerciseDetail() {
 
     // State for the unified "edit workout" modal
     const [editingLogId, setEditingLogId] = useState<string | null>(null);
-    const [editedLog, setEditedLog] = useState<WorkoutLog | null>(null);
+    // Use a local type that allows strings for input handling
+    const [editedLog, setEditedLog] = useState<(Omit<WorkoutLog, 'sets'> & { sets: { weight: number | string; reps: number | string; rpe?: number }[] }) | null>(null);
 
     // Get tab from query parameters, default to 'log'
     const initialTab = searchParams.get('tab') || 'log';
 
     // State for tracking which instruction steps are checked
     const [checkedSteps, setCheckedSteps] = useState<Record<number, boolean>>({});
-
 
     useEffect(() => {
         if (editingLogId && logs) {
@@ -71,7 +71,26 @@ export function ExerciseDetail() {
 
     const handleSaveEditedLog = () => {
         if (editedLog) {
-            updateWorkout(editedLog);
+            // Validate sets
+            const validSets: WorkoutSet[] = [];
+            for (const set of editedLog.sets) {
+                const weight = Number(set.weight);
+                const reps = Number(set.reps);
+
+                // Check if values are valid numbers and reps > 0
+                if (set.weight === '' || set.reps === '' || isNaN(weight) || isNaN(reps) || reps <= 0) {
+                    // You might want to show an error notification here
+                    return;
+                }
+                validSets.push({ weight, reps, rpe: set.rpe });
+            }
+
+            if (validSets.length === 0) return;
+
+            updateWorkout({
+                ...editedLog,
+                sets: validSets
+            } as WorkoutLog);
             setEditingLogId(null);
         }
     };
@@ -346,10 +365,12 @@ export function ExerciseDetail() {
                                                 value={set.weight}
                                                 onChange={(value) => {
                                                     const newSets = [...editedLog.sets];
-                                                    newSets[index] = { ...newSets[index], weight: Number(value) };
+                                                    newSets[index] = { ...newSets[index], weight: value };
                                                     setEditedLog({ ...editedLog, sets: newSets });
                                                 }}
                                                 min={0}
+                                                placeholder="0"
+                                                allowNegative={false}
                                             />
                                         </Table.Td>
                                         <Table.Td>
@@ -357,11 +378,13 @@ export function ExerciseDetail() {
                                                 value={set.reps}
                                                 onChange={(value) => {
                                                     const newSets = [...editedLog.sets];
-                                                    newSets[index] = { ...newSets[index], reps: Number(value) };
+                                                    newSets[index] = { ...newSets[index], reps: value };
                                                     setEditedLog({ ...editedLog, sets: newSets });
                                                 }}
                                                 min={0}
                                                 allowDecimal={false}
+                                                placeholder="0"
+                                                allowNegative={false}
                                             />
                                         </Table.Td>
                                         <Table.Td>
@@ -378,7 +401,7 @@ export function ExerciseDetail() {
                         </Table>
                         <Button
                             onClick={() => {
-                                const newSets = [...editedLog.sets, { weight: 0, reps: 0 }];
+                                const newSets = [...editedLog.sets, { weight: '', reps: '' }];
                                 setEditedLog({ ...editedLog, sets: newSets });
                             }}
                         >
