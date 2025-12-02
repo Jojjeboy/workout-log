@@ -1,5 +1,17 @@
 [
   {
+    "hash": "852d977eff5acde4a03ef95685939397d8713648",
+    "message": "Harmonize buttons",
+    "date": "2025-12-02 22:17:52 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/features/routines/RoutinesPage.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
     "hash": "d533da3b8ad94f722bd0638c4614956287046e55",
     "message": "useVersion.ts",
     "date": "2025-12-02 22:12:37 +0100",

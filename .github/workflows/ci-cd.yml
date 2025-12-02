@@ -1,0 +1,61 @@
+name: CI/CD Frontend till GitHub Pages
+
+# Styr när workflowt ska köras
+on:
+  push:
+    branches: ["main"] # Körs vid push till main-grenen
+  pull_request:
+    branches: ["main"] # Körs vid pull requests mot main
+
+# Tillåter GitHub Actions att skriva till repositoryt för deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# En uppsättning jobb som ska köras
+jobs:
+  # 1. Bygg- och Test-Jobb (CI)
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4 # Hämtar koden från repositoryt
+
+      - name: Set up Node.js
+        # Använd den Node.js version som ditt projekt kräver
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22' 
+          cache: 'npm' # Optimerar installationen genom att cacha beroenden
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run Tests
+        run: npm run test # Kör test-kommandot
+
+      - name: Build Project
+        run: npm run build # Kör build-kommandot (genererar utdata i t.ex. 'dist')
+
+      - name: Upload Artifact
+        # Sparar den byggda utdatamappen (t.ex. 'dist') som en "artifact"
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist' # Byt ut 'dist' mot din faktiska utdatamapp om det behövs
+
+  # 2. Deployment-Jobb (CD)
+  deploy:
+    environment:
+      name: github-pages # Mappar till den GitHub Pages-miljö vi satte upp
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    # Körs ENDAST om föregående jobb (build-and-test) lyckades
+    needs: build-and-test 
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        # Detta är den officiella action för utplacering till Pages
+        uses: actions/deploy-pages@v4
