@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Box, Container, Stack, Title, Group, Button, TextInput, Textarea, Paper, Text, ActionIcon, Badge, Modal, NumberInput, MultiSelect, Avatar } from '@mantine/core';
-import { IconArrowLeft, IconPlus, IconTrash, IconGripVertical, IconSearch } from '@tabler/icons-react';
+import { IconArrowLeft, IconPlus, IconTrash, IconGripVertical, IconSearch, IconPencil } from '@tabler/icons-react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useCreateRoutine, useUpdateRoutine, useRoutine } from '../../hooks/useRoutines';
 import { useExercises } from '../../hooks/useExercises';
@@ -18,7 +18,7 @@ interface SortableExerciseItemProps {
 }
 
 function SortableExerciseItem({ exercise, exerciseDetails, onRemove, onEdit }: SortableExerciseItemProps) {
-    const { t } = useTranslation();
+
     const {
         attributes,
         listeners,
@@ -33,10 +33,10 @@ function SortableExerciseItem({ exercise, exerciseDetails, onRemove, onEdit }: S
     };
 
     return (
-        <Paper ref={setNodeRef} style={style} p="md" radius="sm" withBorder>
-            <Group justify="space-between" align="flex-start" wrap="nowrap">
+        <Paper ref={setNodeRef} style={style} p="sm" radius="sm" withBorder>
+            <Group justify="space-between" align="center" wrap="nowrap">
                 <Group gap="sm" style={{ flex: 1 }}>
-                    <ActionIcon {...attributes} {...listeners} variant="subtle" style={{ cursor: 'grab', marginTop: '4px', touchAction: 'none' }}>
+                    <ActionIcon {...attributes} {...listeners} variant="subtle" color="gray" style={{ cursor: 'grab', touchAction: 'none' }}>
                         <IconGripVertical size={18} />
                     </ActionIcon>
                     <div style={{ flex: 1 }}>
@@ -44,29 +44,33 @@ function SortableExerciseItem({ exercise, exerciseDetails, onRemove, onEdit }: S
                             {exerciseDetails?.gifUrl && (
                                 <Avatar src={exerciseDetails.gifUrl} radius="sm" size="md" />
                             )}
-                            <Text fw={500} tt="capitalize">{exerciseDetails?.name || exercise.exerciseId}</Text>
+                            <div>
+                                <Text fw={500} tt="capitalize" lineClamp={1}>{exerciseDetails?.name || exercise.exerciseId}</Text>
+                                {(exercise.suggestedSets || exercise.suggestedReps || exercise.suggestedWeight) && (
+                                    <Group gap="xs" mt={2}>
+                                        {exercise.suggestedSets && (
+                                            <Badge size="xs" variant="light" color="gray">{exercise.suggestedSets} sets</Badge>
+                                        )}
+                                        {exercise.suggestedReps && (
+                                            <Badge size="xs" variant="light" color="gray">{exercise.suggestedReps} reps</Badge>
+                                        )}
+                                        {exercise.suggestedWeight && (
+                                            <Badge size="xs" variant="light" color="gray">{exercise.suggestedWeight} kg</Badge>
+                                        )}
+                                    </Group>
+                                )}
+                            </div>
                         </Group>
-                        {(exercise.suggestedSets || exercise.suggestedReps || exercise.suggestedWeight) && (
-                            <Group gap="xs" mt={4}>
-                                {exercise.suggestedSets && (
-                                    <Badge size="sm" variant="light">{exercise.suggestedSets} sets</Badge>
-                                )}
-                                {exercise.suggestedReps && (
-                                    <Badge size="sm" variant="light">{exercise.suggestedReps} reps</Badge>
-                                )}
-                                {exercise.suggestedWeight && (
-                                    <Badge size="sm" variant="light">{exercise.suggestedWeight} kg</Badge>
-                                )}
-                            </Group>
-                        )}
-                        <Button size="xs" variant="light" mt="xs" onClick={onEdit}>
-                            {t('routines.editSuggestions')}
-                        </Button>
                     </div>
                 </Group>
-                <ActionIcon color="red" variant="subtle" onClick={onRemove}>
-                    <IconTrash size={18} />
-                </ActionIcon>
+                <Group gap="xs">
+                    <ActionIcon variant="subtle" color="blue" onClick={onEdit}>
+                        <IconPencil size={18} />
+                    </ActionIcon>
+                    <ActionIcon color="red" variant="subtle" onClick={onRemove}>
+                        <IconTrash size={18} />
+                    </ActionIcon>
+                </Group>
             </Group>
         </Paper>
     );
@@ -286,6 +290,9 @@ export function CreateRoutinePage() {
                                     leftSection={<IconPlus size={16} />}
                                     onClick={() => setExercisePickerOpen(true)}
                                     size="sm"
+                                    variant="light"
+                                    color="darkBlue"
+                                    radius="xs"
                                 >
                                     {t('routines.addExercise')}
                                 </Button>

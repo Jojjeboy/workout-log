@@ -177,6 +177,9 @@ export function WorkoutHistoryPage() {
                         size="md"
                         leftSection={<IconPlus size={16} />}
                         onClick={() => navigate('/exercises')}
+                        variant="light"
+                        color="darkBlue"
+                        radius="xs"
                     >
                         {t('workoutHistory.addNewWorkout')}
                     </Button>

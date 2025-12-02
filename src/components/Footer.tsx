@@ -96,8 +96,8 @@ export function Footer() {
             {/* Background color changes based on dark mode */}
             <Group h="100%" gap={0} bg="white" align="center">
                 <NavItem path="/" icon={IconBarbell} label={t('footer.workouts')} color="blue" />
-                <NavItem path="/routines" icon={IconListCheck} label={t('footer.routines')} color="teal" />
                 <NavItem path="/generator" icon={IconWand} label={t('footer.generator')} color="violet" />
+                <NavItem path="/routines" icon={IconListCheck} label={t('footer.routines')} color="teal" />
                 <NavItem path="/exercises" icon={IconPlus} label={t('footer.add')} color="cyan" />
                 <NavItem path="/settings" icon={IconSettings} label={t('footer.settings')} color="orange" />
             </Group>

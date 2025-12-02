@@ -1,5 +1,17 @@
 [
   {
+    "hash": "708fb7f250ae616a1d9b13eb46c7d869c5f404d6",
+    "message": "Fix drag and drop issue in routine edit page",
+    "date": "2025-12-02 21:45:46 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/features/routines/CreateRoutinePage.tsx",
+      "src/features/workouts/WorkoutLogger.tsx"
+    ]
+  },
+  {
     "hash": "90c07fd0593aa6613ff29caf33dd91b22c0cb8d0",
     "message": "Fix build errors and improve UI - move date picker to top, remove empty action column",
     "date": "2025-12-02 21:30:22 +0100",
