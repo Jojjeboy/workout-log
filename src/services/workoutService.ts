@@ -35,11 +35,29 @@ export const workoutService = {
             if (log.id) {
                 // Create or update log with the existing ID using setDoc
                 const docRef = doc(firestore, 'logs', log.id);
-                await setDoc(docRef, { ...log });
+                const logData = { ...log };
+
+                // Remove undefined fields (Firestore doesn't support undefined values)
+                Object.keys(logData).forEach(key => {
+                    if (logData[key as keyof typeof logData] === undefined) {
+                        delete logData[key as keyof typeof logData];
+                    }
+                });
+
+                await setDoc(docRef, logData);
                 return log.id;
             } else {
                 // Create new log with auto-generated ID
-                const docRef = await addDoc(collection(firestore, 'logs'), log);
+                const logData = { ...log };
+
+                // Remove undefined fields (Firestore doesn't support undefined values)
+                Object.keys(logData).forEach(key => {
+                    if (logData[key as keyof typeof logData] === undefined) {
+                        delete logData[key as keyof typeof logData];
+                    }
+                });
+
+                const docRef = await addDoc(collection(firestore, 'logs'), logData);
                 return docRef.id;
             }
         } catch (error) {
