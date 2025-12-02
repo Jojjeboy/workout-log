@@ -22,9 +22,10 @@ export function useVersion() {
         queryKey: ['version'],
         queryFn: async (): Promise<VersionInfo> => {
             // Fetch both version and commits data in parallel
+            const base = import.meta.env.BASE_URL; // Hämtar t.ex. '/workout-log/'
             const [versionResponse, commitsResponse] = await Promise.all([
-                fetch('/version.json'),
-                fetch('/commits.json')
+                fetch(`${base}version.json`),
+                fetch(`${base}commits.json`)
             ]);
 
             if (!versionResponse.ok) {

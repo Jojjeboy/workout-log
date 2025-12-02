@@ -26,7 +26,8 @@ export function ChangelogPage() {
             try {
                 setIsLoading(true);
                 // Fetch commits from the static JSON file
-                const response = await fetch('/commits.json');
+                const base = import.meta.env.BASE_URL; // Hämtar t.ex. '/workout-log/'
+                const response = await fetch('${base}commits.json');
                 if (!response.ok) {
                     throw new Error('Failed to fetch commits');
                 }
