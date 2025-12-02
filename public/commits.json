@@ -1,5 +1,24 @@
 [
   {
+    "hash": "d1c67eeeaf5cefe915d36396bcce953b7ca4e39f",
+    "message": "PR",
+    "date": "2025-12-01 20:24:59 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/components/PersonalRecordsCard.tsx",
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/hooks/usePersonalRecords.ts",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json",
+      "src/services/db.ts",
+      "src/services/prService.ts",
+      "src/types/index.ts",
+      "suggested_features.md",
+      "tsconfig.app.tsbuildinfo"
+    ]
+  },
+  {
     "hash": "415c6764b57dfdfa28e8e5b48f94799479bca90d",
     "message": "Suggestions",
     "date": "2025-12-01 19:28:21 +0100",

@@ -10,6 +10,9 @@ import { ProfilePage } from './features/profile/ProfilePage';
 import { ChangelogPage } from './features/changelog/ChangelogPage';
 import { WorkoutHistoryPage } from './features/workouts/WorkoutHistoryPage';
 import { WorkoutGeneratorPage } from './features/generator/WorkoutGeneratorPage';
+import { RoutinesPage } from './features/routines/RoutinesPage';
+import { CreateRoutinePage } from './features/routines/CreateRoutinePage';
+import { ActiveRoutinePage } from './features/routines/ActiveRoutinePage';
 import { Footer } from './components/Footer';
 import { useAuth } from './hooks/useAuth';
 import { UpdateNotification } from './components/UpdateNotification';
@@ -49,6 +52,9 @@ function App() {
                 <Route path="/changelog" element={<ChangelogPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/generator" element={<WorkoutGeneratorPage />} />
+                <Route path="/routines" element={<RoutinesPage />} />
+                <Route path="/routines/create" element={<CreateRoutinePage />} />
+                <Route path="/routines/:id/active" element={<ActiveRoutinePage />} />
               </Route>
 
               <Route path="*" element={<Navigate to="/" />} />

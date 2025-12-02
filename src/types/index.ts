@@ -26,7 +26,7 @@ export interface WorkoutSet {
 
 export interface QueueItem {
     id?: number; // Auto-incremented by Dexie
-    type: 'LOG_WORKOUT' | 'SYNC_EXERCISES' | 'UPDATE_PROFILE' | 'DELETE_WORKOUT';
+    type: 'LOG_WORKOUT' | 'SYNC_EXERCISES' | 'UPDATE_PROFILE' | 'DELETE_WORKOUT' | 'CREATE_ROUTINE' | 'UPDATE_ROUTINE' | 'DELETE_ROUTINE';
     payload: any;
     timestamp: number;
     retryCount: number;
@@ -69,3 +69,33 @@ export interface PersonalRecord {
     estimatedOneRepMax?: PRRecord;
     lastUpdated: number;
 }
+
+export interface RoutineExercise {
+    exerciseId: string;
+    order: number;
+    suggestedSets?: number;
+    suggestedReps?: number;
+    suggestedWeight?: number;
+}
+
+export interface WorkoutRoutine {
+    id?: string;
+    uid: string;
+    name: string;
+    description?: string;
+    exercises: RoutineExercise[];
+    createdAt: number;
+    updatedAt: number;
+    lastUsed?: number;
+}
+
+export interface ActiveRoutineSession {
+    routineId: string;
+    routineName: string;
+    startedAt: number;
+    currentExerciseIndex: number;
+    completedExercises: string[]; // exerciseIds
+    logs: WorkoutLog[];
+}
+
+export type QueueItemType = 'LOG_WORKOUT' | 'SYNC_EXERCISES' | 'UPDATE_PROFILE' | 'DELETE_WORKOUT' | 'CREATE_ROUTINE' | 'UPDATE_ROUTINE' | 'DELETE_ROUTINE';

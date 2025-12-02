@@ -1,5 +1,5 @@
 import Dexie, { Table } from 'dexie';
-import { Exercise, QueueItem, PersonalRecord } from '../types';
+import { Exercise, QueueItem, PersonalRecord, WorkoutRoutine } from '../types';
 
 export class IronLogDatabase extends Dexie {
     exercises!: Table<Exercise, string>;
@@ -7,6 +7,8 @@ export class IronLogDatabase extends Dexie {
     queue!: Table<QueueItem, number>;
 
     personalRecords!: Table<PersonalRecord, string>;
+
+    routines!: Table<WorkoutRoutine, string>;
 
     constructor() {
         super('IronLogDB');
@@ -21,6 +23,14 @@ export class IronLogDatabase extends Dexie {
             exercises: 'exerciseId, name, *targetMuscles, *bodyParts, *equipments',
             queue: '++id, status, timestamp',
             personalRecords: 'id, [exerciseId+uid], uid, lastUpdated'
+        });
+
+        // Version 3: Add routines table
+        this.version(3).stores({
+            exercises: 'exerciseId, name, *targetMuscles, *bodyParts, *equipments',
+            queue: '++id, status, timestamp',
+            personalRecords: 'id, [exerciseId+uid], uid, lastUpdated',
+            routines: 'id, uid, name, createdAt, lastUsed'
         });
     }
 }

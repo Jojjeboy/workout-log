@@ -38,7 +38,16 @@ service cloud.firestore {
       allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
     }
     
-    // 5. Logs Collection
+    // 5. Routines Collection
+    // Users can only read/write their own workout routines
+    match /routines/{routineId} {
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow read: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null && resource.data.uid == request.auth.uid;
+      allow delete: if request.auth != null && resource.data.uid == request.auth.uid;
+    }
+    
+    // 6. Logs Collection
     // Users can only read/write their own workout logs
     match /logs/{logId} {
       allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
