@@ -1,5 +1,18 @@
 [
   {
+    "hash": "9698b8ff7d7528789cbd13f2a5b48020b6aba047",
+    "message": "mc",
+    "date": "2025-12-02 22:11:05 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/components/Footer.tsx",
+      "src/features/routines/CreateRoutinePage.tsx",
+      "src/features/workouts/WorkoutHistoryPage.tsx",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
     "hash": "708fb7f250ae616a1d9b13eb46c7d869c5f404d6",
     "message": "Fix drag and drop issue in routine edit page",
     "date": "2025-12-02 21:45:46 +0100",
