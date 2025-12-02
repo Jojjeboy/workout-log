@@ -1,5 +1,15 @@
 [
   {
+    "hash": "2c292a8451f510d4a471284aa844079fa389f312",
+    "message": "feat: setup CI/CD with GitHub Actions",
+    "date": "2025-12-02 22:26:11 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      ".github/workflows/ci-cd.yml",
+      "public/commits.json"
+    ]
+  },
+  {
     "hash": "852d977eff5acde4a03ef95685939397d8713648",
     "message": "Harmonize buttons",
     "date": "2025-12-02 22:17:52 +0100",
