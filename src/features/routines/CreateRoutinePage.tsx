@@ -1,8 +1,8 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Box, Container, Stack, Title, Group, Button, TextInput, Textarea, Paper, Text, ActionIcon, Badge, Modal, NumberInput, MultiSelect, Avatar } from '@mantine/core';
 import { IconArrowLeft, IconPlus, IconTrash, IconGripVertical, IconSearch } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
-import { useCreateRoutine } from '../../hooks/useRoutines';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useCreateRoutine, useUpdateRoutine, useRoutine } from '../../hooks/useRoutines';
 import { useExercises } from '../../hooks/useExercises';
 import { useTranslation } from 'react-i18next';
 import { RoutineExercise, Exercise } from '../../types';
@@ -75,7 +75,12 @@ function SortableExerciseItem({ exercise, exerciseDetails, onRemove, onEdit }: S
 export function CreateRoutinePage() {
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
+    const isEditMode = !!id;
+
     const createMutation = useCreateRoutine();
+    const updateMutation = useUpdateRoutine();
+    const { data: existingRoutine } = useRoutine(id);
     const { data: exercises } = useExercises();
 
     const [name, setName] = useState('');
@@ -151,18 +156,38 @@ export function CreateRoutinePage() {
         setSuggestedWeight('');
     };
 
+    // Load existing routine data when in edit mode
+    useEffect(() => {
+        if (isEditMode && existingRoutine) {
+            setName(existingRoutine.name);
+            setDescription(existingRoutine.description || '');
+            setRoutineExercises(existingRoutine.exercises);
+        }
+    }, [isEditMode, existingRoutine]);
+
     const handleSubmit = async () => {
         if (!name.trim() || routineExercises.length === 0) return;
 
         try {
-            await createMutation.mutateAsync({
-                name: name.trim(),
-                description: description.trim() || undefined,
-                exercises: routineExercises,
-            });
+            if (isEditMode && id) {
+                await updateMutation.mutateAsync({
+                    id,
+                    updates: {
+                        name: name.trim(),
+                        description: description.trim() || undefined,
+                        exercises: routineExercises,
+                    },
+                });
+            } else {
+                await createMutation.mutateAsync({
+                    name: name.trim(),
+                    description: description.trim() || undefined,
+                    exercises: routineExercises,
+                });
+            }
             navigate('/routines');
         } catch (error) {
-            console.error('Failed to create routine:', error);
+            console.error(`Failed to ${isEditMode ? 'update' : 'create'} routine:`, error);
         }
     };
 
@@ -225,7 +250,9 @@ export function CreateRoutinePage() {
                     </Button>
                 </Group>
 
-                <Title order={2} style={{ color: 'white' }}>{t('routines.createTitle')}</Title>
+                <Title order={2} style={{ color: 'white' }}>
+                    {isEditMode ? t('routines.editTitle') : t('routines.createTitle')}
+                </Title>
             </div>
 
             <Container size="lg" px="md" style={{ marginTop: '-40px' }}>
@@ -295,9 +322,9 @@ export function CreateRoutinePage() {
                             <Button
                                 onClick={handleSubmit}
                                 disabled={!name.trim() || routineExercises.length === 0}
-                                loading={createMutation.isPending}
+                                loading={createMutation.isPending || updateMutation.isPending}
                             >
-                                {t('routines.create')}
+                                {isEditMode ? t('routines.update') : t('routines.create')}
                             </Button>
                         </Group>
                     </Stack>

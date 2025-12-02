@@ -39,7 +39,7 @@ export function useActiveRoutine(
         }));
     }, []);
 
-    const logExercise = useCallback((sets: WorkoutSet[], date: Date, note?: string) => {
+    const logExercise = useCallback(async (sets: WorkoutSet[], date: Date, note?: string) => {
         const currentExercise = exercises[session.currentExerciseIndex];
         if (!currentExercise || !user) return;
 
@@ -51,12 +51,15 @@ export function useActiveRoutine(
             uid: user.uid,
         };
 
+        // Save immediately to Firebase
+        await logWorkout(log);
+
         setSession(prev => ({
             ...prev,
             logs: [...prev.logs, log],
             completedExercises: [...prev.completedExercises, currentExercise.exerciseId],
         }));
-    }, [exercises, session.currentExerciseIndex, user]);
+    }, [exercises, session.currentExerciseIndex, user, logWorkout]);
 
     const isCurrentExerciseCompleted = useCallback(() => {
         const currentExercise = exercises[session.currentExerciseIndex];
@@ -65,13 +68,12 @@ export function useActiveRoutine(
     }, [exercises, session.currentExerciseIndex, session.completedExercises]);
 
     const finishRoutine = useCallback(async () => {
-        for (const log of session.logs) {
-            await logWorkout(log);
-        }
-
+        // Logs are already saved immediately when logged, so just update routine lastUsed
         if (routineId) {
             await routineService.markRoutineAsUsed(routineId);
         }
+
+        const logCount = session.logs.length;
 
         setSession({
             routineId: routineId || '',
@@ -82,8 +84,8 @@ export function useActiveRoutine(
             logs: [],
         });
 
-        return session.logs.length;
-    }, [session.logs, logWorkout, routineId, routineName]);
+        return logCount;
+    }, [routineId, routineName, session.logs.length]);
 
     const currentExercise = exercises[session.currentExerciseIndex];
     const progress = exercises.length > 0

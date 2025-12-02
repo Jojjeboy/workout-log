@@ -101,6 +101,23 @@ export function ActiveRoutinePage() {
                         {exerciseDetails && (
                             <Paper p="lg" radius="lg" shadow="sm" bg="white">
                                 <Stack gap="md">
+                                    {/* Exercise Image */}
+                                    {exerciseDetails.gifUrl && (
+                                        <div style={{ textAlign: 'center' }}>
+                                            <img
+                                                src={exerciseDetails.gifUrl}
+                                                alt={exerciseDetails.name}
+                                                style={{
+                                                    width: '100%',
+                                                    maxWidth: '300px',
+                                                    borderRadius: '8px',
+                                                    margin: '0 auto',
+                                                    display: 'block'
+                                                }}
+                                            />
+                                        </div>
+                                    )}
+
                                     <div>
                                         <Group justify="space-between" mb="xs">
                                             <Title order={3} tt="capitalize">{exerciseDetails.name}</Title>

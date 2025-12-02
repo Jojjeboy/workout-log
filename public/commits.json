@@ -1,5 +1,29 @@
 [
   {
+    "hash": "d92976f0b5229738f8f7c0cbe9f9f4e45aaccfa8",
+    "message": "Routines initial",
+    "date": "2025-12-02 13:51:01 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "firestore.rules",
+      "public/commits.json",
+      "src/App.tsx",
+      "src/components/Footer.tsx",
+      "src/components/RoutineCard.tsx",
+      "src/features/routines/ActiveRoutinePage.tsx",
+      "src/features/routines/CreateRoutinePage.tsx",
+      "src/features/routines/RoutinesPage.tsx",
+      "src/hooks/useActiveRoutine.ts",
+      "src/hooks/useRoutines.ts",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json",
+      "src/services/db.ts",
+      "src/services/routineService.ts",
+      "src/types/index.ts",
+      "tsconfig.app.tsbuildinfo"
+    ]
+  },
+  {
     "hash": "d1c67eeeaf5cefe915d36396bcce953b7ca4e39f",
     "message": "PR",
     "date": "2025-12-01 20:24:59 +0100",

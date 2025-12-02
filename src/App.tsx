@@ -54,6 +54,7 @@ function App() {
                 <Route path="/generator" element={<WorkoutGeneratorPage />} />
                 <Route path="/routines" element={<RoutinesPage />} />
                 <Route path="/routines/create" element={<CreateRoutinePage />} />
+                <Route path="/routines/:id/edit" element={<CreateRoutinePage />} />
                 <Route path="/routines/:id/active" element={<ActiveRoutinePage />} />
               </Route>
 
