@@ -104,6 +104,8 @@
         "noHistory": "No workout history for this exercise yet.",
         "actions": "Actions",
         "editSet": "Edit Workout Set",
+        "addSet": "Add New Set",
+        "add": "Add",
         "date": "Date",
         "cancel": "Cancel",
         "save": "Save"

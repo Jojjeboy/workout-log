@@ -104,6 +104,8 @@
     "noHistory": "Ingen träningshistorik för denna övning än.",
     "actions": "Åtgärder",
     "editSet": "Redigera set",
+    "addSet": "Lägg till nytt set",
+    "add": "Lägg till",
     "date": "Datum",
     "cancel": "Avbryt",
     "save": "Spara"

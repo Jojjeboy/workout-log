@@ -7,7 +7,7 @@ import { useExercise } from '../../hooks/useExercises';
 import { WorkoutLogger } from '../workouts/WorkoutLogger';
 import { useWorkouts } from '../../hooks/useWorkouts';
 import { ProgressChart } from '../charts/ProgressChart';
-import { WorkoutSet } from '../../types';
+import { WorkoutSet, WorkoutLog } from '../../types';
 import { useAuth } from '../../hooks/useAuth';
 import { useTranslation } from 'react-i18next';
 import { ConfirmDialog } from '../../components/ConfirmDialog';
@@ -27,28 +27,28 @@ export function ExerciseDetail() {
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [workoutToDelete, setWorkoutToDelete] = useState<string | null>(null);
 
+    // State for the unified "edit workout" modal
+    const [editingLogId, setEditingLogId] = useState<string | null>(null);
+    const [editedLog, setEditedLog] = useState<WorkoutLog | null>(null);
+
     // Get tab from query parameters, default to 'log'
     const initialTab = searchParams.get('tab') || 'log';
 
-    // Track which instruction steps are checked
+    // State for tracking which instruction steps are checked
     const [checkedSteps, setCheckedSteps] = useState<Record<number, boolean>>({});
 
-    // State for editing a workout set
-    const [editingSet, setEditingSet] = useState<{ logId: string; setIndex: number; setData: WorkoutSet } | null>(null);
-    const [currentWeight, setCurrentWeight] = useState<number | string>('');
-    const [currentReps, setCurrentReps] = useState<number | string>('');
-    const [currentDate, setCurrentDate] = useState<Date | null>(new Date());
 
     useEffect(() => {
-        if (editingSet && logs) {
-            const logToEdit = logs.find(log => log.id === editingSet.logId);
+        if (editingLogId && logs) {
+            const logToEdit = logs.find(log => log.id === editingLogId);
             if (logToEdit) {
-                setCurrentWeight(editingSet.setData.weight);
-                setCurrentReps(editingSet.setData.reps);
-                setCurrentDate(new Date(logToEdit.timestamp));
+                // Deep copy the log to avoid mutating the original state
+                setEditedLog(JSON.parse(JSON.stringify(logToEdit)));
             }
+        } else {
+            setEditedLog(null);
         }
-    }, [editingSet, logs]);
+    }, [editingLogId, logs]);
 
 
 
@@ -69,36 +69,11 @@ export function ExerciseDetail() {
         }, 500);
     };
 
-    const handleUpdateSet = () => {
-        if (!editingSet || !logs || !currentDate) return;
-
-        const logToUpdate = logs.find(log => log.id === editingSet.logId);
-        if (!logToUpdate || !logToUpdate.sets) return;
-
-        // Create a new updated array of sets
-        const updatedSets = logToUpdate.sets.map((set, index) => {
-            if (index === editingSet.setIndex) {
-                return {
-                    ...set,
-                    weight: Number(currentWeight),
-                    reps: Number(currentReps)
-                };
-            }
-            return set;
-        });
-
-        // Create a new log object with the updated sets and possibly date
-        const updatedLog = {
-            ...logToUpdate,
-            sets: updatedSets,
-            timestamp: currentDate.getTime(), // Update the timestamp
-        };
-
-        // Call the mutation
-        updateWorkout(updatedLog);
-
-        // Close the modal
-        setEditingSet(null);
+    const handleSaveEditedLog = () => {
+        if (editedLog) {
+            updateWorkout(editedLog);
+            setEditingLogId(null);
+        }
     };
 
     const handleDeleteClick = (logId: string) => {
@@ -228,6 +203,14 @@ export function ExerciseDetail() {
                                                                     <Badge color="blue" variant="light">{log.sets?.length || 0} {t('dashboard.sets')}</Badge>
                                                                     <ActionIcon
                                                                         variant="subtle"
+                                                                        color="blue"
+                                                                        size="sm"
+                                                                        onClick={() => setEditingLogId(log.id!)}
+                                                                    >
+                                                                        <IconPencil size={16} />
+                                                                    </ActionIcon>
+                                                                    <ActionIcon
+                                                                        variant="subtle"
                                                                         color="red"
                                                                         size="sm"
                                                                         onClick={() => handleDeleteClick(log.id!)}
@@ -242,7 +225,6 @@ export function ExerciseDetail() {
                                                                         <Table.Th>{t('dashboard.set')}</Table.Th>
                                                                         <Table.Th>{t('dashboard.weight')}</Table.Th>
                                                                         <Table.Th>{t('dashboard.reps')}</Table.Th>
-                                                                        <Table.Th>{t('exerciseDetail.actions')}</Table.Th>
                                                                     </Table.Tr>
                                                                 </Table.Thead>
                                                                 <Table.Tbody>
@@ -251,11 +233,6 @@ export function ExerciseDetail() {
                                                                             <Table.Td c="#1a202c">{setIdx + 1}</Table.Td>
                                                                             <Table.Td c="#1a202c">{set.weight}</Table.Td>
                                                                             <Table.Td c="#1a202c">{set.reps}</Table.Td>
-                                                                            <Table.Td>
-                                                                                <ActionIcon variant="light" onClick={() => setEditingSet({ logId: log.id!, setIndex: setIdx, setData: set })}>
-                                                                                    <IconPencil size={16} />
-                                                                                </ActionIcon>
-                                                                            </Table.Td>
                                                                         </Table.Tr>
                                                                     ))}
                                                                 </Table.Tbody>
@@ -332,38 +309,88 @@ export function ExerciseDetail() {
                 </Container>
             </Box>
 
-            <Modal
-                opened={!!editingSet}
-                onClose={() => setEditingSet(null)}
-                title={t('exerciseDetail.editSet')}
-            >
-                <Stack>
-                    <DatePickerInput
-                        label={t('exerciseDetail.date')}
-                        value={currentDate}
-                        onChange={(dateString: string | null) => setCurrentDate(dateString ? new Date(dateString) : null)}
-                        maxDate={new Date()}
-                        leftSection={<IconCalendar size={16} />}
-                    />
-                    <NumberInput
-                        label={t('dashboard.weight')}
-                        value={currentWeight}
-                        onChange={setCurrentWeight}
-                        min={0}
-                    />
-                    <NumberInput
-                        label={t('dashboard.reps')}
-                        value={currentReps}
-                        onChange={setCurrentReps}
-                        min={0}
-                        allowDecimal={false}
-                    />
-                    <Group justify="flex-end" mt="md">
-                        <Button variant="default" onClick={() => setEditingSet(null)}>{t('exerciseDetail.cancel')}</Button>
-                        <Button onClick={handleUpdateSet}>{t('exerciseDetail.save')}</Button>
-                    </Group>
-                </Stack>
-            </Modal>
+            {editedLog && (
+                <Modal
+                    opened={!!editingLogId}
+                    onClose={() => setEditingLogId(null)}
+                    title={t('exerciseDetail.editWorkout')}
+                    size="lg"
+                >
+                    <Stack>
+                        <DatePickerInput
+                            label={t('exerciseDetail.date')}
+                            value={new Date(editedLog.timestamp)}
+                            onChange={(value) => {
+                                if (value) {
+                                    setEditedLog({ ...editedLog, timestamp: new Date(value).getTime() });
+                                }
+                            }}
+                            maxDate={new Date()}
+                            leftSection={<IconCalendar size={16} />}
+                        />
+                        <Table>
+                            <Table.Thead>
+                                <Table.Tr>
+                                    <Table.Th>{t('dashboard.set')}</Table.Th>
+                                    <Table.Th>{t('dashboard.weight')}</Table.Th>
+                                    <Table.Th>{t('dashboard.reps')}</Table.Th>
+                                    <Table.Th></Table.Th>
+                                </Table.Tr>
+                            </Table.Thead>
+                            <Table.Tbody>
+                                {editedLog.sets.map((set, index) => (
+                                    <Table.Tr key={index}>
+                                        <Table.Td>{index + 1}</Table.Td>
+                                        <Table.Td>
+                                            <NumberInput
+                                                value={set.weight}
+                                                onChange={(value) => {
+                                                    const newSets = [...editedLog.sets];
+                                                    newSets[index] = { ...newSets[index], weight: Number(value) };
+                                                    setEditedLog({ ...editedLog, sets: newSets });
+                                                }}
+                                                min={0}
+                                            />
+                                        </Table.Td>
+                                        <Table.Td>
+                                            <NumberInput
+                                                value={set.reps}
+                                                onChange={(value) => {
+                                                    const newSets = [...editedLog.sets];
+                                                    newSets[index] = { ...newSets[index], reps: Number(value) };
+                                                    setEditedLog({ ...editedLog, sets: newSets });
+                                                }}
+                                                min={0}
+                                                allowDecimal={false}
+                                            />
+                                        </Table.Td>
+                                        <Table.Td>
+                                            <ActionIcon color="red" onClick={() => {
+                                                const newSets = editedLog.sets.filter((_, i) => i !== index);
+                                                setEditedLog({ ...editedLog, sets: newSets });
+                                            }}>
+                                                <IconTrash size={16} />
+                                            </ActionIcon>
+                                        </Table.Td>
+                                    </Table.Tr>
+                                ))}
+                            </Table.Tbody>
+                        </Table>
+                        <Button
+                            onClick={() => {
+                                const newSets = [...editedLog.sets, { weight: 0, reps: 0 }];
+                                setEditedLog({ ...editedLog, sets: newSets });
+                            }}
+                        >
+                            {t('workoutLogger.addSet')}
+                        </Button>
+                        <Group justify="flex-end" mt="md">
+                            <Button variant="default" onClick={() => setEditingLogId(null)}>{t('exerciseDetail.cancel')}</Button>
+                            <Button onClick={handleSaveEditedLog}>{t('exerciseDetail.save')}</Button>
+                        </Group>
+                    </Stack>
+                </Modal>
+            )}
 
             <ConfirmDialog
                 opened={deleteConfirmOpen}

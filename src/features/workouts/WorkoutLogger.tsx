@@ -79,6 +79,24 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
                 </Alert>
             )}
 
+            <DatePickerInput
+                value={selectedDate}
+                onChange={(value) => {
+                    if (typeof value === 'string') {
+                        setSelectedDate(new Date(value));
+                    } else {
+                        setSelectedDate(value);
+                    }
+                }}
+                label={t('workoutLogger.workoutDate')}
+                placeholder={t('workoutLogger.pickDate')}
+                leftSection={<IconCalendar size={16} />}
+                clearable={false}
+                valueFormat="DD MMM YYYY"
+                radius="xs"
+                maxDate={new Date()}
+            />
+
             <Paper withBorder radius="sm" p={0} style={{ overflow: 'hidden' }}>
                 <Table verticalSpacing="sm" withRowBorders>
                     <Table.Thead bg="#f8f9fa">
@@ -137,24 +155,6 @@ export function WorkoutLogger({ onSave, isSaving, initialSets, initialDate, onSa
                     </Table.Tbody>
                 </Table>
             </Paper>
-
-            <DatePickerInput
-                value={selectedDate}
-                onChange={(value) => {
-                    if (typeof value === 'string') {
-                        setSelectedDate(new Date(value));
-                    } else {
-                        setSelectedDate(value);
-                    }
-                }}
-                label={t('workoutLogger.workoutDate')}
-                placeholder={t('workoutLogger.pickDate')}
-                leftSection={<IconCalendar size={16} />}
-                clearable={false}
-                valueFormat="DD MMM YYYY"
-                radius="xs"
-                maxDate={new Date()}
-            />
 
             <Group grow>
                 <Button
