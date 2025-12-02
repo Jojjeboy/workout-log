@@ -242,6 +242,7 @@
         "finish": "Finish Routine",
         "completedTitle": "Routine Completed!",
         "completedMessage": "Great job! You logged {{count}} exercises.",
-        "backToRoutines": "Back to Routines"
+        "backToRoutines": "Back to Routines",
+        "addNew": "Add New Routine"
     }
 }

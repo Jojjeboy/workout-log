@@ -1,4 +1,4 @@
-import { Box, Container, Stack, Title, Text, Group, Avatar, Loader, Center, Affix, Transition, ActionIcon, Paper, TextInput } from '@mantine/core';
+import { Box, Container, Stack, Title, Text, Group, Avatar, Loader, Center, Paper, TextInput, Button } from '@mantine/core';
 import { IconPlus, IconSearch } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useRoutines } from '../../hooks/useRoutines';
@@ -73,6 +73,18 @@ export function RoutinesPage() {
             </div>
 
             <Container size="lg" px="md" style={{ marginTop: '-40px' }}>
+                <Paper radius="lg" withBorder shadow="sm" style={{ overflow: 'hidden', background: 'white', marginBottom: '24px' }}>
+                    <Button
+                        fullWidth
+                        size="md"
+                        leftSection={<IconPlus size={18} />}
+                        onClick={() => navigate('/routines/create')}
+                        variant="light"
+                        style={{ borderRadius: 0 }}
+                    >
+                        {t('routines.addNew')}
+                    </Button>
+                </Paper>
                 <Stack gap="md">
                     {filteredRoutines.length > 0 ? (
                         filteredRoutines.map((routine) => (
@@ -92,27 +104,6 @@ export function RoutinesPage() {
                     )}
                 </Stack>
             </Container>
-
-            {/* Floating Action Button */}
-            <Affix position={{ bottom: 100, right: 20 }}>
-                <Transition transition="slide-up" mounted={true}>
-                    {(transitionStyles) => (
-                        <ActionIcon
-                            size={60}
-                            radius="xl"
-                            variant="filled"
-                            style={{
-                                ...transitionStyles,
-                                backgroundColor: '#228be6',
-                                boxShadow: '0 4px 12px rgba(34, 139, 230, 0.4)'
-                            }}
-                            onClick={() => navigate('/routines/create')}
-                        >
-                            <IconPlus size={28} />
-                        </ActionIcon>
-                    )}
-                </Transition>
-            </Affix>
         </Box>
     );
 }

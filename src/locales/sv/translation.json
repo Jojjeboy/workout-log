@@ -242,6 +242,7 @@
     "finish": "Slutför Rutin",
     "completedTitle": "Rutin Slutförd!",
     "completedMessage": "Bra jobbat! Du loggade {{count}} övningar.",
-    "backToRoutines": "Tillbaka till Rutiner"
-  }
-}
+            "backToRoutines": "Tillbaka till Rutiner",
+            "addNew": "Lägg till ny rutin"
+      }
+    }
