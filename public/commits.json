@@ -1,5 +1,15 @@
 [
   {
+    "hash": "c3f4b26daf8e3270734662aa0bbeed0a48b4f4d5",
+    "message": "Edit history works better",
+    "date": "2025-12-03 07:46:53 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "src/features/exercises/ExerciseDetail.tsx"
+    ]
+  },
+  {
     "hash": "42520ec4552e35f00530492ec949f1a7220296cc",
     "message": "feat: Update app favicon with new kettlebell/barbell icon",
     "date": "2025-12-03 07:12:42 +0100",
