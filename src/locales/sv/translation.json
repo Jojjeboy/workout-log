@@ -76,49 +76,14 @@
     "of": "av",
     "commits": "commits",
     "scrollToLoadMore": "• Scrolla ner för att ladda fler",
-    "loadMore": "Ladda fler",
-    "totalCommits": "Totalt antal commits",
-    "changedFiles": "ändrade",
-    "file": "fil",
-    "files": "filer"
-  },
-  "common": {
-    "deleteWorkout": "Ta bort",
-    "deleteWorkoutConfirmTitle": "Ta bort övningen?",
-    "deleteWorkoutConfirmMessage": "Är du säker på att du vill ta bort denna övning? Detta går inte att ångra.",
-    "delete": "Ta bort",
-    "cancel": "Avbryt",
-    "deleteSet": "Ta bort set",
-    "deleteSetConfirmTitle": "Ta bort set?",
-    "deleteSetConfirmMessage": "Är du säker på att du vill ta bort detta set?",
-    "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort det raderas hela övningen. Är du säker?"
-  },
-  "exerciseDetail": {
-    "back": "Tillbaka",
-    "loading": "Laddar...",
-    "notFound": "Övningen hittades inte",
-    "instructions": "Instruktioner",
-    "log": "Logga",
-    "history": "Historik",
-    "progress": "Framsteg",
-    "noHistory": "Ingen träningshistorik för denna övning än.",
-    "actions": "Åtgärder",
-    "editSet": "Redigera set",
-    "addSet": "Lägg till nytt set",
-    "add": "Lägg till",
-    "date": "Datum",
-    "cancel": "Avbryt",
-    "save": "Spara"
-  },
-  "workoutLogger": {
-    "workoutDate": "Träningsdatum",
-    "pickDate": "Välj datum",
-    "addSet": "Lägg till",
-    "logWorkout": "Spara",
     "workoutLogged": "Träning loggad",
     "workoutLoggedMessage": "Din övning har sparats!",
     "workoutLoggedTitle": "Träning loggad!",
-    "workoutSyncMessage": "Din övning har sparats och kommer synkas till molnet."
+    "workoutSyncMessage": "Din övning har sparats och kommer synkas till molnet.",
+    "totalCommits": "Totalt antal commits",
+    "changedFiles": "ändrade filer",
+    "file": "fil",
+    "files": "filer"
   },
   "exerciseList": {
     "library": "Bibliotek",
@@ -128,6 +93,46 @@
     "filterByMuscle": "Filtrera efter muskel",
     "recentlyLogged": "Nyligen Loggad",
     "noExercisesFound": "Inga övningar hittades."
+  },
+  "exerciseDetail": {
+    "back": "Tillbaka",
+    "log": "Logga",
+    "history": "Historik",
+    "progress": "Framsteg",
+    "noHistory": "Ingen träningshistorik än",
+    "instructions": "Instruktioner",
+    "loading": "Laddar...",
+    "notFound": "Övning hittades inte",
+    "date": "Datum",
+    "save": "Spara",
+    "cancel": "Avbryt",
+    "editWorkout": "Redigera Träning"
+  },
+  "common": {
+    "delete": "Ta bort",
+    "cancel": "Avbryt",
+    "save": "Spara",
+    "edit": "Redigera",
+    "close": "Stäng",
+    "confirm": "Bekräfta",
+    "deleteWorkout": "Ta bort träning",
+    "deleteWorkoutConfirmTitle": "Ta bort träning?",
+    "deleteWorkoutConfirmMessage": "Är du säker på att du vill ta bort denna träning?",
+    "deleteLastSetConfirmMessage": "Detta är det sista settet. Om du tar bort det raderas hela träningen. Är du säker?",
+    "deleteSetConfirmTitle": "Ta bort set?",
+    "deleteSetConfirmMessage": "Är du säker på att du vill ta bort detta set?",
+    "workoutDeleted": "Träning borttagen",
+    "workoutDeletedMessage": "Träningen har tagits bort."
+  },
+  "workoutLogger": {
+    "addSet": "Lägg till set",
+    "logWorkout": "Logga träning",
+    "workoutDate": "Träningsdatum",
+    "weight": "Vikt (kg)",
+    "reps": "Reps",
+    "rpe": "RPE",
+    "notes": "Anteckningar (valfritt)",
+    "notesPlaceholder": "Lägg till anteckningar om denna träning..."
   },
   "notes": {
     "title": "Anteckningar",
@@ -242,7 +247,7 @@
     "finish": "Slutför Rutin",
     "completedTitle": "Rutin Slutförd!",
     "completedMessage": "Bra jobbat! Du loggade {{count}} övningar.",
-            "backToRoutines": "Tillbaka till Rutiner",
-            "addNew": "Lägg till ny rutin"
-      }
-    }
+    "backToRoutines": "Tillbaka till Rutiner",
+    "addNew": "Lägg till ny rutin"
+  }
+}
