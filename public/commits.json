@@ -1,5 +1,16 @@
 [
   {
+    "hash": "42520ec4552e35f00530492ec949f1a7220296cc",
+    "message": "feat: Update app favicon with new kettlebell/barbell icon",
+    "date": "2025-12-03 07:12:42 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "index.html",
+      "public/commits.json",
+      "public/favicon-new.jpg"
+    ]
+  },
+  {
     "hash": "37358fa94e73fa923750143217c734344439c181",
     "message": "chore: Update commits.json",
     "date": "2025-12-03 07:08:23 +0100",

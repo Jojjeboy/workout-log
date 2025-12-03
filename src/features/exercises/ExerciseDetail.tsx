@@ -41,16 +41,19 @@ export function ExerciseDetail() {
     const [checkedSteps, setCheckedSteps] = useState<Record<number, boolean>>({});
 
     useEffect(() => {
-        if (editingLogId && logs) {
+        if (editingLogId && logs && !editedLog) {
+            // Only set editedLog if we're opening the dialog and don't have a log yet
             const logToEdit = logs.find(log => log.id === editingLogId);
             if (logToEdit) {
                 // Deep copy the log to avoid mutating the original state
                 setEditedLog(JSON.parse(JSON.stringify(logToEdit)));
             }
-        } else {
+        } else if (!editingLogId) {
+            // Reset when dialog closes
             setEditedLog(null);
         }
-    }, [editingLogId, logs]);
+    }, [editingLogId, logs, editedLog]);
+
 
 
 
@@ -76,15 +79,32 @@ export function ExerciseDetail() {
             // Validate sets
             const validSets: WorkoutSet[] = [];
             for (const set of editedLog.sets) {
-                const weight = Number(set.weight);
-                const reps = Number(set.reps);
+                // Convert to numbers - NumberInput may return numbers, strings, or empty string
+                const weight = typeof set.weight === 'number' ? set.weight : Number(set.weight || 0);
+                const reps = typeof set.reps === 'number' ? set.reps : Number(set.reps || 0);
 
-                // Check if values are valid numbers and reps > 0
-                if (set.weight === '' || set.reps === '' || isNaN(weight) || isNaN(reps) || reps <= 0) {
-                    // You might want to show an error notification here
-                    return;
+                // Skip sets where BOTH values are 0/empty (completely unfilled sets)
+                // But allow sets where at least one value is filled (even if the other is 0)
+                if (weight === 0 && reps === 0) {
+                    continue; // Skip completely empty sets
                 }
-                validSets.push({ weight, reps, rpe: set.rpe });
+
+                // Skip sets with invalid reps (reps must be > 0)
+                if (isNaN(reps) || reps <= 0) {
+                    continue;
+                }
+
+                // Skip sets with invalid weight
+                if (isNaN(weight) || weight < 0) {
+                    continue;
+                }
+
+                // Create the set object
+                const newSet: WorkoutSet = { weight, reps };
+                if (set.rpe !== undefined && set.rpe !== null) {
+                    newSet.rpe = set.rpe;
+                }
+                validSets.push(newSet);
             }
 
             if (validSets.length === 0) return;
