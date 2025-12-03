@@ -1,5 +1,19 @@
 [
   {
+    "hash": "80edab7b560e6936370f8c18cda06908d6adb5d8",
+    "message": "Fix: Complete i18n translation audit and add missing keys",
+    "body": "- Restored all translation sections (exerciseDetail, exerciseList, common, workoutLogger)\n- Added missing keys: exerciseDetail.editWorkout, workoutLogger.workoutDate\n- Added missing changelog keys: totalCommits, changedFiles, file, files\n- Fixed delete last set confirmation dialog in ExerciseDetail\n- Updated app favicon with new kettlebell/barbell icon",
+    "date": "2025-12-03 07:02:41 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json",
+      "public/favicon.png",
+      "src/features/exercises/ExerciseDetail.tsx",
+      "src/locales/en/translation.json",
+      "src/locales/sv/translation.json"
+    ]
+  },
+  {
     "hash": "5057fbd188532e28b0257b51ff3eb06b8ba034ce",
     "message": "feat: setup CI/CD 7",
     "date": "2025-12-02 23:21:52 +0100",
