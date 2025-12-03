@@ -1,5 +1,14 @@
 [
   {
+    "hash": "37358fa94e73fa923750143217c734344439c181",
+    "message": "chore: Update commits.json",
+    "date": "2025-12-03 07:08:23 +0100",
+    "author": "Jojjeboy",
+    "files": [
+      "public/commits.json"
+    ]
+  },
+  {
     "hash": "80edab7b560e6936370f8c18cda06908d6adb5d8",
     "message": "Fix: Complete i18n translation audit and add missing keys",
     "body": "- Restored all translation sections (exerciseDetail, exerciseList, common, workoutLogger)\n- Added missing keys: exerciseDetail.editWorkout, workoutLogger.workoutDate\n- Added missing changelog keys: totalCommits, changedFiles, file, files\n- Fixed delete last set confirmation dialog in ExerciseDetail\n- Updated app favicon with new kettlebell/barbell icon",
