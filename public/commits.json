@@ -1,5 +1,20 @@
 [
   {
+    "hash": "4afd40ec056b8d71b3cfd99e6288141afe5bb8e8",
+    "message": "Teststrategy and tests in place",
+    "date": "2025-12-03 13:24:03 +0100",
+    "author": "Johannes Kärnstam",
+    "files": [
+      "TEST_STRATEGY.md",
+      "public/commits.json",
+      "src/features/workouts/WorkoutLogger.test.tsx",
+      "src/services/prService.test.ts",
+      "src/services/routineService.test.ts",
+      "src/services/workoutService.test.ts",
+      "src/setupTests.ts"
+    ]
+  },
+  {
     "hash": "c3f4b26daf8e3270734662aa0bbeed0a48b4f4d5",
     "message": "Edit history works better",
     "date": "2025-12-03 07:46:53 +0100",
